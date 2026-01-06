@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4&nbsp; 深度学习笔记：信源编码理论（基于廉黎祥《通信原理》第10周课堂） – EE140 通信系统导论学习笔记</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.html" rel="next">
+<link href="../../chapters/1119b-1114-e-Q1 How to measure the quantity of information/checked_notes.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0dd2bd5de344125cf763a379ddc3eb04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1114-b-数字通信/checked_notes.html">第一部分：数字通信基础</a></li><li class="breadcrumb-item"><a href="../../chapters/1121b-1119-e-Layering of Source Coding/checked_notes.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">深度学习笔记：信源编码理论（基于廉黎祥《通信原理》第10周课堂）</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">EE140 通信系统导论学习笔记</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">EE140 通信系统导论学习笔记</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">第一部分：数字通信基础</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1114-b-数字通信/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：数字通信系统导论</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1119b-1114-e-Q1 How to measure the quantity of information/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">深度学习笔记：信息论基础与信源编码导论</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1121b-1119-e-Layering of Source Coding/checked_notes.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">深度学习笔记：信源编码理论（基于廉黎祥《通信原理》第10周课堂）</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：信源编码与最优变长码理论</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">第二部分：采样与量化</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：采样、正交展开与混叠现象</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1205b-1203-e-Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：通信原理——量化器设计与Lloyd-Max算法</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1210b-1205-e-Lloyd-Max Algorithm/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：量化理论与应用——从通信原理到现代AI</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1212b-1210-e-High-Rate Entropy-Coded Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：高码率熵编码量化与信号空间基础</strong></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">第三部分：信号处理与调制</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从信号空间到数字调制（第14周）</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1219b-1217-e-PAM Signal Constellation/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从PAM到QAM的调制与系统设计</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：奈奎斯特准则与无码间干扰传输</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1226b-1224-e-nyquist criterion2/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">通信原理深度学习笔记</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">目录</h2>
+   
+  <ul>
+  <li><a href="#一课程介绍与核心目标" id="toc-一课程介绍与核心目标" class="nav-link active" data-scroll-target="#一课程介绍与核心目标"><span class="header-section-number">4.1</span> 一、课程介绍与核心目标</a>
+  <ul class="collapse">
+  <li><a href="#核心教学目标" id="toc-核心教学目标" class="nav-link" data-scroll-target="#核心教学目标"><span class="header-section-number">4.1.1</span> 核心教学目标</a></li>
+  </ul></li>
+  <li><a href="#二基本假设离散无记忆信源dms" id="toc-二基本假设离散无记忆信源dms" class="nav-link" data-scroll-target="#二基本假设离散无记忆信源dms"><span class="header-section-number">4.2</span> 二、基本假设：离散无记忆信源（DMS）</a>
+  <ul class="collapse">
+  <li><a href="#定义与三大特性" id="toc-定义与三大特性" class="nav-link" data-scroll-target="#定义与三大特性"><span class="header-section-number">4.2.1</span> 定义与三大特性</a></li>
+  </ul></li>
+  <li><a href="#三编码过程的形式化描述" id="toc-三编码过程的形式化描述" class="nav-link" data-scroll-target="#三编码过程的形式化描述"><span class="header-section-number">4.3</span> 三、编码过程的形式化描述</a>
+  <ul class="collapse">
+  <li><a href="#关键概念定义结合ppt图4" id="toc-关键概念定义结合ppt图4" class="nav-link" data-scroll-target="#关键概念定义结合ppt图4"><span class="header-section-number">4.3.1</span> 关键概念定义（结合PPT图4）</a></li>
+  </ul></li>
+  <li><a href="#四两种基本编码方式" id="toc-四两种基本编码方式" class="nav-link" data-scroll-target="#四两种基本编码方式"><span class="header-section-number">4.4</span> 四、两种基本编码方式</a>
+  <ul class="collapse">
+  <li><a href="#定长编码fixed-length-code" id="toc-定长编码fixed-length-code" class="nav-link" data-scroll-target="#定长编码fixed-length-code"><span class="header-section-number">4.4.1</span> 1. 定长编码（Fixed-Length Code）</a></li>
+  <li><a href="#定长到定长编码block-fixed-to-fixed-code" id="toc-定长到定长编码block-fixed-to-fixed-code" class="nav-link" data-scroll-target="#定长到定长编码block-fixed-to-fixed-code"><span class="header-section-number">4.4.2</span> 2. 定长到定长编码（Block Fixed-to-Fixed Code）</a></li>
+  </ul></li>
+  <li><a href="#五变长编码variable-length-code" id="toc-五变长编码variable-length-code" class="nav-link" data-scroll-target="#五变长编码variable-length-code"><span class="header-section-number">4.5</span> 五、变长编码（Variable-Length Code）</a>
+  <ul class="collapse">
+  <li><a href="#动机打破等价对待" id="toc-动机打破等价对待" class="nav-link" data-scroll-target="#动机打破等价对待"><span class="header-section-number">4.5.1</span> 动机：打破“等价对待”</a></li>
+  <li><a href="#示例ppt图9" id="toc-示例ppt图9" class="nav-link" data-scroll-target="#示例ppt图9"><span class="header-section-number">4.5.2</span> 示例（PPT图9）</a></li>
+  </ul></li>
+  <li><a href="#六编码分类体系从奇异到最优" id="toc-六编码分类体系从奇异到最优" class="nav-link" data-scroll-target="#六编码分类体系从奇异到最优"><span class="header-section-number">4.6</span> 六、编码分类体系：从奇异到最优</a>
+  <ul class="collapse">
+  <li><a href="#层级结构ppt图11-图12" id="toc-层级结构ppt图11-图12" class="nav-link" data-scroll-target="#层级结构ppt图11-图12"><span class="header-section-number">4.6.1</span> 层级结构（PPT图11 &amp; 图12）</a></li>
+  </ul></li>
+  <li><a href="#七前缀码的树形表示法binary-tree-representation" id="toc-七前缀码的树形表示法binary-tree-representation" class="nav-link" data-scroll-target="#七前缀码的树形表示法binary-tree-representation"><span class="header-section-number">4.7</span> 七、前缀码的树形表示法（Binary Tree Representation）</a>
+  <ul class="collapse">
+  <li><a href="#核心思想ppt图14-图15" id="toc-核心思想ppt图14-图15" class="nav-link" data-scroll-target="#核心思想ppt图14-图15"><span class="header-section-number">4.7.1</span> 核心思想（PPT图14 &amp; 图15）</a></li>
+  </ul></li>
+  <li><a href="#八克拉夫特不等式kraft-inequality存在性的判据" id="toc-八克拉夫特不等式kraft-inequality存在性的判据" class="nav-link" data-scroll-target="#八克拉夫特不等式kraft-inequality存在性的判据"><span class="header-section-number">4.8</span> 八、克拉夫特不等式（Kraft Inequality）：存在性的判据</a>
+  <ul class="collapse">
+  <li><a href="#数学形式ppt图17" id="toc-数学形式ppt图17" class="nav-link" data-scroll-target="#数学形式ppt图17"><span class="header-section-number">4.8.1</span> 数学形式（PPT图17）</a></li>
+  <li><a href="#三大用途" id="toc-三大用途" class="nav-link" data-scroll-target="#三大用途"><span class="header-section-number">4.8.2</span> 三大用途</a></li>
+  </ul></li>
+  <li><a href="#九最优编码与哈夫曼编码huffman-coding" id="toc-九最优编码与哈夫曼编码huffman-coding" class="nav-link" data-scroll-target="#九最优编码与哈夫曼编码huffman-coding"><span class="header-section-number">4.9</span> 九、最优编码与哈夫曼编码（Huffman Coding）</a>
+  <ul class="collapse">
+  <li><a href="#什么是最优" id="toc-什么是最优" class="nav-link" data-scroll-target="#什么是最优"><span class="header-section-number">4.9.1</span> 什么是“最优”？</a></li>
+  <li><a href="#哈夫曼编码的地位ppt图12" id="toc-哈夫曼编码的地位ppt图12" class="nav-link" data-scroll-target="#哈夫曼编码的地位ppt图12"><span class="header-section-number">4.9.2</span> 哈夫曼编码的地位（PPT图12）</a></li>
+  </ul></li>
+  <li><a href="#十总结与展望编码的极限在哪里" id="toc-十总结与展望编码的极限在哪里" class="nav-link" data-scroll-target="#十总结与展望编码的极限在哪里"><span class="header-section-number">4.10</span> 十、总结与展望：编码的极限在哪里？</a>
+  <ul class="collapse">
+  <li><a href="#理论极限信息熵" id="toc-理论极限信息熵" class="nav-link" data-scroll-target="#理论极限信息熵"><span class="header-section-number">4.10.1</span> 理论极限：信息熵</a></li>
+  </ul></li>
+  <li><a href="#附录作业与练习建议" id="toc-附录作业与练习建议" class="nav-link" data-scroll-target="#附录作业与练习建议"><span class="header-section-number">4.11</span> 附录：作业与练习建议</a>
+  <ul class="collapse">
+  <li><a href="#已发布任务" id="toc-已发布任务" class="nav-link" data-scroll-target="#已发布任务"><span class="header-section-number">4.11.1</span> 已发布任务</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1114-b-数字通信/checked_notes.html">第一部分：数字通信基础</a></li><li class="breadcrumb-item"><a href="../../chapters/1121b-1119-e-Layering of Source Coding/checked_notes.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">深度学习笔记：信源编码理论（基于廉黎祥《通信原理》第10周课堂）</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">深度学习笔记：信源编码理论（基于廉黎祥《通信原理》第10周课堂）</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<blockquote class="blockquote">
+<p><strong>课程信息</strong><br>
+教师：廉黎祥<br>
+课程名称：通信原理<br>
+时间：2025年11月21日（第10周）<br>
+地点：上海科技大学创管学院215教室</p>
+</blockquote>
+<hr>
+<section id="一课程介绍与核心目标" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="一课程介绍与核心目标"><span class="header-section-number">4.1</span> 一、课程介绍与核心目标</h2>
+<p>本节课系统讲解了<strong>数字通信系统中的信源编解码</strong>，重点聚焦于如何将离散信源高效地表示为二进制比特流。课程不仅涵盖技术定义和公式推导，更深入剖析了编码设计的<strong>思想脉络、历史背景与工程实践考量</strong>。</p>
+<section id="核心教学目标" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="核心教学目标"><span class="header-section-number">4.1.1</span> 核心教学目标</h3>
+<ol type="1">
+<li><strong>唯一可译性（Uniquely Decodable）</strong>：确保接收端能无歧义地还原原始符号序列。<br>
+</li>
+<li><strong>信源压缩（Source Compression）</strong>：最小化平均码字长度 <span class="math inline">\(\bar{L}\)</span>，提升传输效率。</li>
+</ol>
+<blockquote class="blockquote">
+<p>🎯 <strong>教授点拨</strong><br>
+“我们不是在‘发明’编码规则，而是在寻找信息表达的最优边界——这正是信息论的魅力所在。”<br>
+—— 廉黎祥老师强调，信源编码的本质是探索<strong>信息熵所决定的极限性能</strong>，而非简单构造编码表。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1121b-1119-e-Layering%20of%20Source%20Coding/page_1.png" class="img-fluid figure-img"></p>
+<figcaption>国际莫尔斯电码示例</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="二基本假设离散无记忆信源dms" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="二基本假设离散无记忆信源dms"><span class="header-section-number">4.2</span> 二、基本假设：离散无记忆信源（DMS）</h2>
+<p>要进行有效的信源编码分析，必须对信源建立数学模型。本课采用的标准模型是<strong>离散无记忆信源（Discrete Memoryless Source, DMS）</strong>。</p>
+<section id="定义与三大特性" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="定义与三大特性"><span class="header-section-number">4.2.1</span> 定义与三大特性</h3>
+<p>根据PPT图3及语音稿内容，DMS满足以下三个条件：</p>
+<ol type="1">
+<li><p><strong>离散性（Discreteness）</strong><br>
+每个输出符号 <span class="math inline">\(X_k\)</span> 来自一个有限集合 <span class="math inline">\(\mathcal{X}\)</span>，称为<strong>信源字母表（Source Alphabet）</strong>，其大小记为 <span class="math inline">\(M = |\mathcal{X}|\)</span>。</p></li>
+<li><p><strong>同分布性（Identically Distributed）</strong><br>
+所有符号 <span class="math inline">\(X_k\)</span> 都服从相同的概率分布 <span class="math inline">\(P_X(x)\)</span>，即： <span class="math display">\[
+P(X_k = x) = P_X(x),\quad \forall k
+\]</span></p></li>
+<li><p><strong>无记忆性 / 独立性（Memoryless / Independent）</strong><br>
+不同时刻的符号之间相互独立： <span class="math display">\[
+P(X_1, X_2, ..., X_n) = \prod_{i=1}^n P_X(X_i)
+\]</span> 即没有“上下文依赖”，每个符号都是“从头开始”的随机选择。</p></li>
+</ol>
+<blockquote class="blockquote">
+<p>✅ <strong>纠错说明</strong><br>
+语音中多次出现“离散无际忆性缘”、“discre secret”等明显转录错误，已根据上下文及专业术语修正为“<strong>离散无记忆信源（DMS）</strong>”。</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>💡 <strong>发展脉络</strong><br>
+DMS 是香农信息论的基础建模工具。虽然现实语言（如中文、英文）具有强相关性和上下文依赖（即“有记忆”），但 DMS 提供了一个理想的起点，使我们可以先理解最基础的信息压缩极限，再逐步引入马尔可夫信源、通用编码等复杂模型。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1121b-1119-e-Layering%20of%20Source%20Coding/page_3.png" class="img-fluid figure-img"></p>
+<figcaption>离散无记忆信源定义</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="三编码过程的形式化描述" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="三编码过程的形式化描述"><span class="header-section-number">4.3</span> 三、编码过程的形式化描述</h2>
+<p>信源编码可视为一个<strong>映射函数</strong> <span class="math inline">\(C: \mathcal{X} \to \{0,1\}^*\)</span>，即将每个符号 <span class="math inline">\(x \in \mathcal{X}\)</span> 映射到一个由0和1组成的<strong>码字（Codeword）</strong>。</p>
+<section id="关键概念定义结合ppt图4" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="关键概念定义结合ppt图4"><span class="header-section-number">4.3.1</span> 关键概念定义（结合PPT图4）</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>概念</th>
+<th>符号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>码字长度</td>
+<td><span class="math inline">\(l(x)\)</span></td>
+<td>编码后得到的二进制位数（bit）</td>
+</tr>
+<tr class="even">
+<td>平均码长</td>
+<td><span class="math inline">\(\bar{L}\)</span></td>
+<td><span class="math inline">\(\mathbb{E}[l(X)] = \sum_{x \in \mathcal{X}} P_X(x) l(x)\)</span>，单位：bit/symbol</td>
+</tr>
+<tr class="odd">
+<td>编码速率</td>
+<td><span class="math inline">\(R\)</span></td>
+<td>即 <span class="math inline">\(\bar{L}\)</span>，衡量每符号输出多少比特</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p>🔍 <strong>深入理解</strong><br>
+<span class="math inline">\(\bar{L}\)</span> 是一个期望值，它综合了符号的出现概率与其编码长度。高频符号即使只节省1 bit，也可能比低频符号节省10 bit 对整体压缩效果贡献更大。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1121b-1119-e-Layering%20of%20Source%20Coding/page_4.png" class="img-fluid figure-img"></p>
+<figcaption>编码理论基础概念</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="四两种基本编码方式" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="四两种基本编码方式"><span class="header-section-number">4.4</span> 四、两种基本编码方式</h2>
+<section id="定长编码fixed-length-code" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="定长编码fixed-length-code"><span class="header-section-number">4.4.1</span> 1. 定长编码（Fixed-Length Code）</h3>
+<section id="原理" class="level4" data-number="4.4.1.1">
+<h4 data-number="4.4.1.1" class="anchored" data-anchor-id="原理"><span class="header-section-number">4.4.1.1</span> 原理</h4>
+<p>将信源字母表中的每一个符号都编码成相同长度 <span class="math inline">\(L\)</span> 的二进制码字。</p>
+</section>
+<section id="唯一可译性条件" class="level4" data-number="4.4.1.2">
+<h4 data-number="4.4.1.2" class="anchored" data-anchor-id="唯一可译性条件"><span class="header-section-number">4.4.1.2</span> 唯一可译性条件</h4>
+<p>为了保证不同符号对应不同的码字，需满足： <span class="math display">\[
+2^L \geq M
+\Rightarrow L \geq \lceil \log_2 M \rceil
+\]</span> 其中 <span class="math inline">\(\lceil \cdot \rceil\)</span> 表示向上取整。</p>
+</section>
+<section id="最小编码长度" class="level4" data-number="4.4.1.3">
+<h4 data-number="4.4.1.3" class="anchored" data-anchor-id="最小编码长度"><span class="header-section-number">4.4.1.3</span> 最小编码长度</h4>
+<p><span class="math display">\[
+L_{\min} = \lceil \log_2 M \rceil
+\]</span> 当且仅当 <span class="math inline">\(M = 2^n\)</span>（如4, 8, 16）时，<span class="math inline">\(\log_2 M\)</span> 为整数，此时 <span class="math inline">\(L = \log_2 M\)</span>。</p>
+<blockquote class="blockquote">
+<p>📘 <strong>实例解析（PPT图6）</strong><br>
+若信源有6个符号（A–F），则 <span class="math inline">\(M=6\)</span>，<span class="math inline">\(\log_2 6 \approx 2.58\)</span>，故 <span class="math inline">\(L_{\min} = 3\)</span>。可用3位二进制码（000～101）分别表示各符号。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1121b-1119-e-Layering%20of%20Source%20Coding/page_5.png" class="img-fluid figure-img"></p>
+<figcaption>固定长度编码与解码规则</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1121b-1119-e-Layering%20of%20Source%20Coding/page_6.png" class="img-fluid figure-img"></p>
+<figcaption>固定长度编码示例</figcaption>
+</figure>
+</div>
+<blockquote class="blockquote">
+<p>💬 <strong>趣闻与实例</strong><br>
+ASCII码（PPT图7）就是典型的定长编码！每个字符用8位表示，共支持256种字符。尽管效率不高（很多字符很少使用），但它结构简单、易于硬件实现，至今仍是计算机系统的基石之一。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1121b-1119-e-Layering%20of%20Source%20Coding/page_7.png" class="img-fluid figure-img"></p>
+<figcaption>ASCII编码表</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="定长到定长编码block-fixed-to-fixed-code" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="定长到定长编码block-fixed-to-fixed-code"><span class="header-section-number">4.4.2</span> 2. 定长到定长编码（Block Fixed-to-Fixed Code）</h3>
+<section id="思想升级" class="level4" data-number="4.4.2.1">
+<h4 data-number="4.4.2.1" class="anchored" data-anchor-id="思想升级"><span class="header-section-number">4.4.2.1</span> 思想升级</h4>
+<p>不单独编码单个符号，而是将<strong>连续的 <span class="math inline">\(n\)</span> 个符号</strong>组成一个“超级符号”（<span class="math inline">\(n\)</span>-tuple），然后对该超级符号进行定长编码。</p>
+</section>
+<section id="参数关系" class="level4" data-number="4.4.2.2">
+<h4 data-number="4.4.2.2" class="anchored" data-anchor-id="参数关系"><span class="header-section-number">4.4.2.2</span> 参数关系</h4>
+<ul>
+<li>超级符号总数：<span class="math inline">\(M^n\)</span></li>
+<li>所需码字长度 <span class="math inline">\(L\)</span> 满足：<span class="math inline">\(2^L \geq M^n \Rightarrow L \geq \lceil n \log_2 M \rceil\)</span></li>
+<li>每个原始符号的平均编码长度为： <span class="math display">\[
+\frac{L}{n} \geq \frac{\lceil n \log_2 M \rceil}{n}
+\]</span></li>
+</ul>
+</section>
+<section id="渐近最优性" class="level4" data-number="4.4.2.3">
+<h4 data-number="4.4.2.3" class="anchored" data-anchor-id="渐近最优性"><span class="header-section-number">4.4.2.3</span> 渐近最优性</h4>
+<p>当 <span class="math inline">\(n \to \infty\)</span> 时， <span class="math display">\[
+\frac{L}{n} \to \log_2 M
+\]</span> 这意味着，通过增大分组长度，可以无限逼近理论下界 <span class="math inline">\(\log_2 M\)</span>，<strong>即使 <span class="math inline">\(M\)</span> 不是2的幂</strong>！</p>
+<blockquote class="blockquote">
+<p>🧠 <strong>思路与方法</strong><br>
+这体现了“大数定律”在编码中的应用：个体差异被群体统计规律所平滑。虽然实际中受限于延迟和存储，无法做到 <span class="math inline">\(n=\infty\)</span>，但该思想启发了现代压缩算法（如LZ77）中滑动窗口的设计。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1121b-1119-e-Layering%20of%20Source%20Coding/page_8.png" class="img-fluid figure-img"></p>
+<figcaption>固定长度编码原理与应用</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+</section>
+<section id="五变长编码variable-length-code" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="五变长编码variable-length-code"><span class="header-section-number">4.5</span> 五、变长编码（Variable-Length Code）</h2>
+<section id="动机打破等价对待" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="动机打破等价对待"><span class="header-section-number">4.5.1</span> 动机：打破“等价对待”</h3>
+<p>定长编码隐含假设所有符号等概出现，但在现实中，某些符号（如英语中的’e’）远比其他符号（如’z’）频繁。<strong>能否让高频符号用短码，低频符号用长码？</strong></p>
+<p>答案是肯定的——这就是<strong>变长编码</strong>的核心思想。</p>
+</section>
+<section id="示例ppt图9" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="示例ppt图9"><span class="header-section-number">4.5.2</span> 示例（PPT图9）</h3>
+<p>设信源符号集为 {A, B, C}，概率分别为 <span class="math inline">\(P(A)=1/2\)</span>, <span class="math inline">\(P(B)=1/4\)</span>, <span class="math inline">\(P(C)=1/4\)</span>。</p>
+<p>设计如下编码： - A → <code>0</code> （长度1） - B → <code>10</code>（长度2） - C → <code>11</code>（长度2）</p>
+<p>计算平均码长： <span class="math display">\[
+\bar{L} = \frac{1}{2}\cdot1 + \frac{1}{4}\cdot2 + \frac{1}{4}\cdot2 = 1.5 \text{ bit/symbol}
+\]</span> 而定长编码需至少2 bit/symbol，可见显著提升效率。</p>
+<blockquote class="blockquote">
+<p>⚠️ <strong>关键挑战（PPT图9 &amp; 图10）</strong></p>
+<p>变长编码带来两个新问题： 1. <strong>解析歧义性</strong>：接收到比特流如 <code>01011...</code>，如何知道 <code>0</code> 是A，还是 <code>01</code> 是某个码字的一部分？ 2. <strong>输出速率不恒定</strong>：输入固定速率，但输出比特率波动，需缓冲器管理，可能溢出或空闲。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1121b-1119-e-Layering%20of%20Source%20Coding/page_9.png" class="img-fluid figure-img"></p>
+<figcaption>变长码与编码问题</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1121b-1119-e-Layering%20of%20Source%20Coding/page_10.png" class="img-fluid figure-img"></p>
+<figcaption>变量长度码的唯一可译性</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="六编码分类体系从奇异到最优" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="六编码分类体系从奇异到最优"><span class="header-section-number">4.6</span> 六、编码分类体系：从奇异到最优</h2>
+<section id="层级结构ppt图11-图12" class="level3" data-number="4.6.1">
+<h3 data-number="4.6.1" class="anchored" data-anchor-id="层级结构ppt图11-图12"><span class="header-section-number">4.6.1</span> 层级结构（PPT图11 &amp; 图12）</h3>
+<pre class="mermaid"><code>graph TD
+    A[所有编码] --&gt; B[非奇异编码&lt;br&gt;(Non-singular)]
+    A --&gt; C[奇异编码]
+    B --&gt; D[唯一可译编码&lt;br&gt;(Uniquely Decodable)]
+    D --&gt; E[即时编码/前缀码&lt;br&gt;(Instantaneous/Prefix-free)]
+    E --&gt; F[最优前缀码&lt;br&gt;(Optimal Prefix-free)]</code></pre>
+<section id="逐层解读" class="level4" data-number="4.6.1.1">
+<h4 data-number="4.6.1.1" class="anchored" data-anchor-id="逐层解读"><span class="header-section-number">4.6.1.1</span> 逐层解读</h4>
+<ol type="1">
+<li><p><strong>非奇异编码（Non-singular）</strong><br>
+不同符号对应不同码字。这是唯一可译的前提，否则直接冲突。</p></li>
+<li><p><strong>唯一可译编码（Uniquely Decodable）</strong><br>
+任意符号序列的拼接码字在整个码集中唯一。例如：</p>
+<ul>
+<li>✅ 前缀码一定是唯一可译的。</li>
+<li>❌ 如 A→<code>0</code>, B→<code>01</code>，则序列 <code>01</code> 可解释为B或A+A+…，存在歧义。</li>
+</ul></li>
+<li><p><strong>即时编码 / 前缀码（Instantaneous / Prefix-free Code）</strong><br>
+任何码字都不是另一个码字的前缀。这种编码可以在接收到最后一个比特时立即解码，无需等待后续比特。</p></li>
+</ol>
+<blockquote class="blockquote">
+<p>🔍 <strong>经验提醒</strong><br>
+“你收到一个比特流，如果还得往后看才能确定前面怎么解，那这个系统就慢了！”<br>
+—— 廉老师指出，<strong>即时性</strong>对于实时通信至关重要，避免了解码延迟。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1121b-1119-e-Layering%20of%20Source%20Coding/page_11.png" class="img-fluid figure-img"></p>
+<figcaption>编码分类与特性</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1121b-1119-e-Layering%20of%20Source%20Coding/page_12.png" class="img-fluid figure-img"></p>
+<figcaption>编码理论与Huffman码</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+</section>
+<section id="七前缀码的树形表示法binary-tree-representation" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="七前缀码的树形表示法binary-tree-representation"><span class="header-section-number">4.7</span> 七、前缀码的树形表示法（Binary Tree Representation）</h2>
+<section id="核心思想ppt图14-图15" class="level3" data-number="4.7.1">
+<h3 data-number="4.7.1" class="anchored" data-anchor-id="核心思想ppt图14-图15"><span class="header-section-number">4.7.1</span> 核心思想（PPT图14 &amp; 图15）</h3>
+<p>前缀码可以用一棵<strong>二叉树</strong>直观表示： - <strong>根节点（Root）</strong>：起始点<br>
+- <strong>分支（Branches）</strong>：左支标<code>0</code>，右支标<code>1</code><br>
+- <strong>叶子节点（Leaf Nodes）</strong>：代表完整的码字<br>
+- <strong>中间节点（Internal Nodes）</strong>：不代表任何码字</p>
+<blockquote class="blockquote">
+<p>✅ <strong>重要结论</strong><br>
+前缀码的所有码字必须对应<strong>叶子节点</strong>，不能是中间节点，否则会成为其他码字的前缀。</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>🎨 <strong>图示理解</strong>（文字描述PPT图14）<br>
+例如： - a → <code>0</code>（左叶）<br>
+- b → <code>11</code>（右→右叶）<br>
+- c → <code>101</code>（右→左→右叶）<br>
+解码时从根出发，按比特走路径，到达叶子即完成解码。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1121b-1119-e-Layering%20of%20Source%20Coding/page_14.png" class="img-fluid figure-img"></p>
+<figcaption>前缀码与二叉树表示</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1121b-1119-e-Layering%20of%20Source%20Coding/page_15.png" class="img-fluid figure-img"></p>
+<figcaption>前缀码与二叉树表示</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="八克拉夫特不等式kraft-inequality存在性的判据" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="八克拉夫特不等式kraft-inequality存在性的判据"><span class="header-section-number">4.8</span> 八、克拉夫特不等式（Kraft Inequality）：存在性的判据</h2>
+<section id="数学形式ppt图17" class="level3" data-number="4.8.1">
+<h3 data-number="4.8.1" class="anchored" data-anchor-id="数学形式ppt图17"><span class="header-section-number">4.8.1</span> 数学形式（PPT图17）</h3>
+<p>对于任意一组码字长度 <span class="math inline">\(\{l(x)\}_{x \in \mathcal{X}}\)</span>，若存在一个前缀码使其成立，则必满足： <span class="math display">\[
+\sum_{x \in \mathcal{X}} 2^{-l(x)} \leq 1
+\]</span> 此即<strong>克拉夫特不等式</strong>。</p>
+</section>
+<section id="三大用途" class="level3" data-number="4.8.2">
+<h3 data-number="4.8.2" class="anchored" data-anchor-id="三大用途"><span class="header-section-number">4.8.2</span> 三大用途</h3>
+<ol type="1">
+<li><strong>必要条件验证</strong>：若给定编码不满足该式，则一定不是前缀码。<br>
+</li>
+<li><strong>存在性判断</strong>：若满足该式，则<strong>存在</strong>一种前缀码实现这些长度。<br>
+</li>
+<li><strong>完备性判据</strong>：若等号成立（=1），则该前缀码是<strong>满的（Complete）</strong>，即不能再添加任何新码字而不破坏前缀性质。</li>
+</ol>
+<blockquote class="blockquote">
+<p>🔢 <strong>实例分析（PPT图18）</strong></p>
+</blockquote>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 47%">
+<col style="width: 21%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>长度组合</th>
+<th>计算 <span class="math inline">\(\sum 2^{-l(x)}\)</span></th>
+<th>是否可行</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(1,1,2,2)</td>
+<td><span class="math inline">\(2^{-1}+2^{-1}+2^{-2}+2^{-2} = 1.5 &gt; 1\)</span></td>
+<td>❌ 否</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>(2,2,2,2)</td>
+<td><span class="math inline">\(4 \times 2^{-2} = 1\)</span></td>
+<td>✅ 是</td>
+<td>满前缀码</td>
+</tr>
+<tr class="odd">
+<td>(2,2,3,3)</td>
+<td><span class="math inline">\(2 \times 2^{-2} + 2 \times 2^{-3} = 0.75 &lt; 1\)</span></td>
+<td>✅ 是</td>
+<td>非满前缀码</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p>📌 <strong>教授点拨</strong><br>
+“Kraft不等式告诉你的是<strong>可能性空间</strong>，而不是具体怎么构造。它是设计前的‘可行性报告’。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1121b-1119-e-Layering%20of%20Source%20Coding/page_17.png" class="img-fluid figure-img"></p>
+<figcaption>Kraft不等式与前缀码</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1121b-1119-e-Layering%20of%20Source%20Coding/page_18.png" class="img-fluid figure-img"></p>
+<figcaption>最小化平均码长，满足Kraft不等式</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="九最优编码与哈夫曼编码huffman-coding" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="九最优编码与哈夫曼编码huffman-coding"><span class="header-section-number">4.9</span> 九、最优编码与哈夫曼编码（Huffman Coding）</h2>
+<section id="什么是最优" class="level3" data-number="4.9.1">
+<h3 data-number="4.9.1" class="anchored" data-anchor-id="什么是最优"><span class="header-section-number">4.9.1</span> 什么是“最优”？</h3>
+<p>一个编码方案 <span class="math inline">\(C\)</span> 是<strong>最优的</strong>，当且仅当： 1. 它是唯一可译的；<br>
+2. 其平均码长 <span class="math inline">\(\bar{L}\)</span> 在所有唯一可译码中达到最小，即 <span class="math inline">\(\bar{L} = \min \bar{L}_{\text{ud}}\)</span>。</p>
+<blockquote class="blockquote">
+<p>⚠️ <strong>常见误区澄清</strong>： - ❌ 所有前缀码都是最优的？ → 错！只是其中一部分可能是。<br>
+- ❌ 所有最优码都是前缀码？ → 错！存在非前缀的最优码，但前缀码已足够好且易实现。<br>
+- ❌ 最优前缀码只有哈夫曼码？ → 错！哈夫曼码只是众多最优前缀码中的一种。</p>
+</blockquote>
+</section>
+<section id="哈夫曼编码的地位ppt图12" class="level3" data-number="4.9.2">
+<h3 data-number="4.9.2" class="anchored" data-anchor-id="哈夫曼编码的地位ppt图12"><span class="header-section-number">4.9.2</span> 哈夫曼编码的地位（PPT图12）</h3>
+<p>哈夫曼编码是一种<strong>系统化的、贪婪式的最优前缀码构造算法</strong>，具有以下优点： - 实现简单，适合编程；<br>
+- 达到所有前缀码中的最小平均长度；<br>
+- 构造过程直观：合并概率最小的两个节点，层层上溯。</p>
+<blockquote class="blockquote">
+<p>🔄 <strong>方法论启示</strong><br>
+哈夫曼算法体现了“局部最优导致全局最优”的思想。虽然每次只考虑当前最小概率的两个符号，但最终结果却达到了理论最优。</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="十总结与展望编码的极限在哪里" class="level2" data-number="4.10">
+<h2 data-number="4.10" class="anchored" data-anchor-id="十总结与展望编码的极限在哪里"><span class="header-section-number">4.10</span> 十、总结与展望：编码的极限在哪里？</h2>
+<section id="理论极限信息熵" class="level3" data-number="4.10.1">
+<h3 data-number="4.10.1" class="anchored" data-anchor-id="理论极限信息熵"><span class="header-section-number">4.10.1</span> 理论极限：信息熵</h3>
+<p>本节课虽未直接讲出，但贯穿始终的思想是——<strong>最优平均码长的下界就是信源的熵 <span class="math inline">\(H(X)\)</span></strong>： <span class="math display">\[
+H(X) \leq \bar{L}_{\min} &lt; H(X) + 1
+\]</span> 哈夫曼编码通常非常接近这个极限。</p>
+<blockquote class="blockquote">
+<p>🔭 <strong>未来方向预告</strong>： - 下节课将正式引入<strong>香农第一定理（无噪信源编码定理）</strong>，严格证明上述界限。<br>
+- 将探讨更高级的编码方法，如算术编码（突破整数比特限制）、Lempel-Ziv算法（无需先验概率）等。</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="附录作业与练习建议" class="level2" data-number="4.11">
+<h2 data-number="4.11" class="anchored" data-anchor-id="附录作业与练习建议"><span class="header-section-number">4.11</span> 附录：作业与练习建议</h2>
+<section id="已发布任务" class="level3" data-number="4.11.1">
+<h3 data-number="4.11.1" class="anchored" data-anchor-id="已发布任务"><span class="header-section-number">4.11.1</span> 已发布任务</h3>
+<ol type="1">
+<li><strong>提交考试前作业</strong>：请按时完成并提交。<br>
+</li>
+<li><strong>新作业</strong>：
+<ul>
+<li>信息论基础概念练习；<br>
+</li>
+<li>两道关于编码唯一性和Kraft不等式的题目。</li>
+</ul></li>
+</ol>
+<blockquote class="blockquote">
+<p>📝 <strong>教授建议</strong><br>
+“这些题看起来琐碎，但计算都很简单。关键是<strong>提前动手</strong>，不要等到最后一刻。尤其是Kraft不等式的应用，一定要亲手算几遍，形成直觉。”</p>
+</blockquote>
+<hr>
+<blockquote class="blockquote">
+<p><strong>结语</strong><br>
+本次课程从摩尔斯电码的历史案例出发（PPT图1），经由定长、变长编码的演进，最终抵达以哈夫曼码为代表的现代编码思想，完整展现了人类追求高效信息表达的智慧历程。记住：好的编码不仅是数学游戏，更是对信息本质的深刻洞察。</p>
+</blockquote>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "已复制");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "已复制");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../chapters/1119b-1114-e-Q1 How to measure the quantity of information/checked_notes.html" class="pagination-link" aria-label="深度学习笔记：信息论基础与信源编码导论">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">深度学习笔记：信息论基础与信源编码导论</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.html" class="pagination-link" aria-label="**通信原理深度学习笔记：信源编码与最优变长码理论**">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：信源编码与最优变长码理论</strong></span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

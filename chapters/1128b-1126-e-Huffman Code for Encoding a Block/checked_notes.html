@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>6&nbsp; 通信原理深度学习笔记 – EE140 通信系统导论学习笔记</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html" rel="next">
+<link href="../../chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0dd2bd5de344125cf763a379ddc3eb04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1114-b-数字通信/checked_notes.html">第一部分：数字通信基础</a></li><li class="breadcrumb-item"><a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">EE140 通信系统导论学习笔记</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">EE140 通信系统导论学习笔记</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">第一部分：数字通信基础</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1114-b-数字通信/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：数字通信系统导论</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1119b-1114-e-Q1 How to measure the quantity of information/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">深度学习笔记：信息论基础与信源编码导论</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1121b-1119-e-Layering of Source Coding/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">深度学习笔记：信源编码理论（基于廉黎祥《通信原理》第10周课堂）</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：信源编码与最优变长码理论</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">第二部分：采样与量化</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：采样、正交展开与混叠现象</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1205b-1203-e-Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：通信原理——量化器设计与Lloyd-Max算法</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1210b-1205-e-Lloyd-Max Algorithm/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：量化理论与应用——从通信原理到现代AI</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1212b-1210-e-High-Rate Entropy-Coded Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：高码率熵编码量化与信号空间基础</strong></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">第三部分：信号处理与调制</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从信号空间到数字调制（第14周）</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1219b-1217-e-PAM Signal Constellation/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从PAM到QAM的调制与系统设计</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：奈奎斯特准则与无码间干扰传输</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1226b-1224-e-nyquist criterion2/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">通信原理深度学习笔记</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">目录</h2>
+   
+  <ul>
+  <li><a href="#课程介绍与目标" id="toc-课程介绍与目标" class="nav-link active" data-scroll-target="#课程介绍与目标"><span class="header-section-number">6.1</span> <strong>课程介绍与目标</strong></a></li>
+  <li><a href="#第一部分信源编码回顾与深化" id="toc-第一部分信源编码回顾与深化" class="nav-link" data-scroll-target="#第一部分信源编码回顾与深化"><span class="header-section-number">6.2</span> <strong>第一部分：信源编码回顾与深化</strong></a>
+  <ul class="collapse">
+  <li><a href="#基础概念什么是信源编码" id="toc-基础概念什么是信源编码" class="nav-link" data-scroll-target="#基础概念什么是信源编码"><span class="header-section-number">6.2.1</span> <strong>1. 基础概念：什么是信源编码？</strong></a></li>
+  <li><a href="#可变长编码-variable-length-coding-vlc-与-kraft-不等式" id="toc-可变长编码-variable-length-coding-vlc-与-kraft-不等式" class="nav-link" data-scroll-target="#可变长编码-variable-length-coding-vlc-与-kraft-不等式"><span class="header-section-number">6.2.2</span> <strong>2. 可变长编码 (Variable-Length Coding, VLC) 与 Kraft 不等式</strong></a></li>
+  <li><a href="#最优编码的极限信源编码基本定理" id="toc-最优编码的极限信源编码基本定理" class="nav-link" data-scroll-target="#最优编码的极限信源编码基本定理"><span class="header-section-number">6.2.3</span> <strong>3. 最优编码的极限：信源编码基本定理</strong></a></li>
+  <li><a href="#如何计算最短平均码长-l_" id="toc-如何计算最短平均码长-l_" class="nav-link" data-scroll-target="#如何计算最短平均码长-l_"><span class="header-section-number">6.2.4</span> **4. 如何计算最短平均码长 $ {L}_{} $？**</a></li>
+  </ul></li>
+  <li><a href="#第二部分经典编码算法详解" id="toc-第二部分经典编码算法详解" class="nav-link" data-scroll-target="#第二部分经典编码算法详解"><span class="header-section-number">6.3</span> <strong>第二部分：经典编码算法详解</strong></a>
+  <ul class="collapse">
+  <li><a href="#霍夫曼编码-huffman-coding" id="toc-霍夫曼编码-huffman-coding" class="nav-link" data-scroll-target="#霍夫曼编码-huffman-coding"><span class="header-section-number">6.3.1</span> <strong>1. 霍夫曼编码 (Huffman Coding)</strong></a></li>
+  <li><a href="#霍夫曼编码的实际应用jpeg-图像压缩流程" id="toc-霍夫曼编码的实际应用jpeg-图像压缩流程" class="nav-link" data-scroll-target="#霍夫曼编码的实际应用jpeg-图像压缩流程"><span class="header-section-number">6.3.2</span> <strong>2. 霍夫曼编码的实际应用：JPEG 图像压缩流程</strong></a></li>
+  <li><a href="#自适应编码lempel-ziv-lz-算法" id="toc-自适应编码lempel-ziv-lz-算法" class="nav-link" data-scroll-target="#自适应编码lempel-ziv-lz-算法"><span class="header-section-number">6.3.3</span> <strong>3. 自适应编码：Lempel-Ziv (LZ) 算法</strong></a></li>
+  </ul></li>
+  <li><a href="#第三部分从离散到连续信号采样理论" id="toc-第三部分从离散到连续信号采样理论" class="nav-link" data-scroll-target="#第三部分从离散到连续信号采样理论"><span class="header-section-number">6.4</span> <strong>第三部分：从离散到连续——信号采样理论</strong></a>
+  <ul class="collapse">
+  <li><a href="#采样的本质正交展开" id="toc-采样的本质正交展开" class="nav-link" data-scroll-target="#采样的本质正交展开"><span class="header-section-number">6.4.1</span> <strong>1. 采样的本质：正交展开</strong></a></li>
+  <li><a href="#带宽有限信号-采样定理-sampling-theorem" id="toc-带宽有限信号-采样定理-sampling-theorem" class="nav-link" data-scroll-target="#带宽有限信号-采样定理-sampling-theorem"><span class="header-section-number">6.4.2</span> <strong>2. 带宽有限信号 → 采样定理 (Sampling Theorem)</strong></a></li>
+  </ul></li>
+  <li><a href="#课程总结与展望" id="toc-课程总结与展望" class="nav-link" data-scroll-target="#课程总结与展望"><span class="header-section-number">6.5</span> <strong>课程总结与展望</strong></a>
+  <ul class="collapse">
+  <li><a href="#知识体系总览" id="toc-知识体系总览" class="nav-link" data-scroll-target="#知识体系总览"><span class="header-section-number">6.5.1</span> <strong>知识体系总览</strong></a></li>
+  <li><a href="#核心结论" id="toc-核心结论" class="nav-link" data-scroll-target="#核心结论"><span class="header-section-number">6.5.2</span> <strong>核心结论</strong></a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1114-b-数字通信/checked_notes.html">第一部分：数字通信基础</a></li><li class="breadcrumb-item"><a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><strong>课程：EE140 通信系统导论 | 授课教师：廉黎祥 教授（上海科技大学）| 时间：2025年秋季学期 第11周</strong></p>
+<hr>
+<section id="课程介绍与目标" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="课程介绍与目标"><span class="header-section-number">6.1</span> <strong>课程介绍与目标</strong></h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_15.png" class="img-fluid figure-img"></p>
+<figcaption>上海科技大课程介绍。</figcaption>
+</figure>
+</div>
+<p>本节课是“信源编码”部分的总结与升华，随后正式进入“模拟信号采样”的核心内容。课程从信息论的基础出发，系统梳理了无损信源编码的核心理论、经典算法及其实际应用，并以<strong>JPEG图像压缩</strong>和<strong>GIF动图压缩</strong>为实例，揭示了现代数字通信中数据压缩的本质逻辑。</p>
+<blockquote class="blockquote">
+<p>💡 <strong>教授点拨 · 学习视角转换</strong><br>
+“我们这门课的重点不是记住公式，而是理解<strong>为什么需要这些技术</strong>，以及它们在真实世界中的‘生存方式’——比如一张图片是怎么被一步步压小到可以发微信而不明显失真的。”</p>
+</blockquote>
+<hr>
+</section>
+<section id="第一部分信源编码回顾与深化" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="第一部分信源编码回顾与深化"><span class="header-section-number">6.2</span> <strong>第一部分：信源编码回顾与深化</strong></h2>
+<section id="基础概念什么是信源编码" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="基础概念什么是信源编码"><span class="header-section-number">6.2.1</span> <strong>1. 基础概念：什么是信源编码？</strong></h3>
+<p>信源编码的目标是在<strong>不丢失信息的前提下</strong>，用尽可能少的比特表示原始数据。其理论极限由香农信息熵 $ H(X) $ 决定。</p>
+<ul>
+<li><strong>信源</strong>：产生符号序列的数据源（如文本、语音、图像像素）。</li>
+<li><strong>编码器</strong>：将原始符号映射为二进制比特流。</li>
+<li><strong>无损编码 (Lossless Coding)</strong>：要求接收端能完全恢复原始数据。</li>
+<li>**信息熵 $ H(X) <span class="math inline">\(**：衡量信源平均信息量的最小期望比特数：\)</span>$ H(X) = -_{i=1}^{n} p_i _2 p_i $$</li>
+</ul>
+<blockquote class="blockquote">
+<p>📌 <strong>关键提醒 · 概念辨析</strong><br>
+信息熵是一个<strong>统计下界</strong>，并非所有情况下都能达到。能否逼近该极限取决于信源的概率分布是否满足特定条件。</p>
+</blockquote>
+<hr>
+</section>
+<section id="可变长编码-variable-length-coding-vlc-与-kraft-不等式" class="level3" data-number="6.2.2">
+<h3 data-number="6.2.2" class="anchored" data-anchor-id="可变长编码-variable-length-coding-vlc-与-kraft-不等式"><span class="header-section-number">6.2.2</span> <strong>2. 可变长编码 (Variable-Length Coding, VLC) 与 Kraft 不等式</strong></h3>
+<section id="kraft-不等式前缀码存在的充要条件" class="level4" data-number="6.2.2.1">
+<h4 data-number="6.2.2.1" class="anchored" data-anchor-id="kraft-不等式前缀码存在的充要条件"><span class="header-section-number">6.2.2.1</span> <strong>Kraft 不等式：前缀码存在的充要条件</strong></h4>
+<p>对于一组码字长度 $ l_1, l_2, …, l_n <span class="math inline">\(，存在一个唯一可解的前缀码当且仅当：\)</span>$ _{i=1}^{n} 2^{-l_i} $$</p>
+<blockquote class="blockquote">
+<p>🔍 <strong>深入理解 · 为什么是这个形式？</strong><br>
+这个不等式本质上反映了<strong>二叉树的空间约束</strong>。每个码字对应一棵二叉树的叶子节点，$ 2^{-l_i} $ 表示该叶子所占据的“子树比例”。总和不超过1，意味着所有叶子不会超出整棵树的容量。</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>⚠️ <strong>常见误区纠正</strong><br>
+即使某个编码方案的平均码长 $ L $ 满足 $ H(X) L &lt; H(X)+1 $，也不能说明它是最优或唯一的！必须检查是否满足 Kraft 不等式并验证其唯一可解性。</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="最优编码的极限信源编码基本定理" class="level3" data-number="6.2.3">
+<h3 data-number="6.2.3" class="anchored" data-anchor-id="最优编码的极限信源编码基本定理"><span class="header-section-number">6.2.3</span> <strong>3. 最优编码的极限：信源编码基本定理</strong></h3>
+<blockquote class="blockquote">
+<p>✅ <strong>定理名称更正</strong><br>
+语音稿中“相同地定理”应为 <strong>香农第一定理 (Shannon’s First Theorem)</strong> 或 <strong>无损信源编码定理</strong>。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_12.png" class="img-fluid figure-img"></p>
+<figcaption>香农第一定理。</figcaption>
+</figure>
+</div>
+<section id="香农第一定理无损" class="level4" data-number="6.2.3.1">
+<h4 data-number="6.2.3.1" class="anchored" data-anchor-id="香农第一定理无损"><span class="header-section-number">6.2.3.1</span> <strong>香农第一定理（无损）</strong></h4>
+<p>设离散无记忆信源 $ X $ 的熵为 $ H(X) $，则：</p>
+<ol type="1">
+<li><strong>存在性</strong>：对任意编码速率 $ R &gt; H(X) $，总存在一种无损编码方式使得平均码长 $ {L} &lt; R $。</li>
+<li><strong>不可能性</strong>：若编码速率 $ R &lt; H(X) $，则任何无损编码都将以概率1出现错误（即必然有损）。</li>
+</ol>
+<p>因此，<strong>信息熵 $ H(X) $ 是所有无损编码的平均码长下限</strong>，无论编码方式多么复杂。</p>
+<blockquote class="blockquote">
+<p>💡 <strong>教授洞见 · 理论的意义</strong><br>
+“这个定理告诉我们：<strong>压缩是有极限的</strong>。你可以无限逼近 $ H(X) $，但永远不能突破它。就像光速之于物理世界，信息熵是数据世界的‘光速’。”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="如何计算最短平均码长-l_" class="level3" data-number="6.2.4">
+<h3 data-number="6.2.4" class="anchored" data-anchor-id="如何计算最短平均码长-l_"><span class="header-section-number">6.2.4</span> **4. 如何计算最短平均码长 $ {L}_{} $？**</h3>
+<p>这是学生最容易混淆的问题。答案取决于信源的概率分布：</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 36%">
+<col style="width: 53%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>情况</th>
+<th>是否可达 $ H(X) $</th>
+<th>如何计算 $ {L}_{} $</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>所有 $ p_i = 2^{-k_i} $（即 $ p_i $ 是2的负整数次幂）</td>
+<td>✅ 可达</td>
+<td>$ {L}_{} = H(X) $</td>
+</tr>
+<tr class="even">
+<td>否则</td>
+<td>❌ 不可达</td>
+<td>必须使用最优编码算法（如霍夫曼编码）计算实际能达到的最小 $ {L} $</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p>🧠 <strong>思路解析 · 为何如此设计？</strong><br>
+当 $ p_i = 2^{-k_i} $ 时，我们可以直接令码长 $ l_i = -_2 p_i = k_i $，此时 Kraft 和恰好等于1，完美填满二叉树，实现熵极限。</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>🛠️ <strong>操作建议</strong><br>
+在考试或作业中，若未明确说明概率分布形式，<strong>不要直接用 $ H(X) $ 作为答案</strong>，应说明需通过霍夫曼编码等方法求解。</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="第二部分经典编码算法详解" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="第二部分经典编码算法详解"><span class="header-section-number">6.3</span> <strong>第二部分：经典编码算法详解</strong></h2>
+<section id="霍夫曼编码-huffman-coding" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="霍夫曼编码-huffman-coding"><span class="header-section-number">6.3.1</span> <strong>1. 霍夫曼编码 (Huffman Coding)</strong></h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_1.png" class="img-fluid figure-img"></p>
+<figcaption>Huffman编码原理与应用</figcaption>
+</figure>
+</div>
+<p>霍夫曼编码是一种构造<strong>最优前缀码</strong>的经典贪心算法。</p>
+<section id="算法步骤" class="level4" data-number="6.3.1.1">
+<h4 data-number="6.3.1.1" class="anchored" data-anchor-id="算法步骤"><span class="header-section-number">6.3.1.1</span> <strong>算法步骤</strong></h4>
+<ol type="1">
+<li>将所有符号按概率从小到大排序。</li>
+<li>取出两个概率最小的符号，合并为一个新节点，其概率为二者之和。</li>
+<li>将新节点插入原序列，保持有序。</li>
+<li>重复步骤2–3，直到只剩一个根节点。</li>
+<li>从根节点回溯，分配0/1，得到各符号的码字。</li>
+</ol>
+</section>
+<section id="性能分析" class="level4" data-number="6.3.1.2">
+<h4 data-number="6.3.1.2" class="anchored" data-anchor-id="性能分析"><span class="header-section-number">6.3.1.2</span> <strong>性能分析</strong></h4>
+<ul>
+<li>平均码长 $ {L} $ 满足：<br>
+<span class="math display">\[
+H(X) \leq \bar{L} &lt; H(X) + 1
+\]</span></li>
+<li>编码效率 $ = $</li>
+</ul>
+</section>
+<section id="块编码-block-coding-提升效率" class="level4" data-number="6.3.1.3">
+<h4 data-number="6.3.1.3" class="anchored" data-anchor-id="块编码-block-coding-提升效率"><span class="header-section-number">6.3.1.3</span> <strong>块编码 (Block Coding) 提升效率</strong></h4>
+<p>将 $ N $ 个符号组合成一个“超级符号”进行编码：</p>
+<ul>
+<li>联合熵：$ H(X^N) = N H(X) $ （因独立同分布）</li>
+<li>块编码最小平均码长：$ {L}_N $</li>
+<li>单个符号平均码长：$ $</li>
+<li>极限性质： <span class="math display">\[
+H(X) \leq \frac{\bar{L}_N}{N} &lt; H(X) + \frac{1}{N}
+\]</span> 当 $ N $ 时，$ H(X) $</li>
+</ul>
+<blockquote class="blockquote">
+<p>📊 <strong>实例对比（来自PPT）</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>编码方式</th>
+<th>平均码长 (bit/symbol)</th>
+<th>编码效率</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>符号级 Huffman</td>
+<td>1.55</td>
+<td>97.6%</td>
+</tr>
+<tr class="even">
+<td>块大小 N=2</td>
+<td>1.534</td>
+<td>更高</td>
+</tr>
+<tr class="odd">
+<td>块大小 N→∞</td>
+<td>→ H(X)</td>
+<td>→100%</td>
+</tr>
+</tbody>
+</table>
+<p>结论：<strong>增大块大小可逼近熵极限</strong>，但代价是复杂度指数增长。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_3.png" class="img-fluid figure-img"></p>
+<figcaption>Huffman编码效率对比。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="霍夫曼编码的实际应用jpeg-图像压缩流程" class="level3" data-number="6.3.2">
+<h3 data-number="6.3.2" class="anchored" data-anchor-id="霍夫曼编码的实际应用jpeg-图像压缩流程"><span class="header-section-number">6.3.2</span> <strong>2. 霍夫曼编码的实际应用：JPEG 图像压缩流程</strong></h3>
+<blockquote class="blockquote">
+<p>🔗 <strong>连接理论与现实</strong><br>
+JPEG 是霍夫曼编码在工程实践中最著名的应用之一。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_4.png" class="img-fluid figure-img"></p>
+<figcaption>Huffman编码应用流程图</figcaption>
+</figure>
+</div>
+<section id="完整流程四步走" class="level4" data-number="6.3.2.1">
+<h4 data-number="6.3.2.1" class="anchored" data-anchor-id="完整流程四步走"><span class="header-section-number">6.3.2.1</span> <strong>完整流程（四步走）</strong></h4>
+<pre class="mermaid"><code>graph LR
+A[原始高清图像] --&gt; B[DCT 变换]
+B --&gt; C[量化]
+C --&gt; D[熵编码&lt;br&gt;(Zigzag + RLE + Huffman)]
+D --&gt; E[JEPG 比特流]</code></pre>
+</section>
+<section id="离散余弦变换-dct" class="level4" data-number="6.3.2.2">
+<h4 data-number="6.3.2.2" class="anchored" data-anchor-id="离散余弦变换-dct"><span class="header-section-number">6.3.2.2</span> <strong>(1) 离散余弦变换 (DCT)</strong></h4>
+<ul>
+<li>将图像分块（通常8×8），对每块做 DCT： <span class="math display">\[
+F(u,v) = C(u)C(v) \sum_{x=0}^{7} \sum_{y=0}^{7} f(x,y) \cos\left[\frac{(2x+1)u\pi}{16}\right] \cos\left[\frac{(2y+1)v\pi}{16}\right]
+\]</span></li>
+<li><strong>作用</strong>：能量集中。低频分量（左上角）包含主要信息，高频分量（右下角）多为细节/噪声。</li>
+</ul>
+</section>
+<section id="量化-quantization" class="level4" data-number="6.3.2.3">
+<h4 data-number="6.3.2.3" class="anchored" data-anchor-id="量化-quantization"><span class="header-section-number">6.3.2.3</span> <strong>(2) 量化 (Quantization)</strong></h4>
+<ul>
+<li>使用量化表 $ Q(u,v) $ 对 DCT 系数进行除法并取整： <span class="math display">\[
+F_Q(u,v) = \text{round}\left( \frac{F(u,v)}{Q(u,v)} \right)
+\]</span></li>
+<li><strong>非均匀量化策略</strong>：
+<ul>
+<li>左上角（低频）：$ Q $ 值小 → 量化误差小 → 保留更多细节</li>
+<li>右下角（高频）：$ Q $ 值大 → 量化误差大 → 允许更大压缩</li>
+</ul></li>
+</ul>
+<blockquote class="blockquote">
+<p>💡 <strong>教授点拨 · 设计哲学</strong><br>
+“人眼对高频变化不敏感，所以我们可以大胆舍弃。这就是<strong>感知编码</strong>的思想——根据人类感官特性来丢数据。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_6.png" class="img-fluid figure-img"></p>
+<figcaption>Huffman编码应用与量化策略。</figcaption>
+</figure>
+</div>
+</section>
+<section id="熵编码优化" class="level4" data-number="6.3.2.4">
+<h4 data-number="6.3.2.4" class="anchored" data-anchor-id="熵编码优化"><span class="header-section-number">6.3.2.4</span> <strong>(3) 熵编码优化</strong></h4>
+<ul>
+<li><strong>Zigzag 扫描</strong>：将8×8矩阵转为一维序列，使低频在前，高频在后。</li>
+<li><strong>游程编码 (Run-Length Encoding, RLE)</strong>：
+<ul>
+<li>格式：<code>(R, S, C)</code>
+<ul>
+<li><code>R</code>：当前非零值前连续零的个数（Run）</li>
+<li><code>S</code>：非零值所需比特数（Size）</li>
+<li><code>C</code>：非零值本身（Coefficient）</li>
+</ul></li>
+<li>结束标志：<code>(0,0)</code> 表示后续全为零。</li>
+</ul></li>
+<li><strong>霍夫曼编码</strong>：对 <code>(R,S)</code> 组合进行变长编码，高频组合用短码。</li>
+</ul>
+<blockquote class="blockquote">
+<p>🎯 <strong>优势总结</strong><br>
+通过 DCT + 量化，大量系数变为0；再通过 RLE + Huffman，实现了远超单符号编码的压缩比。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_7.png" class="img-fluid figure-img"></p>
+<figcaption>Huffman编码应用示例。</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_8.png" class="img-fluid figure-img"></p>
+<figcaption>Huffman编码应用示例。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="自适应编码lempel-ziv-lz-算法" class="level3" data-number="6.3.3">
+<h3 data-number="6.3.3" class="anchored" data-anchor-id="自适应编码lempel-ziv-lz-算法"><span class="header-section-number">6.3.3</span> <strong>3. 自适应编码：Lempel-Ziv (LZ) 算法</strong></h3>
+<blockquote class="blockquote">
+<p>✅ <strong>术语更正</strong><br>
+语音稿中“LC编码”、“LV编码”应为 <strong>Lempel-Ziv 编码</strong>，常见变体如 LZ77、LZW。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_9.png" class="img-fluid figure-img"></p>
+<figcaption>Lempel-Ziv数据压缩特点</figcaption>
+</figure>
+</div>
+<section id="核心思想" class="level4" data-number="6.3.3.1">
+<h4 data-number="6.3.3.1" class="anchored" data-anchor-id="核心思想"><span class="header-section-number">6.3.3.1</span> <strong>核心思想</strong></h4>
+<ul>
+<li><strong>无需先验统计</strong>：不需要预先知道信源概率分布。</li>
+<li><strong>基于字典</strong>：利用数据中的重复模式动态构建“词典”。</li>
+<li><strong>广泛应用</strong>：GIF、ZIP、PNG 等格式均采用 LZ 系列算法。</li>
+</ul>
+</section>
+<section id="lz77-算法简述滑动窗口" class="level4" data-number="6.3.3.2">
+<h4 data-number="6.3.3.2" class="anchored" data-anchor-id="lz77-算法简述滑动窗口"><span class="header-section-number">6.3.3.2</span> <strong>LZ77 算法简述（滑动窗口）</strong></h4>
+<ol type="1">
+<li>维护一个长度为 $ W $ 的滑动窗口（历史缓冲区）。</li>
+<li>对当前位置的字符串，查找其在窗口内的最长匹配子串。</li>
+<li>编码为 <code>(偏移量 u, 长度 n)</code>：
+<ul>
+<li><code>u</code>：匹配串起始位置距当前位置的距离</li>
+<li><code>n</code>：匹配串长度</li>
+</ul></li>
+<li>若无匹配（<code>n=1</code>），直接输出原字符。</li>
+</ol>
+</section>
+<section id="编码细节" class="level4" data-number="6.3.3.3">
+<h4 data-number="6.3.3.3" class="anchored" data-anchor-id="编码细节"><span class="header-section-number">6.3.3.3</span> <strong>编码细节</strong></h4>
+<ul>
+<li><code>n</code> 的编码：使用 <strong>Unary-Binary Code</strong>
+<ul>
+<li>前缀：<code>floor(log₂n)</code> 个零</li>
+<li>后缀：<code>n</code> 的二进制表示</li>
+</ul></li>
+<li><code>u</code> 的编码：固定长度编码，需 $ _2 W $ 比特</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_10.png" class="img-fluid figure-img"></p>
+<figcaption>Lempel-Ziv数据压缩算法</figcaption>
+</figure>
+</div>
+<blockquote class="blockquote">
+<p>💡 <strong>教授洞见 · 通用性的力量</strong><br>
+“LZ 编码的伟大之处在于它的<strong>普适性</strong>。不管你是中文、英文还是DNA序列，只要有重复，它就能压缩。它不像霍夫曼那样依赖训练，是一种真正‘即插即用’的智能压缩。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_11.png" class="img-fluid figure-img"></p>
+<figcaption>Lempel-Ziv编码示例</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+</section>
+<section id="第三部分从离散到连续信号采样理论" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="第三部分从离散到连续信号采样理论"><span class="header-section-number">6.4</span> <strong>第三部分：从离散到连续——信号采样理论</strong></h2>
+<blockquote class="blockquote">
+<p>🔁 <strong>课程转折点</strong><br>
+“前面我们假设信源是离散的。但现实世界是模拟的。现在我们要回答：<strong>如何把连续的模拟信号变成我们可以编码的离散序列？</strong>”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_16.png" class="img-fluid figure-img"></p>
+<figcaption>信号采样与处理流程图</figcaption>
+</figure>
+</div>
+<section id="采样的本质正交展开" class="level3" data-number="6.4.1">
+<h3 data-number="6.4.1" class="anchored" data-anchor-id="采样的本质正交展开"><span class="header-section-number">6.4.1</span> <strong>1. 采样的本质：正交展开</strong></h3>
+<p>采样不仅是“每隔一段时间取一个点”，更是<strong>在信号空间中的一组正交基下的投影</strong>。</p>
+<section id="时间有限信号-傅里叶级数-fourier-series" class="level4" data-number="6.4.1.1">
+<h4 data-number="6.4.1.1" class="anchored" data-anchor-id="时间有限信号-傅里叶级数-fourier-series"><span class="header-section-number">6.4.1.1</span> <strong>时间有限信号 → 傅里叶级数 (Fourier Series)</strong></h4>
+<ul>
+<li>信号 $ u(t) $ 在区间 <span class="math inline">\([-T/2, T/2]\)</span> 外为零。</li>
+<li>可展开为： <span class="math display">\[
+u(t) = \sum_{k=-\infty}^{\infty} u_k \cdot e^{j2\pi kt / T} \cdot \Pi_T(t)
+\]</span> 其中 $ _T(t) $ 是宽度为 $ T $ 的矩形窗函数。</li>
+<li>基函数 $ _k(t) = e^{j2kt / T} _T(t) $ 构成一组<strong>正交基</strong>（非单位正交，能量为 $ T $）。</li>
+<li>系数 $ u_k $ 即为采样点，可通过内积提取： <span class="math display">\[
+u_k = \frac{1}{T} \int_{-T/2}^{T/2} u(t) e^{-j2\pi kt / T} dt
+\]</span></li>
+</ul>
+<blockquote class="blockquote">
+<p>🧩 <strong>统一视角</strong><br>
+无论是傅里叶级数、DTFT 还是采样定理，本质都是<strong>信号在正交基下的分解</strong>。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_17.png" class="img-fluid figure-img"></p>
+<figcaption>傅里叶级数与信号能量</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_18.png" class="img-fluid figure-img"></p>
+<figcaption>傅里叶级数展开与收敛性分析。</figcaption>
+</figure>
+</div>
+</section>
+<section id="时间无限信号-分段展开-t-spaced-truncated-sinusoidal-expansion" class="level4" data-number="6.4.1.2">
+<h4 data-number="6.4.1.2" class="anchored" data-anchor-id="时间无限信号-分段展开-t-spaced-truncated-sinusoidal-expansion"><span class="header-section-number">6.4.1.2</span> <strong>时间无限信号 → 分段展开 (T-Spaced Truncated Sinusoidal Expansion)</strong></h4>
+<ul>
+<li>将无限信号分段，每段长度 $ T $。</li>
+<li>每段独立做傅里叶级数展开。</li>
+<li>总信号表示为双索引展开： <span class="math display">\[
+u(t) = \sum_{m=-\infty}^{\infty} \sum_{k=-\infty}^{\infty} u_{k,m} \cdot \phi_k(t - mT)
+\]</span></li>
+<li>$ u_{k,m} $ 为第 $ m $ 段的第 $ k $ 个傅里叶系数。</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_19.png" class="img-fluid figure-img"></p>
+<figcaption>信号时域有限，频域正交展开。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="带宽有限信号-采样定理-sampling-theorem" class="level3" data-number="6.4.2">
+<h3 data-number="6.4.2" class="anchored" data-anchor-id="带宽有限信号-采样定理-sampling-theorem"><span class="header-section-number">6.4.2</span> <strong>2. 带宽有限信号 → 采样定理 (Sampling Theorem)</strong></h3>
+<blockquote class="blockquote">
+<p>✅ <strong>公式更正</strong><br>
+PPT 中误写为 $ 2W $，正确采样周期应为 $ T_s = $，即<strong>奈奎斯特率</strong>。</p>
+</blockquote>
+<section id="定理陈述" class="level4" data-number="6.4.2.1">
+<h4 data-number="6.4.2.1" class="anchored" data-anchor-id="定理陈述"><span class="header-section-number">6.4.2.1</span> <strong>定理陈述</strong></h4>
+<p>若信号 $ x(t) $ 的频谱 $ X(f) $ 在 $ |f| &gt; W $ 时为零（即带宽为 $ W $ Hz），则：</p>
+<ul>
+<li>以采样间隔 $ T_s = $ 采样。</li>
+<li>原信号可由采样点完美重构： <span class="math display">\[
+x(t) = \sum_{k=-\infty}^{\infty} x\left(\frac{k}{2W}\right) \cdot \text{sinc}(2Wt - k)
+\]</span> 其中 $ (x) = $。</li>
+</ul>
+</section>
+<section id="证明思路频域-时域" class="level4" data-number="6.4.2.2">
+<h4 data-number="6.4.2.2" class="anchored" data-anchor-id="证明思路频域-时域"><span class="header-section-number">6.4.2.2</span> <strong>证明思路（频域 ↔︎ 时域）</strong></h4>
+<ol type="1">
+<li>带限信号 → DTFT 展开其频谱： <span class="math display">\[
+X(f) = \sum_{k} x_k \cdot e^{-j2\pi kf / (2W)} \cdot \Pi_{2W}(f)
+\]</span></li>
+<li>对 $ X(f) $ 做逆傅里叶变换，利用 $ ^{-1}{_{2W}(f)} = 2W (2Wt) $。</li>
+<li>得到时域表达式，并代入 $ t = $，利用 sinc 函数的正交性完成重构。</li>
+</ol>
+<blockquote class="blockquote">
+<p>⚠️ <strong>重要前提</strong><br>
+采样定理成立的关键是信号<strong>严格带限</strong>。现实中信号总是无限带宽，因此需加抗混叠滤波器。</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>💡 <strong>教授点拨 · 收敛性的本质</strong><br>
+“我们说重构信号等于原信号，不是指<strong>逐点相等</strong>，而是指<strong>两者之差的能量为零</strong>。这叫做 $ L^2 $ 收敛或均方收敛。在工程意义上，这就足够了。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_20.png" class="img-fluid figure-img"></p>
+<figcaption>信号采样定理讲解</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_21.png" class="img-fluid figure-img"></p>
+<figcaption>采样定理证明。</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_22.png" class="img-fluid figure-img"></p>
+<figcaption>采样定理与信号重构</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+</section>
+<section id="课程总结与展望" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="课程总结与展望"><span class="header-section-number">6.5</span> <strong>课程总结与展望</strong></h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_13.png" class="img-fluid figure-img"></p>
+<figcaption>香农第一定理总结</figcaption>
+</figure>
+</div>
+<section id="知识体系总览" class="level3" data-number="6.5.1">
+<h3 data-number="6.5.1" class="anchored" data-anchor-id="知识体系总览"><span class="header-section-number">6.5.1</span> <strong>知识体系总览</strong></h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>编码类型</th>
+<th>特点</th>
+<th>极限</th>
+<th>应用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>定长码</td>
+<td>忽略统计特性</td>
+<td>$ M $</td>
+<td>简单协议</td>
+</tr>
+<tr class="even">
+<td>变长码 (Huffman)</td>
+<td>利用概率分布</td>
+<td>$ H(X) $</td>
+<td>JPEG、MP3</td>
+</tr>
+<tr class="odd">
+<td>块编码</td>
+<td>联合编码提升效率</td>
+<td>$ H(X) $</td>
+<td>高效存储</td>
+</tr>
+<tr class="even">
+<td>LZ 编码</td>
+<td>自适应、无需先验</td>
+<td>接近熵</td>
+<td>ZIP、GIF</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="核心结论" class="level3" data-number="6.5.2">
+<h3 data-number="6.5.2" class="anchored" data-anchor-id="核心结论"><span class="header-section-number">6.5.2</span> <strong>核心结论</strong></h3>
+<ol type="1">
+<li><strong>信息熵是无损压缩的终极边界</strong>。</li>
+<li><strong>霍夫曼编码是最优的前缀码</strong>，但需已知概率分布。</li>
+<li><strong>LZ 编码是自适应的通用压缩器</strong>，适合未知信源。</li>
+<li><strong>采样是信号在正交基下的投影</strong>，采样定理给出了完美重构的条件。</li>
+</ol>
+<blockquote class="blockquote">
+<p>🌟 <strong>教授寄语</strong><br>
+“学通信，不要只盯着公式。要问自己：<strong>这个技术解决了什么问题？它在和谁斗争？</strong> 比如霍夫曼在和冗余斗争，LZ在和未知斗争，采样在和连续斗争。理解了‘斗争’，你就理解了本质。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1128b-1126-e-Huffman%20Code%20for%20Encoding%20a%20Block/page_14.png" class="img-fluid figure-img"></p>
+<figcaption>上海科技大学感谢提问。</figcaption>
+</figure>
+</div>
+<hr>
+<p><strong>下次课预告</strong>：我们将深入探讨<strong>量化理论</strong>与<strong>有损信源编码</strong>，揭开 MP3、AAC 等音频压缩背后的奥秘。</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "已复制");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "已复制");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.html" class="pagination-link" aria-label="**通信原理深度学习笔记：信源编码与最优变长码理论**">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：信源编码与最优变长码理论</strong></span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html" class="pagination-link" aria-label="**通信原理深度学习笔记：采样、正交展开与混叠现象**">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：采样、正交展开与混叠现象</strong></span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

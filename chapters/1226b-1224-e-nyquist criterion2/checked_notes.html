@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>14&nbsp; 通信原理深度学习笔记 – EE140 通信系统导论学习笔记</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0dd2bd5de344125cf763a379ddc3eb04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html">第三部分：信号处理与调制</a></li><li class="breadcrumb-item"><a href="../../chapters/1226b-1224-e-nyquist criterion2/checked_notes.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">通信原理深度学习笔记</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">EE140 通信系统导论学习笔记</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">EE140 通信系统导论学习笔记</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">第一部分：数字通信基础</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1114-b-数字通信/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：数字通信系统导论</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1119b-1114-e-Q1 How to measure the quantity of information/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">深度学习笔记：信息论基础与信源编码导论</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1121b-1119-e-Layering of Source Coding/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">深度学习笔记：信源编码理论（基于廉黎祥《通信原理》第10周课堂）</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：信源编码与最优变长码理论</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">第二部分：采样与量化</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：采样、正交展开与混叠现象</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1205b-1203-e-Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：通信原理——量化器设计与Lloyd-Max算法</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1210b-1205-e-Lloyd-Max Algorithm/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：量化理论与应用——从通信原理到现代AI</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1212b-1210-e-High-Rate Entropy-Coded Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：高码率熵编码量化与信号空间基础</strong></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">第三部分：信号处理与调制</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从信号空间到数字调制（第14周）</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1219b-1217-e-PAM Signal Constellation/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从PAM到QAM的调制与系统设计</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：奈奎斯特准则与无码间干扰传输</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1226b-1224-e-nyquist criterion2/checked_notes.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">通信原理深度学习笔记</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">目录</h2>
+   
+  <ul>
+  <li><a href="#一课程回顾从基带波形到奈奎斯特准则" id="toc-一课程回顾从基带波形到奈奎斯特准则" class="nav-link active" data-scroll-target="#一课程回顾从基带波形到奈奎斯特准则"><span class="header-section-number">14.1</span> 一、课程回顾：从基带波形到奈奎斯特准则</a>
+  <ul class="collapse">
+  <li><a href="#基带信号模型与无码间干扰isi" id="toc-基带信号模型与无码间干扰isi" class="nav-link" data-scroll-target="#基带信号模型与无码间干扰isi"><span class="header-section-number">14.1.1</span> 1.1 基带信号模型与无码间干扰（ISI）</a></li>
+  <li><a href="#奈奎斯特准则nyquist-criterion" id="toc-奈奎斯特准则nyquist-criterion" class="nav-link" data-scroll-target="#奈奎斯特准则nyquist-criterion"><span class="header-section-number">14.1.2</span> 1.2 奈奎斯特准则（Nyquist Criterion）</a></li>
+  </ul></li>
+  <li><a href="#二脉冲成形设计理想与现实的权衡" id="toc-二脉冲成形设计理想与现实的权衡" class="nav-link" data-scroll-target="#二脉冲成形设计理想与现实的权衡"><span class="header-section-number">14.2</span> 二、脉冲成形设计：理想与现实的权衡</a>
+  <ul class="collapse">
+  <li><a href="#最小带宽限制奈奎斯特带宽" id="toc-最小带宽限制奈奎斯特带宽" class="nav-link" data-scroll-target="#最小带宽限制奈奎斯特带宽"><span class="header-section-number">14.2.1</span> 2.1 最小带宽限制：奈奎斯特带宽</a></li>
+  <li><a href="#典型脉冲函数对比" id="toc-典型脉冲函数对比" class="nav-link" data-scroll-target="#典型脉冲函数对比"><span class="header-section-number">14.2.2</span> 2.2 典型脉冲函数对比</a></li>
+  <li><a href="#实际解决方案升余弦滚降滤波器raised-cosine-filter" id="toc-实际解决方案升余弦滚降滤波器raised-cosine-filter" class="nav-link" data-scroll-target="#实际解决方案升余弦滚降滤波器raised-cosine-filter"><span class="header-section-number">14.2.3</span> 2.3 实际解决方案：升余弦滚降滤波器（Raised Cosine Filter）</a></li>
+  </ul></li>
+  <li><a href="#三匹配滤波与正交波形最优接收的核心" id="toc-三匹配滤波与正交波形最优接收的核心" class="nav-link" data-scroll-target="#三匹配滤波与正交波形最优接收的核心"><span class="header-section-number">14.3</span> 三、匹配滤波与正交波形：最优接收的核心</a>
+  <ul class="collapse">
+  <li><a href="#匹配滤波器matched-filter" id="toc-匹配滤波器matched-filter" class="nav-link" data-scroll-target="#匹配滤波器matched-filter"><span class="header-section-number">14.3.1</span> 3.1 匹配滤波器（Matched Filter）</a></li>
+  <li><a href="#正交波形与信号空间表示" id="toc-正交波形与信号空间表示" class="nav-link" data-scroll-target="#正交波形与信号空间表示"><span class="header-section-number">14.3.2</span> 3.2 正交波形与信号空间表示</a></li>
+  </ul></li>
+  <li><a href="#四带通调制从基带到射频" id="toc-四带通调制从基带到射频" class="nav-link" data-scroll-target="#四带通调制从基带到射频"><span class="header-section-number">14.4</span> 四、带通调制：从基带到射频</a></li>
+  <li><a href="#五核心挑战含噪信道下的最优检测" id="toc-五核心挑战含噪信道下的最优检测" class="nav-link" data-scroll-target="#五核心挑战含噪信道下的最优检测"><span class="header-section-number">14.5</span> 五、核心挑战：含噪信道下的最优检测</a>
+  <ul class="collapse">
+  <li><a href="#检测问题建模" id="toc-检测问题建模" class="nav-link" data-scroll-target="#检测问题建模"><span class="header-section-number">14.5.1</span> 5.1 检测问题建模</a></li>
+  <li><a href="#关键概率模型" id="toc-关键概率模型" class="nav-link" data-scroll-target="#关键概率模型"><span class="header-section-number">14.5.2</span> 5.2 关键概率模型</a></li>
+  <li><a href="#最优检测准则" id="toc-最优检测准则" class="nav-link" data-scroll-target="#最优检测准则"><span class="header-section-number">14.5.3</span> 5.3 最优检测准则</a></li>
+  <li><a href="#似然比检验likelihood-ratio-test-lrt" id="toc-似然比检验likelihood-ratio-test-lrt" class="nav-link" data-scroll-target="#似然比检验likelihood-ratio-test-lrt"><span class="header-section-number">14.5.4</span> 5.4 似然比检验（Likelihood Ratio Test, LRT）</a></li>
+  <li><a href="#典型案例反极性信号检测antipodal-signaling" id="toc-典型案例反极性信号检测antipodal-signaling" class="nav-link" data-scroll-target="#典型案例反极性信号检测antipodal-signaling"><span class="header-section-number">14.5.5</span> 5.5 典型案例：反极性信号检测（Antipodal Signaling）</a></li>
+  <li><a href="#错误概率分析" id="toc-错误概率分析" class="nav-link" data-scroll-target="#错误概率分析"><span class="header-section-number">14.5.6</span> 5.6 错误概率分析</a></li>
+  </ul></li>
+  <li><a href="#六扩展话题从二元到多元与序列检测" id="toc-六扩展话题从二元到多元与序列检测" class="nav-link" data-scroll-target="#六扩展话题从二元到多元与序列检测"><span class="header-section-number">14.6</span> 六、扩展话题：从二元到多元与序列检测</a>
+  <ul class="collapse">
+  <li><a href="#m-ary-检测" id="toc-m-ary-检测" class="nav-link" data-scroll-target="#m-ary-检测"><span class="header-section-number">14.6.1</span> 6.1 M-ary 检测</a></li>
+  <li><a href="#序列检测" id="toc-序列检测" class="nav-link" data-scroll-target="#序列检测"><span class="header-section-number">14.6.2</span> 6.2 序列检测</a></li>
+  </ul></li>
+  <li><a href="#七总结与反思通信系统的设计哲学" id="toc-七总结与反思通信系统的设计哲学" class="nav-link" data-scroll-target="#七总结与反思通信系统的设计哲学"><span class="header-section-number">14.7</span> 七、总结与反思：通信系统的设计哲学</a></li>
+  <li><a href="#附录常见误区澄清" id="toc-附录常见误区澄清" class="nav-link" data-scroll-target="#附录常见误区澄清"><span class="header-section-number">14.8</span> 附录：常见误区澄清</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html">第三部分：信号处理与调制</a></li><li class="breadcrumb-item"><a href="../../chapters/1226b-1224-e-nyquist criterion2/checked_notes.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">通信原理深度学习笔记</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">通信原理深度学习笔记</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><strong>课程：EE140《通信系统导论》第15讲</strong><br>
+<strong>主讲人：李翔 教授（上海科技大学）</strong><br>
+<strong>时间：2025年12月26日</strong></p>
+<blockquote class="blockquote">
+<p><strong>教授点拨</strong>：本节课是数字通信理论的收尾与升华，核心在于从“无噪声理想传输”走向“有噪声下的最优检测”。我们不仅要掌握公式推导，更要理解其背后的物理意义、设计权衡和决策逻辑。这不仅是技术，更是工程思维的体现。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_8.png" class="img-fluid figure-img"></p>
+<figcaption>上海科技大通信系统课件。</figcaption>
+</figure>
+</div>
+<hr>
+<section id="一课程回顾从基带波形到奈奎斯特准则" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="一课程回顾从基带波形到奈奎斯特准则"><span class="header-section-number">14.1</span> 一、课程回顾：从基带波形到奈奎斯特准则</h2>
+<section id="基带信号模型与无码间干扰isi" class="level3" data-number="14.1.1">
+<h3 data-number="14.1.1" class="anchored" data-anchor-id="基带信号模型与无码间干扰isi"><span class="header-section-number">14.1.1</span> 1.1 基带信号模型与无码间干扰（ISI）</h3>
+<p>在数字通信中，我们将离散符号序列 <span class="math inline">\(\{u_k\}\)</span> 转换为连续时间信号 <span class="math inline">\(u(t)\)</span> 进行传输：</p>
+<p><span class="math display">\[
+u(t) = \sum_{k} u_k p(t - kT)
+\]</span></p>
+<p>其中： - <span class="math inline">\(u_k\)</span>：第 <span class="math inline">\(k\)</span> 个时刻发送的符号； - <span class="math inline">\(p(t)\)</span>：<strong>基带脉冲成形函数</strong>（或称基函数）； - <span class="math inline">\(T\)</span>：符号周期（Symbol Duration），也称为“单符时长”。</p>
+<p>接收端通过滤波器 <span class="math inline">\(q(t)\)</span> 处理接收到的信号，并在采样时刻 <span class="math inline">\(t = nT\)</span> 提取信息。目标是实现 <strong>无码间干扰（Inter-Symbol Interference, ISI-Free）恢复</strong>，即恢复出的 <span class="math inline">\(\hat{u}_n = u_n\)</span>。</p>
+<p>为此，定义系统的整体脉冲响应为：</p>
+<p><span class="math display">\[
+g(t) = p(t) * q(t)
+\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_1.png" class="img-fluid figure-img"></p>
+<figcaption>通信系统信号处理流程。</figcaption>
+</figure>
+</div>
+</section>
+<section id="奈奎斯特准则nyquist-criterion" class="level3" data-number="14.1.2">
+<h3 data-number="14.1.2" class="anchored" data-anchor-id="奈奎斯特准则nyquist-criterion"><span class="header-section-number">14.1.2</span> 1.2 奈奎斯特准则（Nyquist Criterion）</h3>
+<p>奈奎斯特准则给出了实现无ISI传输的充要条件。</p>
+<section id="时域表述" class="level4" data-number="14.1.2.1">
+<h4 data-number="14.1.2.1" class="anchored" data-anchor-id="时域表述"><span class="header-section-number">14.1.2.1</span> ✅ 时域表述</h4>
+<p><span class="math inline">\(g(t)\)</span> 必须是一个<strong>理想奈奎斯特脉冲</strong>，满足：</p>
+<p><span class="math display">\[
+g(nT) =
+\begin{cases}
+1, &amp; n = 0 \\
+0, &amp; n \neq 0
+\end{cases}
+\]</span></p>
+<p>这意味着，在每个符号采样点上，仅当前符号有贡献，其余符号的响应恰好为零。</p>
+<blockquote class="blockquote">
+<p><strong>教授点拨 · 直观理解</strong><br>
+“你可以把 <span class="math inline">\(g(t)\)</span> 想象成一个‘梳子’——它的齿只在整数倍 <span class="math inline">\(T\)</span> 处起作用，其他地方都是空的。这样你每次‘抓取’信号时，只会抓到你想抓的那个符号。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_2.png" class="img-fluid figure-img"></p>
+<figcaption>奈奎斯特准则示例。</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_3.png" class="img-fluid figure-img"></p>
+<figcaption>奈奎斯特准则与信号分析。</figcaption>
+</figure>
+</div>
+</section>
+<section id="频域表述奈奎斯特第一准则" class="level4" data-number="14.1.2.2">
+<h4 data-number="14.1.2.2" class="anchored" data-anchor-id="频域表述奈奎斯特第一准则"><span class="header-section-number">14.1.2.2</span> ✅ 频域表述（奈奎斯特第一准则）</h4>
+<p>令 <span class="math inline">\(G(f)\)</span> 为 <span class="math inline">\(g(t)\)</span> 的傅里叶变换，则 <span class="math inline">\(G(f)\)</span> 必须满足：</p>
+<p><span class="math display">\[
+\sum_{k=-\infty}^{\infty} G\left(f + \frac{k}{T}\right) = T, \quad \forall f \in \left[-\frac{1}{2T}, \frac{1}{2T}\right]
+\]</span></p>
+<p>即将 <span class="math inline">\(G(f)\)</span> 以 <span class="math inline">\(\frac{1}{T}\)</span> 为间隔进行周期性折叠后，在基带区间 <span class="math inline">\(\left[-\frac{1}{2T}, \frac{1}{2T}\right]\)</span> 内叠加的结果为常数。</p>
+<p>这个常数通常归一化为 <span class="math inline">\(T\)</span>，表示总能量守恒。</p>
+<blockquote class="blockquote">
+<p><strong>教授点拨 · 发展脉络</strong><br>
+奈奎斯特准则最早由 Harry Nyquist 在 1928 年提出，用于分析电报系统中的最大传输速率。它揭示了一个根本规律：<strong>信道带宽决定了符号传输的极限速度</strong>。这一思想后来成为香农信息论的基础之一。</p>
+</blockquote>
+<hr>
+</section>
+</section>
+</section>
+<section id="二脉冲成形设计理想与现实的权衡" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="二脉冲成形设计理想与现实的权衡"><span class="header-section-number">14.2</span> 二、脉冲成形设计：理想与现实的权衡</h2>
+<section id="最小带宽限制奈奎斯特带宽" class="level3" data-number="14.2.1">
+<h3 data-number="14.2.1" class="anchored" data-anchor-id="最小带宽限制奈奎斯特带宽"><span class="header-section-number">14.2.1</span> 2.1 最小带宽限制：奈奎斯特带宽</h3>
+<p>根据奈奎斯特准则，最小可能的基带信号带宽（即“奈奎斯特带宽”）为：</p>
+<p><span class="math display">\[
+B_N = \frac{1}{2T}
+\]</span></p>
+<p>若实际基带带宽 <span class="math inline">\(B_b &lt; B_N\)</span>，则无法满足奈奎斯特准则，必然存在 ISI。</p>
+<blockquote class="blockquote">
+<p><strong>关键概念澄清</strong><br>
+在语音稿中提到的“XX带宽”、“WB=1/(2T)”等术语，经核实应统一为 <strong>奈奎斯特带宽 <span class="math inline">\(B_N = \frac{1}{2T}\)</span></strong>。这是系统设计的基本约束。</p>
+</blockquote>
+</section>
+<section id="典型脉冲函数对比" class="level3" data-number="14.2.2">
+<h3 data-number="14.2.2" class="anchored" data-anchor-id="典型脉冲函数对比"><span class="header-section-number">14.2.2</span> 2.2 典型脉冲函数对比</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 21%">
+<col style="width: 17%">
+<col style="width: 34%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>脉冲类型</th>
+<th>时域表达式</th>
+<th>频域特性</th>
+<th>是否满足奈奎斯特准则</th>
+<th>缺陷</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>矩形脉冲（Rectangular）</td>
+<td>$ () $</td>
+<td><span class="math inline">\(\text{sinc}(fT)\)</span></td>
+<td>❌ 不满足</td>
+<td>频谱无限宽，带宽利用率极低</td>
+</tr>
+<tr class="even">
+<td>sinc脉冲</td>
+<td>$ $</td>
+<td>矩形窗 <span class="math inline">\([ -1/(2T), 1/(2T) ]\)</span></td>
+<td>✅ 满足</td>
+<td>时域衰减慢（<span class="math inline">\(\sim 1/t\)</span>），对定时误差敏感</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p><strong>教授点拨 · 工程启示</strong><br>
+“sinc 函数虽然理论上完美，但在现实中几乎不可用。想象一下：你的信号在几千个符号周期后仍有微弱回响，只要有一点点采样偏差，就会引入严重干扰。这就是为什么我们说‘理想的往往不实用’。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_4.png" class="img-fluid figure-img"></p>
+<figcaption>数字通信信号处理概述</figcaption>
+</figure>
+</div>
+</section>
+<section id="实际解决方案升余弦滚降滤波器raised-cosine-filter" class="level3" data-number="14.2.3">
+<h3 data-number="14.2.3" class="anchored" data-anchor-id="实际解决方案升余弦滚降滤波器raised-cosine-filter"><span class="header-section-number">14.2.3</span> 2.3 实际解决方案：升余弦滚降滤波器（Raised Cosine Filter）</h3>
+<p>为了在<strong>带宽效率</strong>与<strong>时域收敛性</strong>之间取得平衡，实际系统采用<strong>升余弦滚降滤波器</strong>。</p>
+<p>其频谱定义为：</p>
+<p><span class="math display">\[
+P(f) =
+\begin{cases}
+\sqrt{T}, &amp; |f| \leq \frac{1 - \alpha}{2T} \\
+\sqrt{\frac{T}{2} \left[1 + \cos\left( \frac{\pi T}{\alpha} \left(|f| - \frac{1 - \alpha}{2T} \right) \right)\right]}, &amp; \frac{1 - \alpha}{2T} &lt; |f| \leq \frac{1 + \alpha}{2T} \\
+0, &amp; |f| &gt; \frac{1 + \alpha}{2T}
+\end{cases}
+\]</span></p>
+<p>其中 <span class="math inline">\(\alpha \in [0,1]\)</span> 为<strong>滚降系数</strong>。</p>
+<ul>
+<li>当 <span class="math inline">\(\alpha = 0\)</span>：退化为理想低通，带宽最小但不可实现；</li>
+<li>当 <span class="math inline">\(\alpha = 1\)</span>：带宽为 <span class="math inline">\(B = \frac{1}{T}\)</span>，是奈奎斯特带宽的两倍，但时域衰减快（<span class="math inline">\(\sim 1/t^3\)</span>），抗定时抖动能力强。</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>教授点拨 · 设计哲学</strong><br>
+“我们宁愿多花一点带宽，换来更强的鲁棒性。通信系统不是追求极致性能，而是要在各种不确定因素下依然可靠工作。这就是‘稳健设计’的思想。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_5.png" class="img-fluid figure-img"></p>
+<figcaption>通信系统符号基带波形转换</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_6.png" class="img-fluid figure-img"></p>
+<figcaption>带宽效率与能量权衡</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="三匹配滤波与正交波形最优接收的核心" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="三匹配滤波与正交波形最优接收的核心"><span class="header-section-number">14.3</span> 三、匹配滤波与正交波形：最优接收的核心</h2>
+<section id="匹配滤波器matched-filter" class="level3" data-number="14.3.1">
+<h3 data-number="14.3.1" class="anchored" data-anchor-id="匹配滤波器matched-filter"><span class="header-section-number">14.3.1</span> 3.1 匹配滤波器（Matched Filter）</h3>
+<p>当信道中存在加性白高斯噪声（AWGN）时，最优接收机使用<strong>匹配滤波器</strong>来最大化输出信噪比（SNR）。</p>
+<p>若发送脉冲为 <span class="math inline">\(p(t)\)</span>，则接收端滤波器应设计为：</p>
+<p><span class="math display">\[
+q(t) = p(T - t)
+\]</span></p>
+<p>即 <span class="math inline">\(p(t)\)</span> 关于 <span class="math inline">\(t = T/2\)</span> 对称的时间反转（若非因果需延迟）。该结构确保了接收机对已知信号波形的“最佳匹配”。</p>
+<p>此时，输出信噪比达到最大值。</p>
+</section>
+<section id="正交波形与信号空间表示" class="level3" data-number="14.3.2">
+<h3 data-number="14.3.2" class="anchored" data-anchor-id="正交波形与信号空间表示"><span class="header-section-number">14.3.2</span> 3.2 正交波形与信号空间表示</h3>
+<p>一个重要结论是：</p>
+<blockquote class="blockquote">
+<p>若 <span class="math inline">\(\{p(t - kT)\}\)</span> 构成一组单位正交函数集，且接收滤波器为匹配滤波器，则整体响应 <span class="math inline">\(g(t)\)</span> 满足奈奎斯特准则。</p>
+</blockquote>
+<p>这意味着我们可以将符号序列 <span class="math inline">\(\{u_k\}\)</span> 视为在一组正交基上的投影系数，而接收过程就是对该信号在对应基方向上的内积运算（即投影）：</p>
+<p><span class="math display">\[
+\hat{u}_k = \int u(t) \cdot p(t - kT) dt
+\]</span></p>
+<p>这正是解调的本质——<strong>从信号空间中提取坐标</strong>。</p>
+<blockquote class="blockquote">
+<p><strong>教授点拨 · 思路升华</strong><br>
+“你看，整个通信过程就像是一次‘向量搬家’：你在发送端把一个数字序列‘编码’成一个波形向量；经过信道传输后，接收端再把这个波形‘解码’回原来的数字序列。而奈奎斯特准则和匹配滤波，就是保证这次搬家不丢包、不错位的关键机制。”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="四带通调制从基带到射频" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="四带通调制从基带到射频"><span class="header-section-number">14.4</span> 四、带通调制：从基带到射频</h2>
+<p>完成基带成形后，需将其调制到高频以便在无线或有线信道中传输。</p>
+<p>对于复包络信号 <span class="math inline">\(u(t)\)</span>，带通信号为：</p>
+<p><span class="math display">\[
+s(t) = \text{Re} \left\{ u(t) e^{j2\pi f_c t} \right\}
+\]</span></p>
+<p>具体实现方式取决于调制类型：</p>
+<ul>
+<li><strong>PAM（脉冲幅度调制）</strong>：<span class="math inline">\(u(t)\)</span> 为实信号，直接双边带调制；</li>
+<li><strong>QAM（正交幅度调制）</strong>：<span class="math inline">\(u(t) = u_I(t) + j u_Q(t)\)</span>，分别与 <span class="math inline">\(\cos(2\pi f_c t)\)</span> 和 <span class="math inline">\(-\sin(2\pi f_c t)\)</span> 相乘后叠加。</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_9.png" class="img-fluid figure-img"></p>
+<figcaption>PAM检测与解调过程</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="五核心挑战含噪信道下的最优检测" class="level2" data-number="14.5">
+<h2 data-number="14.5" class="anchored" data-anchor-id="五核心挑战含噪信道下的最优检测"><span class="header-section-number">14.5</span> 五、核心挑战：含噪信道下的最优检测</h2>
+<p>至此，我们进入本课最深刻的环节——<strong>如何在噪声中做出最佳判断？</strong></p>
+<section id="检测问题建模" class="level3" data-number="14.5.1">
+<h3 data-number="14.5.1" class="anchored" data-anchor-id="检测问题建模"><span class="header-section-number">14.5.1</span> 5.1 检测问题建模</h3>
+<p>考虑最简单的场景：<strong>二进制检测（Binary Detection）</strong></p>
+<ul>
+<li>发送比特 <span class="math inline">\(b \in \{0, 1\}\)</span></li>
+<li>映射为星座点：<span class="math inline">\(b=0 \to a_0\)</span>, <span class="math inline">\(b=1 \to a_1\)</span></li>
+<li>接收信号：<span class="math inline">\(v = u + z\)</span>，其中 <span class="math inline">\(z \sim \mathcal{N}(0, N_0/2)\)</span> 为 AWGN</li>
+<li>观测值 <span class="math inline">\(v\)</span> 是随机变量，目标是基于 <span class="math inline">\(v\)</span> 判断原始发送的是 <span class="math inline">\(a_0\)</span> 还是 <span class="math inline">\(a_1\)</span></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_14.png" class="img-fluid figure-img"></p>
+<figcaption>二元检测原理与公式</figcaption>
+</figure>
+</div>
+</section>
+<section id="关键概率模型" class="level3" data-number="14.5.2">
+<h3 data-number="14.5.2" class="anchored" data-anchor-id="关键概率模型"><span class="header-section-number">14.5.2</span> 5.2 关键概率模型</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>名称</th>
+<th>符号</th>
+<th>定义</th>
+<th>物理意义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>先验概率</td>
+<td><span class="math inline">\(P(a_m)\)</span></td>
+<td>发送前认为 <span class="math inline">\(a_m\)</span> 被发送的概率</td>
+<td>反映发送端统计特性</td>
+</tr>
+<tr class="even">
+<td>似然概率</td>
+<td><span class="math inline">\(p(v\|a_m)\)</span></td>
+<td>给定发送 <span class="math inline">\(a_m\)</span>，观测到 <span class="math inline">\(v\)</span> 的条件概率</td>
+<td>描述信道行为</td>
+</tr>
+<tr class="odd">
+<td>后验概率</td>
+<td><span class="math inline">\(p(a_m\|v)\)</span></td>
+<td>给定观测到 <span class="math inline">\(v\)</span>，推断发送的是 <span class="math inline">\(a_m\)</span> 的概率</td>
+<td>支持决策的依据</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_10.png" class="img-fluid figure-img"></p>
+<figcaption>检测原理与MAP准则。</figcaption>
+</figure>
+</div>
+</section>
+<section id="最优检测准则" class="level3" data-number="14.5.3">
+<h3 data-number="14.5.3" class="anchored" data-anchor-id="最优检测准则"><span class="header-section-number">14.5.3</span> 5.3 最优检测准则</h3>
+<section id="最大后验概率准则map-maximum-a-posteriori" class="level4" data-number="14.5.3.1">
+<h4 data-number="14.5.3.1" class="anchored" data-anchor-id="最大后验概率准则map-maximum-a-posteriori"><span class="header-section-number">14.5.3.1</span> (1) 最大后验概率准则（MAP: Maximum A Posteriori）</h4>
+<p>选择使后验概率最大的假设：</p>
+<p><span class="math display">\[
+\hat{m} = \arg\max_m p(a_m | v)
+\]</span></p>
+<p>根据贝叶斯公式：</p>
+<p><span class="math display">\[
+p(a_m|v) = \frac{p(v|a_m) P(a_m)}{p(v)}
+\]</span></p>
+<p>由于分母 <span class="math inline">\(p(v)\)</span> 对所有 <span class="math inline">\(m\)</span> 相同，等价于最大化分子：</p>
+<p><span class="math display">\[
+\hat{m} = \arg\max_m \left[ p(v|a_m) \cdot P(a_m) \right]
+\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_15.png" class="img-fluid figure-img"></p>
+<figcaption>二元检测：最大后验概率准则。</figcaption>
+</figure>
+</div>
+</section>
+<section id="最大似然准则ml-maximum-likelihood" class="level4" data-number="14.5.3.2">
+<h4 data-number="14.5.3.2" class="anchored" data-anchor-id="最大似然准则ml-maximum-likelihood"><span class="header-section-number">14.5.3.2</span> (2) 最大似然准则（ML: Maximum Likelihood）</h4>
+<p>当先验等概（<span class="math inline">\(P(a_0)=P(a_1)=0.5\)</span>）时，MAP 退化为 ML：</p>
+<p><span class="math display">\[
+\hat{m} = \arg\max_m p(v|a_m)
+\]</span></p>
+<blockquote class="blockquote">
+<p><strong>教授点拨 · 决策智慧</strong><br>
+“MAP 像是一个‘理性决策者’：它不仅看证据（似然），还考虑先入之见（先验）。而 ML 更像是一个‘证据至上主义者’，只相信眼前看到的数据。两者没有绝对好坏，取决于你是否了解发送端的统计规律。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_11.png" class="img-fluid figure-img"></p>
+<figcaption>检测理论：MAP与ML准则。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="似然比检验likelihood-ratio-test-lrt" class="level3" data-number="14.5.4">
+<h3 data-number="14.5.4" class="anchored" data-anchor-id="似然比检验likelihood-ratio-test-lrt"><span class="header-section-number">14.5.4</span> 5.4 似然比检验（Likelihood Ratio Test, LRT）</h3>
+<p>引入<strong>似然比</strong>：</p>
+<p><span class="math display">\[
+\Lambda(v) = \frac{p(v|a_0)}{p(v|a_1)}
+\]</span></p>
+<p>MAP 决策规则可写为：</p>
+<p><span class="math display">\[
+\Lambda(v) \overset{\hat{a}=a_0}{\underset{\hat{a}=a_1}{\gtrless}} \eta = \frac{P(a_1)}{P(a_0)}
+\]</span></p>
+<p>即比较似然比与阈值 <span class="math inline">\(\eta\)</span>。</p>
+<blockquote class="blockquote">
+<p><strong>教授点拨 · 数学之美</strong><br>
+“看似复杂的概率决策，最终简化为一个简单的‘比较操作’。这就是数学的力量——将复杂现象抽象为简洁规则。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_16.png" class="img-fluid figure-img"></p>
+<figcaption>通信系统决策区域分析。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="典型案例反极性信号检测antipodal-signaling" class="level3" data-number="14.5.5">
+<h3 data-number="14.5.5" class="anchored" data-anchor-id="典型案例反极性信号检测antipodal-signaling"><span class="header-section-number">14.5.5</span> 5.5 典型案例：反极性信号检测（Antipodal Signaling）</h3>
+<p>设： - <span class="math inline">\(a_0 = +a\)</span>, <span class="math inline">\(a_1 = -a\)</span> - <span class="math inline">\(z \sim \mathcal{N}(0, \sigma^2), \sigma^2 = N_0/2\)</span></p>
+<p>则： - <span class="math inline">\(p(v|+a) = \mathcal{N}(a, \sigma^2)\)</span> - <span class="math inline">\(p(v|-a) = \mathcal{N}(-a, \sigma^2)\)</span></p>
+<p>计算似然比并取对数得<strong>对数似然比（LLR）</strong>：</p>
+<p><span class="math display">\[
+\text{LLR}(v) = \log \Lambda(v) = \frac{2a}{\sigma^2} v
+\]</span></p>
+<p>MAP 决策规则变为：</p>
+<p><span class="math display">\[
+v \overset{\hat{a}=+a}{\underset{\hat{a}=-a}{\gtrless}} \frac{\sigma^2}{2a} \log \left( \frac{P(-a)}{P(+a)} \right)
+\]</span></p>
+<p>若先验等概（<span class="math inline">\(P(+a)=P(-a)\)</span>），则阈值为 0：</p>
+<p><span class="math display">\[
+\hat{a} =
+\begin{cases}
++a, &amp; v &gt; 0 \\
+-a, &amp; v &lt; 0
+\end{cases}
+\]</span></p>
+<blockquote class="blockquote">
+<p><strong>教授点拨 · 生活类比</strong><br>
+“这就像你听不清一句话，只能听到模糊的声音。如果你本来就倾向于对方说的是‘是’，那么即使声音偏向‘否’，你也可能仍判断为‘是’——除非这个反向证据足够强。这就是偏见（prior）的作用。改变一个人的观点，需要更强的证据。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_20.png" class="img-fluid figure-img"></p>
+<figcaption>二进制检测，抗极性信号。</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_21.png" class="img-fluid figure-img"></p>
+<figcaption>二元检测与似然比分析。</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_22.png" class="img-fluid figure-img"></p>
+<figcaption>二元检测与MAP准则。</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_23.png" class="img-fluid figure-img"></p>
+<figcaption>二叉检测与MAP规则</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="错误概率分析" class="level3" data-number="14.5.6">
+<h3 data-number="14.5.6" class="anchored" data-anchor-id="错误概率分析"><span class="header-section-number">14.5.6</span> 5.6 错误概率分析</h3>
+<p>总的错误概率为：</p>
+<p><span class="math display">\[
+P_e = P(\text{error}|a_0)P(a_0) + P(\text{error}|a_1)P(a_1)
+\]</span></p>
+<p>对于反极性信号且等概先验，可推导出：</p>
+<p><span class="math display">\[
+P_e = Q\left( \sqrt{\frac{2E_b}{N_0}} \right)
+\]</span></p>
+<p>其中 <span class="math inline">\(Q(x)\)</span> 为 Q 函数，<span class="math inline">\(E_b = a^2 T\)</span> 为每比特能量。</p>
+<blockquote class="blockquote">
+<p><strong>教授点拨 · 物理意义</strong><br>
+“这个公式告诉我们：<strong>性能由信噪比决定</strong>。你可以通过增加功率（提高 <span class="math inline">\(E_b\)</span>）、降低噪声（减小 <span class="math inline">\(N_0\)</span>）或延长符号时间（增加 <span class="math inline">\(T\)</span>）来改善性能。但这一切都受限于香农极限。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_17.png" class="img-fluid figure-img"></p>
+<figcaption>二元检测：ML规则与错误概率。</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_18.png" class="img-fluid figure-img"></p>
+<figcaption>二元检测错误概率计算。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="六扩展话题从二元到多元与序列检测" class="level2" data-number="14.6">
+<h2 data-number="14.6" class="anchored" data-anchor-id="六扩展话题从二元到多元与序列检测"><span class="header-section-number">14.6</span> 六、扩展话题：从二元到多元与序列检测</h2>
+<section id="m-ary-检测" class="level3" data-number="14.6.1">
+<h3 data-number="14.6.1" class="anchored" data-anchor-id="m-ary-检测"><span class="header-section-number">14.6.1</span> 6.1 M-ary 检测</h3>
+<p>推广至 <span class="math inline">\(M\)</span> 个符号的情况，MAP 规则仍适用：</p>
+<p><span class="math display">\[
+\hat{m} = \arg\max_m p(a_m|v)
+\]</span></p>
+<p>但随着 <span class="math inline">\(M\)</span> 增大，符号间距减小，错误率上升。因此需在<strong>频谱效率</strong>（高 <span class="math inline">\(M\)</span>）与<strong>可靠性</strong>（低 <span class="math inline">\(M\)</span>）之间权衡。</p>
+</section>
+<section id="序列检测" class="level3" data-number="14.6.2">
+<h3 data-number="14.6.2" class="anchored" data-anchor-id="序列检测"><span class="header-section-number">14.6.2</span> 6.2 序列检测</h3>
+<p>若考虑多个符号联合检测（如 Viterbi 算法），可进一步提升抗干扰能力，尤其适用于存在 ISI 的信道。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_13.png" class="img-fluid figure-img"></p>
+<figcaption>M-ary检测与序列检测</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="七总结与反思通信系统的设计哲学" class="level2" data-number="14.7">
+<h2 data-number="14.7" class="anchored" data-anchor-id="七总结与反思通信系统的设计哲学"><span class="header-section-number">14.7</span> 七、总结与反思：通信系统的设计哲学</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 34%">
+<col style="width: 39%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>权衡关系</th>
+<th>工程启示</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>带宽 vs.&nbsp;可靠性</strong></td>
+<td>升余弦滚降系数 <span class="math inline">\(\alpha\)</span> 越小，带宽越窄，但对定时越敏感</td>
+<td>适度牺牲带宽换取稳定性</td>
+</tr>
+<tr class="even">
+<td><strong>效率 vs.&nbsp;能量</strong></td>
+<td>高阶调制（如64-QAM）频谱效率高，但BER差，需更高SNR</td>
+<td>根据信道质量动态调整调制方式（AMC）</td>
+</tr>
+<tr class="odd">
+<td><strong>性能 vs.&nbsp;复杂度</strong></td>
+<td>MAP最优但需知道先验，ML次优但更通用</td>
+<td>实际系统常采用ML或近似MAP</td>
+</tr>
+<tr class="even">
+<td><strong>理想 vs.&nbsp;现实</strong></td>
+<td>sinc函数理论最优，但无法实现</td>
+<td>工程设计必须考虑实现可行性</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p><strong>教授点拨 · 课程终章寄语</strong><br>
+“同学们，通信不仅仅是发几个比特过去。它是关于<strong>在不确定性中寻找确定性</strong>的艺术。每一个公式背后，都是人类对抗自然限制的努力。希望你们学到的不只是知识，更是一种思维方式——如何在约束中创新，如何在噪声中倾听真相。”</p>
+</blockquote>
+<hr>
+</section>
+<section id="附录常见误区澄清" class="level2" data-number="14.8">
+<h2 data-number="14.8" class="anchored" data-anchor-id="附录常见误区澄清"><span class="header-section-number">14.8</span> 附录：常见误区澄清</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 37%">
+<col style="width: 62%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>误区</th>
+<th>正确认知</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>“奈奎斯特采样定理”与“奈奎斯特ISI准则”是同一回事</td>
+<td>❌ 二者完全不同：前者针对模拟信号数字化，后者针对数字信号抗干扰设计</td>
+</tr>
+<tr class="even">
+<td>匹配滤波只是为了放大信号</td>
+<td>❌ 主要目的是在AWGN下最大化输出信噪比（SNR）</td>
+</tr>
+<tr class="odd">
+<td>ML总是最优的</td>
+<td>❌ 仅当先验等概时，ML才等价于最优的MAP</td>
+</tr>
+<tr class="even">
+<td>带宽越宽越好</td>
+<td>❌ 带宽是稀缺资源，应在满足性能前提下尽量节省</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<blockquote class="blockquote">
+<p><strong>作业与考试提醒</strong><br>
+- 第12次作业请按时提交<br>
+- 第13次作业作为复习练习<br>
+- 期末考试时间：<strong>2026年1月12日 10:30–12:30</strong><br>
+- 地点：教学中心204<br>
+- 考试范围：期中之后内容为重点，形式同前，请准备一张A4纸</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_7.png" class="img-fluid figure-img"></p>
+<figcaption>上海科技大学感谢提问。</figcaption>
+</figure>
+</div>
+<hr>
+<p><em>笔记整理完毕。愿你在通信的世界里，既能仰望理论星空，也能踏实走好每一步工程之路。</em></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "已复制");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "已复制");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.html" class="pagination-link" aria-label="**通信原理深度学习笔记：奈奎斯特准则与无码间干扰传输**">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：奈奎斯特准则与无码间干扰传输</strong></span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

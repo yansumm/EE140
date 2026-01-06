@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>9&nbsp; 深度学习笔记：量化理论与应用——从通信原理到现代AI – EE140 通信系统导论学习笔记</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../chapters/1212b-1210-e-High-Rate Entropy-Coded Quantization/checked_notes.html" rel="next">
+<link href="../../chapters/1205b-1203-e-Quantization/checked_notes.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0dd2bd5de344125cf763a379ddc3eb04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html">第二部分：采样与量化</a></li><li class="breadcrumb-item"><a href="../../chapters/1210b-1205-e-Lloyd-Max Algorithm/checked_notes.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：量化理论与应用——从通信原理到现代AI</strong></span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">EE140 通信系统导论学习笔记</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">EE140 通信系统导论学习笔记</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">第一部分：数字通信基础</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1114-b-数字通信/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：数字通信系统导论</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1119b-1114-e-Q1 How to measure the quantity of information/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">深度学习笔记：信息论基础与信源编码导论</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1121b-1119-e-Layering of Source Coding/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">深度学习笔记：信源编码理论（基于廉黎祥《通信原理》第10周课堂）</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：信源编码与最优变长码理论</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">第二部分：采样与量化</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：采样、正交展开与混叠现象</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1205b-1203-e-Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：通信原理——量化器设计与Lloyd-Max算法</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1210b-1205-e-Lloyd-Max Algorithm/checked_notes.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：量化理论与应用——从通信原理到现代AI</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1212b-1210-e-High-Rate Entropy-Coded Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：高码率熵编码量化与信号空间基础</strong></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">第三部分：信号处理与调制</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从信号空间到数字调制（第14周）</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1219b-1217-e-PAM Signal Constellation/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从PAM到QAM的调制与系统设计</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：奈奎斯特准则与无码间干扰传输</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1226b-1224-e-nyquist criterion2/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">通信原理深度学习笔记</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">目录</h2>
+   
+  <ul>
+  <li><a href="#课程介绍" id="toc-课程介绍" class="nav-link active" data-scroll-target="#课程介绍"><span class="header-section-number">9.1</span> <strong>课程介绍</strong></a></li>
+  <li><a href="#第一部分标量量化基础回顾" id="toc-第一部分标量量化基础回顾" class="nav-link" data-scroll-target="#第一部分标量量化基础回顾"><span class="header-section-number">9.2</span> <strong>第一部分：标量量化基础回顾</strong></a>
+  <ul class="collapse">
+  <li><a href="#量化过程建模" id="toc-量化过程建模" class="nav-link" data-scroll-target="#量化过程建模"><span class="header-section-number">9.2.1</span> <strong>1.1 量化过程建模</strong></a></li>
+  <li><a href="#核心性能指标" id="toc-核心性能指标" class="nav-link" data-scroll-target="#核心性能指标"><span class="header-section-number">9.2.2</span> <strong>1.2 核心性能指标</strong></a></li>
+  <li><a href="#lloyd-max-算法最优标量量化器的设计" id="toc-lloyd-max-算法最优标量量化器的设计" class="nav-link" data-scroll-target="#lloyd-max-算法最优标量量化器的设计"><span class="header-section-number">9.2.3</span> <strong>1.3 Lloyd-Max 算法：最优标量量化器的设计</strong></a></li>
+  <li><a href="#实例分析1比特均匀量化器" id="toc-实例分析1比特均匀量化器" class="nav-link" data-scroll-target="#实例分析1比特均匀量化器"><span class="header-section-number">9.2.4</span> <strong>1.4 实例分析：1比特均匀量化器</strong></a></li>
+  </ul></li>
+  <li><a href="#第二部分向量量化vector-quantization-vq" id="toc-第二部分向量量化vector-quantization-vq" class="nav-link" data-scroll-target="#第二部分向量量化vector-quantization-vq"><span class="header-section-number">9.3</span> <strong>第二部分：向量量化（Vector Quantization, VQ）</strong></a>
+  <ul class="collapse">
+  <li><a href="#从标量到向量维度的跃迁" id="toc-从标量到向量维度的跃迁" class="nav-link" data-scroll-target="#从标量到向量维度的跃迁"><span class="header-section-number">9.3.1</span> <strong>2.1 从标量到向量：维度的跃迁</strong></a></li>
+  <li><a href="#二维lloyd-max算法与voronoi图" id="toc-二维lloyd-max算法与voronoi图" class="nav-link" data-scroll-target="#二维lloyd-max算法与voronoi图"><span class="header-section-number">9.3.2</span> <strong>2.2 二维Lloyd-Max算法与Voronoi图</strong></a></li>
+  <li><a href="#向量量化的深层洞见与现代应用" id="toc-向量量化的深层洞见与现代应用" class="nav-link" data-scroll-target="#向量量化的深层洞见与现代应用"><span class="header-section-number">9.3.3</span> <strong>2.3 向量量化的深层洞见与现代应用</strong></a></li>
+  <li><a href="#向量量化的挑战与适用场景" id="toc-向量量化的挑战与适用场景" class="nav-link" data-scroll-target="#向量量化的挑战与适用场景"><span class="header-section-number">9.3.4</span> <strong>2.4 向量量化的挑战与适用场景</strong></a></li>
+  </ul></li>
+  <li><a href="#第三部分熵约束下的量化熵编码量化" id="toc-第三部分熵约束下的量化熵编码量化" class="nav-link" data-scroll-target="#第三部分熵约束下的量化熵编码量化"><span class="header-section-number">9.4</span> <strong>第三部分：熵约束下的量化（熵编码量化）</strong></a>
+  <ul class="collapse">
+  <li><a href="#问题提出超越mse的优化目标" id="toc-问题提出超越mse的优化目标" class="nav-link" data-scroll-target="#问题提出超越mse的优化目标"><span class="header-section-number">9.4.1</span> <strong>3.1 问题提出：超越MSE的优化目标</strong></a></li>
+  <li><a href="#高码率假设high-rate-assumption" id="toc-高码率假设high-rate-assumption" class="nav-link" data-scroll-target="#高码率假设high-rate-assumption"><span class="header-section-number">9.4.2</span> <strong>3.2 高码率假设（High-Rate Assumption）</strong></a></li>
+  <li><a href="#核心结论均匀量化的最优性" id="toc-核心结论均匀量化的最优性" class="nav-link" data-scroll-target="#核心结论均匀量化的最优性"><span class="header-section-number">9.4.3</span> <strong>3.3 核心结论：均匀量化的最优性</strong></a></li>
+  <li><a href="#性能曲线与设计指导" id="toc-性能曲线与设计指导" class="nav-link" data-scroll-target="#性能曲线与设计指导"><span class="header-section-number">9.4.4</span> <strong>3.4 性能曲线与设计指导</strong></a></li>
+  </ul></li>
+  <li><a href="#总结与展望" id="toc-总结与展望" class="nav-link" data-scroll-target="#总结与展望"><span class="header-section-number">9.5</span> <strong>总结与展望</strong></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html">第二部分：采样与量化</a></li><li class="breadcrumb-item"><a href="../../chapters/1210b-1205-e-Lloyd-Max Algorithm/checked_notes.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：量化理论与应用——从通信原理到现代AI</strong></span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：量化理论与应用——从通信原理到现代AI</strong></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<blockquote class="blockquote">
+<p><em>整理自 廉黎祥 教授《通信原理》第13周课程 | 上海科技大学创管学院</em></p>
+</blockquote>
+<hr>
+<section id="课程介绍" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="课程介绍"><span class="header-section-number">9.1</span> <strong>课程介绍</strong></h2>
+<p>本节课系统回顾了<strong>标量量化（Scalar Quantization）</strong> 与<strong>向量量化（Vector Quantization, VQ）</strong> 的核心理论，并深入探讨其在信息论、信源编码以及现代人工智能中的深刻联系。课程不仅涵盖量化器设计的经典算法（如Lloyd-Max），还引入了<strong>熵约束下的最优量化（Entropy-Coded Quantization）</strong> 和<strong>高码率假设（High-Rate Assumption）</strong> 等高级概念。</p>
+<p>教授通过清晰的数学推导与生动的类比，揭示了“离散化”这一基本操作如何贯穿于从传统通信系统到前沿大模型的技术脉络之中。尤其值得强调的是，<strong>向量量化不仅是图像压缩的基石，更是理解VQ-VAE、Codebook-based生成模型乃至聚类算法的关键桥梁</strong>。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_1.png" class="img-fluid figure-img"></p>
+<figcaption>标量量化原理与公式推导。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="第一部分标量量化基础回顾" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="第一部分标量量化基础回顾"><span class="header-section-number">9.2</span> <strong>第一部分：标量量化基础回顾</strong></h2>
+<section id="量化过程建模" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="量化过程建模"><span class="header-section-number">9.2.1</span> <strong>1.1 量化过程建模</strong></h3>
+<p>量化是将一个连续随机变量 $ U $ 映射为一个离散随机变量 $ V $ 的过程。该过程由三个核心要素定义：</p>
+<ol type="1">
+<li><strong>量化区间（Quantization Regions）$ {R_j} $</strong>: 将输入 $ u $ 的取值空间划分为 $ M $ 个互不相交的子区间。</li>
+<li><strong>量化电平/代表点（Quantization Levels / Representatives）$ {a_j} $</strong>: 每个区间 $ R_j $ 对应一个输出值 $ a_j $。</li>
+<li><strong>量化规则</strong>: 若输入 $ u R_j $，则输出 $ v = a_j $。</li>
+</ol>
+<p>经过量化后，得到离散序列 $ V $，其概率质量函数（PMF）可通过原连续变量的概率密度函数（PDF） $ f_U(u) $ 在对应区间上的积分求得： <span class="math display">\[
+P(V = a_j) = Q_j = \int_{R_j} f_U(u) \, du
+\]</span></p>
+<hr>
+</section>
+<section id="核心性能指标" class="level3" data-number="9.2.2">
+<h3 data-number="9.2.2" class="anchored" data-anchor-id="核心性能指标"><span class="header-section-number">9.2.2</span> <strong>1.2 核心性能指标</strong></h3>
+<p>量化器的设计围绕两个关键目标展开：</p>
+<section id="量化输出的熵-hv" class="level4" data-number="9.2.2.1">
+<h4 data-number="9.2.2.1" class="anchored" data-anchor-id="量化输出的熵-hv"><span class="header-section-number">9.2.2.1</span> <strong>(1) 量化输出的熵 $ H(V) $</strong></h4>
+<ul>
+<li><strong>意义</strong>: 衡量量化输出的不确定性，直接决定了对其进行<strong>无损信源编码</strong>时所需的平均比特数下限。</li>
+<li><strong>计算公式</strong>: <span class="math display">\[
+H(V) = -\sum_{j=1}^{M} Q_j \log_2 Q_j
+\]</span></li>
+<li><strong>重要性</strong>: $ H(V) $ 是后续变长编码（如Huffman编码）的理论依据，也是衡量编码效率的基准。</li>
+</ul>
+</section>
+<section id="均方误差-mse-或称失真-d" class="level4" data-number="9.2.2.2">
+<h4 data-number="9.2.2.2" class="anchored" data-anchor-id="均方误差-mse-或称失真-d"><span class="header-section-number">9.2.2.2</span> <strong>(2) 均方误差 $ MSE $ (或称失真 $ D $)</strong></h4>
+<ul>
+<li><strong>意义</strong>: 衡量量化过程引入的失真，即重建信号与原始信号之间的平均平方偏差，是重构质量的核心度量。</li>
+<li><strong>计算方法</strong>:
+<ol type="1">
+<li><strong>直接积分法</strong>: <span class="math display">\[
+MSE = E[(U - V)^2] = \sum_{j=1}^{M} \int_{R_j} (u - a_j)^2 f_U(u) \, du
+\]</span></li>
+<li><strong>条件期望分解法</strong>: <span class="math display">\[
+MSE = \sum_{j=1}^{M} P(R_j) \cdot E[(U - a_j)^2 | U \in R_j] = \sum_{j=1}^{M} Q_j \cdot MSE_j
+\]</span> 其中 $ MSE_j $ 是在区域 $ R_j $ 内的<strong>条件均方误差</strong>。</li>
+</ol></li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>📌 教授点拨：权衡的艺术</strong><br>
+量化本质上是一个 <strong><code>rate-distortion trade-off</code></strong> 问题。降低 $ MSE $（提高质量）通常需要更多的量化级 $ M $，这会导致 $ H(V) $ 增加（更高的编码速率）。反之，追求低码率会牺牲信号质量。<strong>理解这个权衡关系是设计任何实际量化系统的出发点</strong>。</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="lloyd-max-算法最优标量量化器的设计" class="level3" data-number="9.2.3">
+<h3 data-number="9.2.3" class="anchored" data-anchor-id="lloyd-max-算法最优标量量化器的设计"><span class="header-section-number">9.2.3</span> <strong>1.3 Lloyd-Max 算法：最优标量量化器的设计</strong></h3>
+<p>当唯一目标是最小化均方误差 $ MSE $ 时，可使用 <strong>Lloyd-Max 算法</strong> 迭代地设计最优的 $ {R_j} $ 和 $ {a_j} $。</p>
+<section id="算法核心思想与必要条件" class="level4" data-number="9.2.3.1">
+<h4 data-number="9.2.3.1" class="anchored" data-anchor-id="算法核心思想与必要条件"><span class="header-section-number">9.2.3.1</span> <strong>算法核心思想与必要条件</strong></h4>
+<p>该算法基于以下两个在最优解处必须满足的<strong>必要条件</strong>（但非充分条件）：</p>
+<ol type="1">
+<li><strong>Nearest Neighbor Rule (最近邻法则)</strong>: 给定一组代表点 $ {a_j} $，最优的划分边界是相邻代表点的<strong>垂直平分线</strong>。这意味着对于任意输入 $ u $，应将其分配给距离最近的 $ a_j $。</li>
+<li><strong>Centroid Condition (质心条件)</strong>: 给定一组划分区间 $ {R_j} $，使 $ MSE $ 最小的代表点 $ a_j $ 是该区间内 $ U $ 的<strong>条件期望</strong>： <span class="math display">\[
+a_j^* = E[U | U \in R_j] = \frac{\int_{R_j} u f_U(u) \, du}{\int_{R_j} f_U(u) \, du}
+\]</span></li>
+</ol>
+</section>
+<section id="算法流程" class="level4" data-number="9.2.3.2">
+<h4 data-number="9.2.3.2" class="anchored" data-anchor-id="算法流程"><span class="header-section-number">9.2.3.2</span> <strong>算法流程</strong></h4>
+<p>Lloyd-Max 算法通过交替优化上述两个条件来迭代收敛：</p>
+<ol type="1">
+<li><strong>初始化</strong>: 随机选择 $ M $ 个初始代表点 $ {a_j} $。</li>
+<li><strong>划分区间 (Update $ R_j $)</strong>: 基于当前的 $ {a_j} $，根据最近邻法则划分量化区间 $ {R_j} $。</li>
+<li><strong>更新代表点 (Update $ a_j $)</strong>: 基于新划分的 $ {R_j} $，计算每个区间的条件期望，更新 $ {a_j} $。</li>
+<li><strong>迭代</strong>: 重复步骤2和3，直到 $ {a_j} $ 或 $ MSE $ 的变化小于预设阈值。</li>
+</ol>
+<blockquote class="blockquote">
+<p><strong>⚠️ 重要提醒</strong><br>
+如图所示，Lloyd-Max 算法只能保证找到<strong>局部最优解 (Local Optimum)</strong>，而非全局最优。最终结果高度依赖于初始点的选择。但在大多数实际问题中，它已被证明是非常有效的。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_2.png" class="img-fluid figure-img"></p>
+<figcaption>Lloyd-Max算法要点。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="实例分析1比特均匀量化器" class="level3" data-number="9.2.4">
+<h3 data-number="9.2.4" class="anchored" data-anchor-id="实例分析1比特均匀量化器"><span class="header-section-number">9.2.4</span> <strong>1.4 实例分析：1比特均匀量化器</strong></h3>
+<p>考虑一个经典例子：对 $ U (0,1) $ 设计一个 $ M=2 $ 的标量量化器以最小化 $ MSE $。</p>
+<ol type="1">
+<li><strong>初始猜测</strong>: 直觉上，将区间在中心 $ b_1 = 0.5 $ 处分割。</li>
+<li><strong>计算条件PDF</strong>:
+<ul>
+<li>$ R_1 = [0, 0.5), R_2 = [0.5, 1] $</li>
+<li>$ Q_1 = Q_2 = 0.5 $</li>
+<li>条件PDF: $ f_{U|R_j}(u) = = = 2 $ （在 $ R_j $ 内）</li>
+</ul></li>
+<li><strong>应用质心条件</strong>:
+<ul>
+<li>$ a_1^* = E[U | U R_1] = _0^{0.5} u , du = _0^{0.5} = 0.25 $</li>
+<li>$ a_2^* = E[U | U R_2] = <em>{0.5}^{1} u , du = </em>{0.5}^{1} = 1 - 0.25 = 0.75 $</li>
+</ul></li>
+<li><strong>验证最近邻法则</strong>: 新的边界应在 $ a_1 $ 和 $ a_2 $ 的中点 $ (0.25 + 0.75)/2 = 0.5 $，与初始猜测一致。</li>
+<li>**计算最终 $ MSE <span class="math inline">\(**:
+-   利用均匀量化公式：\)</span> MSE = $，其中 $ = 0.5 $ 是区间宽度。
+<ul>
+<li>$ MSE = = $</li>
+</ul></li>
+</ol>
+<blockquote class="blockquote">
+<p><strong>✅ 结论</strong><br>
+如图所示，最优的1比特量化器具有阈值 $ b_1 = 1/2 $ 和重建电平 $ a_1 = 1/4, a_2 = 3/4 $，最小 $ MSE = 1/48 $。此例完美演示了Lloyd-Max算法的快速收敛。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_3.png" class="img-fluid figure-img"></p>
+<figcaption>1比特量化最小化MSE。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="第二部分向量量化vector-quantization-vq" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="第二部分向量量化vector-quantization-vq"><span class="header-section-number">9.3</span> <strong>第二部分：向量量化（Vector Quantization, VQ）</strong></h2>
+<section id="从标量到向量维度的跃迁" class="level3" data-number="9.3.1">
+<h3 data-number="9.3.1" class="anchored" data-anchor-id="从标量到向量维度的跃迁"><span class="header-section-number">9.3.1</span> <strong>2.1 从标量到向量：维度的跃迁</strong></h3>
+<p>标量量化一次只处理一个样本。<strong>向量量化</strong>则将 $ N $ 个连续的样本 $ = (u_1, u_2, …, u_N) $ 视为一个 $ N $-维向量进行整体量化。</p>
+<ul>
+<li><strong>输入</strong>: $ N $-维向量 $ ^N $</li>
+<li><strong>输出</strong>: 一个索引 $ j $，指向码本（Codebook）中的第 $ j $ 个码字（Codeword） $ _j $。</li>
+</ul>
+<hr>
+</section>
+<section id="二维lloyd-max算法与voronoi图" class="level3" data-number="9.3.2">
+<h3 data-number="9.3.2" class="anchored" data-anchor-id="二维lloyd-max算法与voronoi图"><span class="header-section-number">9.3.2</span> <strong>2.2 二维Lloyd-Max算法与Voronoi图</strong></h3>
+<p>以 $ N=2, M=4 $ 为例，假设 $ U_1, U_2 (-1,1) $ 且独立。</p>
+<ol type="1">
+<li><strong>输入空间</strong>: 输入向量 $ (u_1, u_2) $ 落在一个 $ [-1,1] $ 的正方形区域内。</li>
+<li><strong>联合PDF</strong>: 由于独立，联合PDF $ f_{U_1,U_2}(u_1,u_2) = f_{U_1}(u_1) f_{U_2}(u_2) = $，在整个正方形内为常数。</li>
+<li><strong>Lloyd-Max 迭代</strong>:
+<ul>
+<li><strong>初始化</strong>: 随机选择4个初始码字位置。</li>
+<li><strong>划分区域</strong>: 对每一对码字，画出它们的<strong>垂直平分线</strong>。所有平分线的交集将平面划分为若干多边形区域。</li>
+<li><strong>Voronoi Region</strong>: 每个码字 $ _j $ 所对应的区域 $ R_j $ 称为<strong>Voronoi区域</strong>，包含所有离 $ _j $ 最近的点。</li>
+<li><strong>更新码字</strong>: 计算每个 $ R_j $ 内的<strong>条件期望</strong> $ _j^* = E[ | R_j] $，并移动码字至此。</li>
+</ul></li>
+<li><strong>收敛</strong>: 迭代直至码字位置稳定。</li>
+</ol>
+<blockquote class="blockquote">
+<p><strong>📌 图解说明</strong><br>
+下图直观展示了这一过程：初始码字（红点）划分出初始Voronoi区域，计算各区域质心得到新码字（黑叉），再以新码字重新划分，如此往复，最终形成规整的六边形或矩形网格（对于均匀分布）。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_4.png" class="img-fluid figure-img"></p>
+<figcaption>矢量量化原理与算法</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_5.png" class="img-fluid figure-img"></p>
+<figcaption>矢量量化迭代过程。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="向量量化的深层洞见与现代应用" class="level3" data-number="9.3.3">
+<h3 data-number="9.3.3" class="anchored" data-anchor-id="向量量化的深层洞见与现代应用"><span class="header-section-number">9.3.3</span> <strong>2.3 向量量化的深层洞见与现代应用</strong></h3>
+<section id="与机器学习的惊人联系" class="level4" data-number="9.3.3.1">
+<h4 data-number="9.3.3.1" class="anchored" data-anchor-id="与机器学习的惊人联系"><span class="header-section-number">9.3.3.1</span> <strong>(1) 与机器学习的惊人联系</strong></h4>
+<blockquote class="blockquote">
+<p><strong>教授点拨：超越通信的视野</strong><br>
+“同学们，你们可能觉得这只是老掉牙的通信技术。但我要告诉你们，<strong>向量量化是理解现代AI的一把钥匙</strong>。”</p>
+</blockquote>
+<ul>
+<li><strong>聚类 (Clustering)</strong>: VQ 的本质就是<strong>K-means聚类</strong>！码字 $ _j $ 就是聚类中心（质心），Voronoi区域就是聚类簇。Lloyd-Max算法与K-means算法完全同构。</li>
+<li><strong>表示学习 (Representation Learning)</strong>: 在深度学习中，我们希望学习数据的“好”表示。VQ 强制将连续的特征空间离散化为有限个“原型”（码字），这本身就是一种强大的表示学习机制。</li>
+<li><strong>大模型 (LLMs) 中的应用</strong>: 当前的大语言模型（LLM）处理的是离散的文本。若要用LLM生成图像，就必须先将连续的像素空间离散化。<strong>向量量化正是实现这种跨模态转换的核心技术之一</strong>。</li>
+</ul>
+</section>
+<section id="vq-vae向量量化变分自编码器" class="level4" data-number="9.3.3.2">
+<h4 data-number="9.3.3.2" class="anchored" data-anchor-id="vq-vae向量量化变分自编码器"><span class="header-section-number">9.3.3.2</span> <strong>(2) VQ-VAE：向量量化变分自编码器</strong></h4>
+<blockquote class="blockquote">
+<p><strong>📌 实例解析</strong><br>
+如图所示，VQ-VAE 是一个革命性的生成模型架构：</p>
+<ol type="1">
+<li><strong>Encoder</strong>: 将输入图像映射到一个连续的潜在向量 $ _e $。</li>
+<li><strong>Quantizer (VQ Layer)</strong>: 在预定义的<strong>码本 (Codebook)</strong> $ = {_1, _2, …, _K} $ 中，找到与 $ _e $ 最接近的码字 $ _k $，并用 $ k $ 的one-hot编码作为离散表示 $ _q $。</li>
+<li><strong>Decoder</strong>: 将离散表示 $ _q $ 解码回图像。</li>
+</ol>
+<p>**这里的码本 $ $ 就是我们量化器的 $ { _j } $！** 而码本本身是通过反向传播与整个网络一起学习的，目标是最小化重建误差。这完美体现了“量化器不再是固定的，而是可学习的”这一现代思想。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_6.png" class="img-fluid figure-img"></p>
+<figcaption>向量量化研究要点</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_8.png" class="img-fluid figure-img"></p>
+<figcaption>VQ-VAE 架构示意图</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="向量量化的挑战与适用场景" class="level3" data-number="9.3.4">
+<h3 data-number="9.3.4" class="anchored" data-anchor-id="向量量化的挑战与适用场景"><span class="header-section-number">9.3.4</span> <strong>2.4 向量量化的挑战与适用场景</strong></h3>
+<p>尽管强大，VQ也面临严峻挑战：</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">挑战</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>指数复杂度</strong></td>
+<td style="text-align: left;">码本大小 $ M $ 和维度 $ N $ 呈指数关系 ($ M e^N $)，搜索和存储成本极高。</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>严重局部最优</strong></td>
+<td style="text-align: left;">高维空间中存在大量局部极小值，Lloyd-Max算法极易陷入次优解。</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>增益有限（对独立信源）</strong></td>
+<td style="text-align: left;">如果输入样本 $ u_i $ 之间相互独立，则VQ相比标量量化带来的 $ MSE $ 改善非常有限。</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p><strong>💡 关键洞见：相关性是VQ的生命线</strong><br>
+“那么，什么情况下VQ才真正值得做？”教授提出了一个深刻的问题。</p>
+<p><strong>答案是：当输入数据具有强相关性时</strong>。</p>
+<p><strong>举例对比</strong>: - <strong>情况一 (独立)</strong>: $ U_1, U_2 (-1,1) $ 且独立。输入点均匀分布在 $ 2 $ 正方形内。$ MSE ^2 = 1 $。 - <strong>情况二 (强相关)</strong>: $ U_1 (-1,1), U_2 = U_1 $。输入点被限制在一条斜率为1的直线上。此时，即使 $ M=4 <span class="math inline">\(，量化区间沿直线划分，\)</span> $ 可减半。$ MSE (/2)^2 = 0.25 $，显著降低！</p>
+<p><strong>现实意义</strong>: 图像、音频、视频等自然信号在时间和空间上都具有极强的相关性。因此，VQ在这些领域的压缩和生成任务中能发挥巨大威力。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_7.png" class="img-fluid figure-img"></p>
+<figcaption>量化误差分析与计算。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="第三部分熵约束下的量化熵编码量化" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="第三部分熵约束下的量化熵编码量化"><span class="header-section-number">9.4</span> <strong>第三部分：熵约束下的量化（熵编码量化）</strong></h2>
+<section id="问题提出超越mse的优化目标" class="level3" data-number="9.4.1">
+<h3 data-number="9.4.1" class="anchored" data-anchor-id="问题提出超越mse的优化目标"><span class="header-section-number">9.4.1</span> <strong>3.1 问题提出：超越MSE的优化目标</strong></h3>
+<p>前面的Lloyd-Max算法仅优化 $ MSE $，忽略了编码效率。在实际系统中，我们往往有<strong>固定的编码速率 $ R $</strong>（例如，每样本2比特）。此时，目标变为： &gt; <strong>在保证量化输出熵 $ H(V) R $ 的前提下，最小化均方误差 $ MSE $</strong>。</p>
+<p>这类量化器被称为 <strong><code>熵编码量化器 (Entropy-Coded Quantizer)</code></strong>。</p>
+<blockquote class="blockquote">
+<p><strong>📌 双重视角理解</strong><br>
+一个最优的熵编码量化器可以从两个等价的角度理解： 1. <strong>约束优化视角</strong>: 它是上述带熵约束的优化问题的解。 2. <strong>编码效率视角</strong>: 当该量化器的输出 $ V $ 跟随一个<strong>熵编码器（如Huffman编码）</strong> 时，该编码器能达到<strong>香农极限</strong>（Shannon Limit），即平均码长 $ L_{avg} = H(V) $，实现了无冗余编码。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_9.png" class="img-fluid figure-img"></p>
+<figcaption>熵编码量化概念</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_10.png" class="img-fluid figure-img"></p>
+<figcaption>熵编码量化问题与解决方案。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="高码率假设high-rate-assumption" class="level3" data-number="9.4.2">
+<h3 data-number="9.4.2" class="anchored" data-anchor-id="高码率假设high-rate-assumption"><span class="header-section-number">9.4.2</span> <strong>3.2 高码率假设（High-Rate Assumption）</strong></h3>
+<p>直接求解上述优化问题是极其困难的。为此，我们引入一个强大的简化假设——<strong>高码率假设</strong>。</p>
+<section id="核心假设内容" class="level4" data-number="9.4.2.1">
+<h4 data-number="9.4.2.1" class="anchored" data-anchor-id="核心假设内容"><span class="header-section-number">9.4.2.1</span> <strong>核心假设内容</strong></h4>
+<ol type="1">
+<li>编码速率 $ R $ 很高（即 $ H(V) $ 很大）。</li>
+<li>量化级数 $ M $ 非常大。</li>
+<li>量化间隔 $ $ 非常小。</li>
+<li><strong>最关键的一条</strong>: 每个量化区间足够小，以至于在该区间内，原PDF $ f_U(u) $ 可以近似为一个<strong>常数</strong> $ {f}_j $。</li>
+</ol>
+<blockquote class="blockquote">
+<p><strong>📌 直观理解</strong><br>
+“想象一下数值积分。”教授解释道，“当你把积分区间划分得足够细时，曲线下面积就可以用一个个小矩形来近似。这里的‘高码率’就相当于让每个‘小矩形’的宽度趋近于零。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_11.png" class="img-fluid figure-img"></p>
+<figcaption>高码率量化器分析</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_12.png" class="img-fluid figure-img"></p>
+<figcaption>高率量化器优化分析</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="核心结论均匀量化的最优性" class="level3" data-number="9.4.3">
+<h3 data-number="9.4.3" class="anchored" data-anchor-id="核心结论均匀量化的最优性"><span class="header-section-number">9.4.3</span> <strong>3.3 核心结论：均匀量化的最优性</strong></h3>
+<p>在高码率假设下，我们可以得出一个优美而实用的结论：</p>
+<blockquote class="blockquote">
+<p><strong>对于熵编码量化，均匀标量量化器（Uniform Scalar Quantizer）是接近最优的。</strong></p>
+</blockquote>
+<section id="数学推导摘要" class="level4" data-number="9.4.3.1">
+<h4 data-number="9.4.3.1" class="anchored" data-anchor-id="数学推导摘要"><span class="header-section-number">9.4.3.1</span> <strong>数学推导摘要</strong></h4>
+<ol type="1">
+<li><strong>计算 $ MSE $</strong>:
+<ul>
+<li>在每个小区间 $ R_j $ 内，$ f_U(u) {f}_j $。</li>
+<li>区间内的条件PDF是均匀的，因此最优代表点 $ a_j $ 为区间中点。</li>
+<li>区间内的条件 $ MSE_j = $。</li>
+<li>总 $ MSE _j {f}_j _j = _j {f}_j _j^3 $。</li>
+</ul></li>
+<li><strong>计算 $ H(V) $</strong>:
+<ul>
+<li>$ P(V=a_j) = Q_j = _{R_j} f_U(u) du {f}_j _j $。</li>
+<li>$ H(V) = -_j Q_j _2 Q_j -_j {f}_j _j _2({f}_j _j) $。</li>
+<li>在高码率下，可进一步近似为： <span class="math display">\[
+H(V) \approx h(U) - \log_2 \Delta
+\]</span> 其中 $ h(U) = -f_U(u)_2 f_U(u) du $ 是 $ U $ 的微分熵。</li>
+</ul></li>
+<li><strong>优化结论</strong>:
+<ul>
+<li>通过拉格朗日乘子法，在约束 $ H(V) = R $ 下最小化 $ MSE $。</li>
+<li>**最终发现，当所有 $ _j $ 相等（即采用均匀量化）时，$ MSE $ 最小**。</li>
+</ul></li>
+</ol>
+<blockquote class="blockquote">
+<p><strong>📌 结论的意义</strong><br>
+这意味着，在高码率条件下，复杂的非均匀量化带来的性能增益微乎其微。<strong>简单的均匀量化器就能逼近理论最优性能</strong>。这也是为什么在许多实际系统（如PCM音频）中，均匀量化被广泛采用。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_13.png" class="img-fluid figure-img"></p>
+<figcaption>均匀标量量化器特性与优势。</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_14.png" class="img-fluid figure-img"></p>
+<figcaption>高率熵编码量化分析。</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_15.png" class="img-fluid figure-img"></p>
+<figcaption>高率熵编码量化分析</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_16.png" class="img-fluid figure-img"></p>
+<figcaption>高码率熵编码量化。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="性能曲线与设计指导" class="level3" data-number="9.4.4">
+<h3 data-number="9.4.4" class="anchored" data-anchor-id="性能曲线与设计指导"><span class="header-section-number">9.4.4</span> <strong>3.4 性能曲线与设计指导</strong></h3>
+<p>综合以上分析，我们可以描绘出 $ MSE $ 与 $ H(V) $ 的关系曲线：</p>
+<ul>
+<li><strong>横轴</strong>: 熵 $ H(V) $ 或编码速率 $ R $。</li>
+<li><strong>纵轴</strong>: 均方误差 $ MSE $。</li>
+<li><strong>曲线趋势</strong>: 随着 $ R $ 增加，$ MSE $ 单调递减。</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>📌 教授点拨：Lower Bound 的启示</strong><br>
+在高码率下，均匀量化器的性能曲线提供了一个<strong>近乎最优的下界 (near-optimal lower bound)</strong>。任何其他量化方案的性能都不应低于此曲线太多。这为系统设计者提供了明确的性能预期。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1210b-1205-e-Lloyd-Max%20Algorithm/page_17.png" class="img-fluid figure-img"></p>
+<figcaption>信息论与编码理论核心公式。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="总结与展望" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="总结与展望"><span class="header-section-number">9.5</span> <strong>总结与展望</strong></h2>
+<p>本节课构建了一个从基础到前沿的完整知识框架：</p>
+<ol type="1">
+<li><strong>基础</strong>: 掌握了标量量化的核心概念、Lloyd-Max算法及其局限性。</li>
+<li><strong>拓展</strong>: 理解了向量量化的工作原理、巨大潜力及其在高维空间面临的挑战，特别是<strong>相关性是发挥VQ优势的关键</strong>。</li>
+<li><strong>深化</strong>: 学习了在实际约束（熵）下设计量化器的方法，并通过<strong>高码率假设</strong>洞察了<strong>均匀量化器的近似最优性</strong>这一深刻结论。</li>
+<li><strong>贯通</strong>: 认识到量化理论不仅是通信的基石，更是连接聚类、表示学习和现代生成式AI（如VQ-VAE）的桥梁。</li>
+</ol>
+<blockquote class="blockquote">
+<p><strong>最后的思考</strong><br>
+“技术看似在飞速迭代，但底层的数学原理却历久弥新。”廉教授总结道，“今天讲的‘离散化’、‘最近邻’、‘质心’，这些思想一百年后依然有用。希望大家不仅能记住公式，更能体会到其中蕴含的智慧。”</p>
+</blockquote>
+<p>下节课将开启新章节，敬请期待。</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "已复制");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "已复制");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../chapters/1205b-1203-e-Quantization/checked_notes.html" class="pagination-link" aria-label="**深度学习笔记：通信原理——量化器设计与Lloyd-Max算法**">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：通信原理——量化器设计与Lloyd-Max算法</strong></span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../chapters/1212b-1210-e-High-Rate Entropy-Coded Quantization/checked_notes.html" class="pagination-link" aria-label="**通信原理深度学习笔记：高码率熵编码量化与信号空间基础**">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：高码率熵编码量化与信号空间基础</strong></span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

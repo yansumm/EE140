@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; 深度学习笔记：信息论基础与信源编码导论 – EE140 通信系统导论学习笔记</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../chapters/1121b-1119-e-Layering of Source Coding/checked_notes.html" rel="next">
+<link href="../../chapters/1114-b-数字通信/checked_notes.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0dd2bd5de344125cf763a379ddc3eb04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1114-b-数字通信/checked_notes.html">第一部分：数字通信基础</a></li><li class="breadcrumb-item"><a href="../../chapters/1119b-1114-e-Q1 How to measure the quantity of information/checked_notes.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">深度学习笔记：信息论基础与信源编码导论</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">EE140 通信系统导论学习笔记</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">EE140 通信系统导论学习笔记</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">第一部分：数字通信基础</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1114-b-数字通信/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：数字通信系统导论</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1119b-1114-e-Q1 How to measure the quantity of information/checked_notes.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">深度学习笔记：信息论基础与信源编码导论</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1121b-1119-e-Layering of Source Coding/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">深度学习笔记：信源编码理论（基于廉黎祥《通信原理》第10周课堂）</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：信源编码与最优变长码理论</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">第二部分：采样与量化</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：采样、正交展开与混叠现象</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1205b-1203-e-Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：通信原理——量化器设计与Lloyd-Max算法</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1210b-1205-e-Lloyd-Max Algorithm/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：量化理论与应用——从通信原理到现代AI</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1212b-1210-e-High-Rate Entropy-Coded Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：高码率熵编码量化与信号空间基础</strong></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">第三部分：信号处理与调制</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从信号空间到数字调制（第14周）</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1219b-1217-e-PAM Signal Constellation/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从PAM到QAM的调制与系统设计</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：奈奎斯特准则与无码间干扰传输</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1226b-1224-e-nyquist criterion2/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">通信原理深度学习笔记</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">目录</h2>
+   
+  <ul>
+  <li><a href="#一课程引入从惊讶程度到信息量的量化" id="toc-一课程引入从惊讶程度到信息量的量化" class="nav-link active" data-scroll-target="#一课程引入从惊讶程度到信息量的量化"><span class="header-section-number">3.1</span> 一、课程引入：从“惊讶程度”到信息量的量化</a>
+  <ul class="collapse">
+  <li><a href="#核心问题如何衡量一个事件的信息量" id="toc-核心问题如何衡量一个事件的信息量" class="nav-link" data-scroll-target="#核心问题如何衡量一个事件的信息量"><span class="header-section-number">3.1.1</span> 1. 核心问题：如何衡量一个事件的信息量？</a></li>
+  </ul></li>
+  <li><a href="#二直观理解用提问次数衡量不确定性" id="toc-二直观理解用提问次数衡量不确定性" class="nav-link" data-scroll-target="#二直观理解用提问次数衡量不确定性"><span class="header-section-number">3.2</span> 二、直观理解：用“提问次数”衡量不确定性</a>
+  <ul class="collapse">
+  <li><a href="#思想实验alice-与-bob-的通信游戏" id="toc-思想实验alice-与-bob-的通信游戏" class="nav-link" data-scroll-target="#思想实验alice-与-bob-的通信游戏"><span class="header-section-number">3.2.1</span> 1. 思想实验：Alice 与 Bob 的通信游戏</a></li>
+  </ul></li>
+  <li><a href="#三信息熵entropy不确定性的数学定义" id="toc-三信息熵entropy不确定性的数学定义" class="nav-link" data-scroll-target="#三信息熵entropy不确定性的数学定义"><span class="header-section-number">3.3</span> 三、信息熵（Entropy）：不确定性的数学定义</a>
+  <ul class="collapse">
+  <li><a href="#离散随机变量的信息熵-hx" id="toc-离散随机变量的信息熵-hx" class="nav-link" data-scroll-target="#离散随机变量的信息熵-hx"><span class="header-section-number">3.3.1</span> 1. 离散随机变量的信息熵 <span class="math inline">\(H(X)\)</span></a></li>
+  <li><a href="#信息熵的性质与推导" id="toc-信息熵的性质与推导" class="nav-link" data-scroll-target="#信息熵的性质与推导"><span class="header-section-number">3.3.2</span> 2. 信息熵的性质与推导</a></li>
+  <li><a href="#实例对比machine-1-vs-machine-2" id="toc-实例对比machine-1-vs-machine-2" class="nav-link" data-scroll-target="#实例对比machine-1-vs-machine-2"><span class="header-section-number">3.3.3</span> 3. 实例对比：Machine 1 vs Machine 2</a></li>
+  </ul></li>
+  <li><a href="#四相关概念扩展" id="toc-四相关概念扩展" class="nav-link" data-scroll-target="#四相关概念扩展"><span class="header-section-number">3.4</span> 四、相关概念扩展</a>
+  <ul class="collapse">
+  <li><a href="#自信息量shannon-information-content" id="toc-自信息量shannon-information-content" class="nav-link" data-scroll-target="#自信息量shannon-information-content"><span class="header-section-number">3.4.1</span> 1. 自信息量（Shannon Information Content）</a></li>
+  <li><a href="#联合熵-hxy" id="toc-联合熵-hxy" class="nav-link" data-scroll-target="#联合熵-hxy"><span class="header-section-number">3.4.2</span> 2. 联合熵 <span class="math inline">\(H(X,Y)\)</span></a></li>
+  <li><a href="#条件熵-hxy" id="toc-条件熵-hxy" class="nav-link" data-scroll-target="#条件熵-hxy"><span class="header-section-number">3.4.3</span> 3. 条件熵 <span class="math inline">\(H(X|Y)\)</span></a></li>
+  <li><a href="#链式法则chain-rule" id="toc-链式法则chain-rule" class="nav-link" data-scroll-target="#链式法则chain-rule"><span class="header-section-number">3.4.4</span> 4. 链式法则（Chain Rule）</a></li>
+  </ul></li>
+  <li><a href="#五互信息mutual-information变量间的共享信息" id="toc-五互信息mutual-information变量间的共享信息" class="nav-link" data-scroll-target="#五互信息mutual-information变量间的共享信息"><span class="header-section-number">3.5</span> 五、互信息（Mutual Information）：变量间的“共享信息”</a>
+  <ul class="collapse">
+  <li><a href="#定义" id="toc-定义" class="nav-link" data-scroll-target="#定义"><span class="header-section-number">3.5.1</span> 1. 定义</a></li>
+  <li><a href="#互信息的性质" id="toc-互信息的性质" class="nav-link" data-scroll-target="#互信息的性质"><span class="header-section-number">3.5.2</span> 2. 互信息的性质</a></li>
+  <li><a href="#互信息与其他熵的关系" id="toc-互信息与其他熵的关系" class="nav-link" data-scroll-target="#互信息与其他熵的关系"><span class="header-section-number">3.5.3</span> 3. 互信息与其他熵的关系</a></li>
+  <li><a href="#venn-图理解熵的关系" id="toc-venn-图理解熵的关系" class="nav-link" data-scroll-target="#venn-图理解熵的关系"><span class="header-section-number">3.5.4</span> 4. Venn 图理解熵的关系</a></li>
+  </ul></li>
+  <li><a href="#六连续随机变量微分熵differential-entropy" id="toc-六连续随机变量微分熵differential-entropy" class="nav-link" data-scroll-target="#六连续随机变量微分熵differential-entropy"><span class="header-section-number">3.6</span> 六、连续随机变量：微分熵（Differential Entropy）</a>
+  <ul class="collapse">
+  <li><a href="#定义-1" id="toc-定义-1" class="nav-link" data-scroll-target="#定义-1"><span class="header-section-number">3.6.1</span> 1. 定义</a></li>
+  <li><a href="#常见分布的微分熵" id="toc-常见分布的微分熵" class="nav-link" data-scroll-target="#常见分布的微分熵"><span class="header-section-number">3.6.2</span> 2. 常见分布的微分熵</a></li>
+  <li><a href="#最大熵定理给定方差下" id="toc-最大熵定理给定方差下" class="nav-link" data-scroll-target="#最大熵定理给定方差下"><span class="header-section-number">3.6.3</span> 3. 最大熵定理（给定方差下）</a></li>
+  </ul></li>
+  <li><a href="#七信源编码初步从信息压缩谈起" id="toc-七信源编码初步从信息压缩谈起" class="nav-link" data-scroll-target="#七信源编码初步从信息压缩谈起"><span class="header-section-number">3.7</span> 七、信源编码初步：从信息压缩谈起</a>
+  <ul class="collapse">
+  <li><a href="#信源编码的目标" id="toc-信源编码的目标" class="nav-link" data-scroll-target="#信源编码的目标"><span class="header-section-number">3.7.1</span> 1. 信源编码的目标</a></li>
+  <li><a href="#编码类型" id="toc-编码类型" class="nav-link" data-scroll-target="#编码类型"><span class="header-section-number">3.7.2</span> 2. 编码类型</a></li>
+  <li><a href="#摩尔斯电码的智慧" id="toc-摩尔斯电码的智慧" class="nav-link" data-scroll-target="#摩尔斯电码的智慧"><span class="header-section-number">3.7.3</span> 3. 摩尔斯电码的智慧</a></li>
+  <li><a href="#信源模型假设" id="toc-信源模型假设" class="nav-link" data-scroll-target="#信源模型假设"><span class="header-section-number">3.7.4</span> 4. 信源模型假设</a></li>
+  </ul></li>
+  <li><a href="#八总结与展望" id="toc-八总结与展望" class="nav-link" data-scroll-target="#八总结与展望"><span class="header-section-number">3.8</span> 八、总结与展望</a>
+  <ul class="collapse">
+  <li><a href="#本课核心知识图谱" id="toc-本课核心知识图谱" class="nav-link" data-scroll-target="#本课核心知识图谱"><span class="header-section-number">3.8.1</span> 本课核心知识图谱</a></li>
+  <li><a href="#关键方法论回顾" id="toc-关键方法论回顾" class="nav-link" data-scroll-target="#关键方法论回顾"><span class="header-section-number">3.8.2</span> 关键方法论回顾</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1114-b-数字通信/checked_notes.html">第一部分：数字通信基础</a></li><li class="breadcrumb-item"><a href="../../chapters/1119b-1114-e-Q1 How to measure the quantity of information/checked_notes.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">深度学习笔记：信息论基础与信源编码导论</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">深度学习笔记：信息论基础与信源编码导论</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><strong>课程名称</strong>：通信原理<br>
+<strong>授课教师</strong>：廉黎祥（注：PPT显示为“李祥”，语音稿中为“廉黎祥”——经核实，应为 <strong>廉黎祥</strong> 教授）<br>
+<strong>学校与时间</strong>：上海科技大学 创管学院 | 2025年11月19日 第10周</p>
+<blockquote class="blockquote">
+<p><strong>笔记说明</strong>：本笔记基于课堂语音转录稿与PPT内容融合整理而成。遵循“准确性、完整性、深度性、结构性”四大原则，不仅还原知识体系，更提炼教授的思维路径、教学洞见与科研经验，旨在构建一份兼具学术严谨性与认知启发性的学习资料。</p>
+</blockquote>
+<hr>
+<section id="一课程引入从惊讶程度到信息量的量化" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="一课程引入从惊讶程度到信息量的量化"><span class="header-section-number">3.1</span> 一、课程引入：从“惊讶程度”到信息量的量化</h2>
+<section id="核心问题如何衡量一个事件的信息量" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="核心问题如何衡量一个事件的信息量"><span class="header-section-number">3.1.1</span> 1. 核心问题：如何衡量一个事件的信息量？</h3>
+<p>我们常说“这个消息真惊人！”或“这结果我早猜到了”，背后其实隐藏着一个根本性问题：<strong>信息是否可以被量化测量？</strong></p>
+<blockquote class="blockquote">
+<p>🎯 <strong>教授点拨</strong>：<br>
+“信息量并非由事件本身决定，而是由它的‘不确定性’决定。”<br>
+—— 这是信息论的<strong>第一性原理</strong>。</p>
+</blockquote>
+<ul>
+<li>若某事件几乎必然发生（如“太阳明天升起”），其带来的信息量趋近于零。</li>
+<li>若某事件极不可能却真实发生（如“中国队赢了巴西队”），它带来巨大冲击，信息量极高。</li>
+</ul>
+<p>因此，<strong>信息量 ∝ 不确定性 ∝ 惊讶程度</strong>。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_20.png" class="img-fluid figure-img"></p>
+<figcaption>上海科技大通信系统课件。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="二直观理解用提问次数衡量不确定性" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="二直观理解用提问次数衡量不确定性"><span class="header-section-number">3.2</span> 二、直观理解：用“提问次数”衡量不确定性</h2>
+<section id="思想实验alice-与-bob-的通信游戏" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="思想实验alice-与-bob-的通信游戏"><span class="header-section-number">3.2.1</span> 1. 思想实验：Alice 与 Bob 的通信游戏</h3>
+<p>设想如下场景： - <strong>Alice</strong> 是发送端，执行一项随机实验（如抛硬币、选字母）。 - <strong>Bob</strong> 是接收端，对结果一无所知。 - Alice 只能回答 <code>0</code> 或 <code>1</code>（<code>1</code>=Yes, <code>0</code>=No）。 - Bob 的目标是以<strong>最少的问题数</strong>准确推断出实验结果。</p>
+<blockquote class="blockquote">
+<p>✅ <strong>核心洞察</strong>：<br>
+<strong>平均所需最少提问次数，即为该事件所含信息量的度量</strong>。<br>
+因每个问题传递1比特信息，此数值也等于传输所需的<strong>最小平均比特数</strong>。</p>
+</blockquote>
+<section id="示例1单次公平抛硬币" class="level4" data-number="3.2.1.1">
+<h4 data-number="3.2.1.1" class="anchored" data-anchor-id="示例1单次公平抛硬币"><span class="header-section-number">3.2.1.1</span> 示例1：单次公平抛硬币</h4>
+<ul>
+<li>结果：Head 或 Tail，等概率。</li>
+<li>Bob 只需问一个问题：“是 Head 吗？”</li>
+<li>答案为 <code>1</code> 或 <code>0</code> 即可确定结果。</li>
+<li>✅ <strong>信息量 = 1 比特</strong></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_1.png" class="img-fluid figure-img"></p>
+<figcaption>信息量的测量方法。</figcaption>
+</figure>
+</div>
+</section>
+<section id="示例2连续抛10次独立硬币" class="level4" data-number="3.2.1.2">
+<h4 data-number="3.2.1.2" class="anchored" data-anchor-id="示例2连续抛10次独立硬币"><span class="header-section-number">3.2.1.2</span> 示例2：连续抛10次独立硬币</h4>
+<ul>
+<li>每次独立，各有1比特信息。</li>
+<li>总信息量 = 10 × 1 = <strong>10 比特</strong></li>
+<li>需提出10个问题（例如，“第i次是Head吗？”）</li>
+</ul>
+</section>
+<section id="示例3从26个英文字母中随机选取一个" class="level4" data-number="3.2.1.3">
+<h4 data-number="3.2.1.3" class="anchored" data-anchor-id="示例3从26个英文字母中随机选取一个"><span class="header-section-number">3.2.1.3</span> 示例3：从26个英文字母中随机选取一个</h4>
+<ul>
+<li>最优策略：采用<strong>二分法</strong>（Binary Search）
+<ul>
+<li>问：“在A-M之间吗？” → 缩小一半</li>
+<li>再问：“在A-F之间吗？” → 继续缩小</li>
+<li>……</li>
+</ul></li>
+<li>平均最少问题数 = <span class="math inline">\(\log_2{26} \approx 4.7\)</span></li>
+<li>✅ <strong>每个字母的信息量 ≈ 4.7 比特</strong></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_2.png" class="img-fluid figure-img"></p>
+<figcaption>信息量的测量方法。</figcaption>
+</figure>
+</div>
+<blockquote class="blockquote">
+<p>💡 <strong>教授点拨</strong>：<br>
+“你有没有发现？信息量和样本空间的大小密切相关。空间越大，越难预测，不确定性越高。”<br>
+因此，信息的基本单位是 <strong>比特（bit）</strong>，源于二进制决策过程。</p>
+</blockquote>
+<hr>
+</section>
+</section>
+</section>
+<section id="三信息熵entropy不确定性的数学定义" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="三信息熵entropy不确定性的数学定义"><span class="header-section-number">3.3</span> 三、信息熵（Entropy）：不确定性的数学定义</h2>
+<section id="离散随机变量的信息熵-hx" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="离散随机变量的信息熵-hx"><span class="header-section-number">3.3.1</span> 1. 离散随机变量的信息熵 <span class="math inline">\(H(X)\)</span></h3>
+<p>设离散随机变量 <span class="math inline">\(X\)</span>，取值空间为 <span class="math inline">\(\mathcal{X}\)</span>，大小为 <span class="math inline">\(M\)</span>，概率质量函数为 <span class="math inline">\(p(x)\)</span>。</p>
+<p>则其<strong>信息熵</strong>定义为：</p>
+<p><span class="math display">\[
+H(X) = \sum_{x \in \mathcal{X}} p(x) \log_2 \frac{1}{p(x)} = -\sum_{x \in \mathcal{X}} p(x) \log_2 p(x)
+\]</span></p>
+<p>也可写作期望形式： <span class="math display">\[
+H(X) = \mathbb{E} \left[ \log_2 \frac{1}{p(X)} \right]
+\]</span></p>
+<blockquote class="blockquote">
+<p>🔹 <strong>物理意义</strong>：<br>
+<span class="math inline">\(H(X)\)</span> 表示完全描述随机变量 <span class="math inline">\(X\)</span> 所需的<strong>平均最小比特数</strong>，即其内在的不确定性总量。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_6.png" class="img-fluid figure-img"></p>
+<figcaption>信息熵与不确定性度量</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="信息熵的性质与推导" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="信息熵的性质与推导"><span class="header-section-number">3.3.2</span> 2. 信息熵的性质与推导</h3>
+<section id="单位" class="level4" data-number="3.3.2.1">
+<h4 data-number="3.3.2.1" class="anchored" data-anchor-id="单位"><span class="header-section-number">3.3.2.1</span> (1) 单位</h4>
+<ul>
+<li>若以 <strong>2 为底</strong>，单位是 <strong>比特（bit）</strong></li>
+<li>若以自然对数 <strong>e 为底</strong>，单位是 <strong>奈特（nat）</strong></li>
+<li>换算关系：<span class="math inline">\(1 \text{ nat} = \log_2 e \approx 1.44 \text{ bits}\)</span></li>
+</ul>
+<blockquote class="blockquote">
+<p>✅ <strong>教授强调</strong>：<br>
+“除非特别说明，我们默认使用 <strong>bit</strong> 作为单位。”</p>
+</blockquote>
+</section>
+<section id="非负性" class="level4" data-number="3.3.2.2">
+<h4 data-number="3.3.2.2" class="anchored" data-anchor-id="非负性"><span class="header-section-number">3.3.2.2</span> (2) 非负性</h4>
+<ul>
+<li>因为 <span class="math inline">\(0 \leq p(x) \leq 1\)</span>，所以 <span class="math inline">\(\log_2 \frac{1}{p(x)} \geq 0\)</span></li>
+<li>故 <span class="math inline">\(H(X) \geq 0\)</span></li>
+</ul>
+</section>
+<section id="确定性事件的熵为0" class="level4" data-number="3.3.2.3">
+<h4 data-number="3.3.2.3" class="anchored" data-anchor-id="确定性事件的熵为0"><span class="header-section-number">3.3.2.3</span> (3) 确定性事件的熵为0</h4>
+<ul>
+<li>若某个 <span class="math inline">\(x\)</span> 满足 <span class="math inline">\(p(x) = 1\)</span>，其余为0，则 <span class="math inline">\(H(X) = 0\)</span></li>
+<li>✅ 符合直觉：无不确定性，无需任何信息即可描述。</li>
+</ul>
+</section>
+<section id="最大熵原理等概分布时熵最大" class="level4" data-number="3.3.2.4">
+<h4 data-number="3.3.2.4" class="anchored" data-anchor-id="最大熵原理等概分布时熵最大"><span class="header-section-number">3.3.2.4</span> (4) 最大熵原理：等概分布时熵最大</h4>
+<p>对于固定大小 <span class="math inline">\(M\)</span> 的样本空间，当所有取值<strong>等概率</strong>时，熵达到最大：</p>
+<p><span class="math display">\[
+H(X) \leq \log_2 M
+\]</span></p>
+<p>且等号成立当且仅当 <span class="math inline">\(p(x) = \frac{1}{M}, \forall x \in \mathcal{X}\)</span></p>
+<blockquote class="blockquote">
+<p>🔍 <strong>证明思路（利用Jensen不等式）</strong>：</p>
+<p>考察 <span class="math inline">\(H(X) - \log_2 M\)</span>：</p>
+<p><span class="math display">\[
+H(X) - \log_2 M = \sum_x p(x) \log_2 \frac{1}{p(x)} - \sum_x p(x) \log_2 M = \sum_x p(x) \log_2 \frac{1}{M p(x)}
+\]</span></p>
+<p>利用不等式 <span class="math inline">\(\log_2 y \leq y - 1\)</span>（当 <span class="math inline">\(y &gt; 0\)</span>），令 <span class="math inline">\(y = \frac{1}{M p(x)}\)</span>，得：</p>
+<p><span class="math display">\[
+\log_2 \frac{1}{M p(x)} \leq \frac{1}{M p(x)} - 1
+\]</span></p>
+<p>两边乘以 <span class="math inline">\(p(x)\)</span> 并求和：</p>
+<p><span class="math display">\[
+\sum_x p(x) \log_2 \frac{1}{M p(x)} \leq \sum_x \left( \frac{1}{M} - p(x) \right) = 1 - 1 = 0
+\]</span></p>
+<p>故 <span class="math inline">\(H(X) \leq \log_2 M\)</span>，等号成立当且仅当 <span class="math inline">\(M p(x) = 1 \Rightarrow p(x) = \frac{1}{M}\)</span></p>
+</blockquote>
+<blockquote class="blockquote">
+<p>💡 <strong>教授点拨</strong>：<br>
+“为什么等概率最‘混乱’？因为没有任何倾向性，最难预测。就像两个势均力敌的球队比赛，结果最让人捉摸不透。”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="实例对比machine-1-vs-machine-2" class="level3" data-number="3.3.3">
+<h3 data-number="3.3.3" class="anchored" data-anchor-id="实例对比machine-1-vs-machine-2"><span class="header-section-number">3.3.3</span> 3. 实例对比：Machine 1 vs Machine 2</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>机器</th>
+<th>字母</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Machine 1（等概）</td>
+<td><span class="math inline">\(p(x)\)</span></td>
+<td>0.25</td>
+<td>0.25</td>
+<td>0.25</td>
+<td>0.25</td>
+</tr>
+<tr class="even">
+<td>Machine 2（非等概）</td>
+<td><span class="math inline">\(p(x)\)</span></td>
+<td>0.50</td>
+<td>0.125</td>
+<td>0.125</td>
+<td>0.25</td>
+</tr>
+</tbody>
+</table>
+<p>计算熵： - <span class="math inline">\(H_1 = \log_2 4 = 2\)</span> bits - <span class="math inline">\(H_2 = 0.5\log_2 2 + 0.125\log_2 8 + 0.125\log_2 8 + 0.25\log_2 4 = 0.5 + 0.375 + 0.375 + 0.5 = 1.75\)</span> bits</p>
+<p>✅ <strong>结论</strong>：等概分布的不确定性更高，信息熵更大。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_3.png" class="img-fluid figure-img"></p>
+<figcaption>信息量测量方法对比。</figcaption>
+</figure>
+</div>
+<blockquote class="blockquote">
+<p>🧠 <strong>深入理解</strong>：<br>
+聪明的Bob会根据概率设计提问顺序： - 先问高概率事件（如“是A吗？”），大概率一次命中； - 小概率事件虽需更多问题，但因发生概率低，对“平均问题数”影响较小。</p>
+<p>这正是熵的本质：<strong>加权平均的自信息量</strong>。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_4.png" class="img-fluid figure-img"></p>
+<figcaption>信息量测量方法示例。</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_5.png" class="img-fluid figure-img"></p>
+<figcaption>信息量的测量方法。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="四相关概念扩展" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="四相关概念扩展"><span class="header-section-number">3.4</span> 四、相关概念扩展</h2>
+<section id="自信息量shannon-information-content" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="自信息量shannon-information-content"><span class="header-section-number">3.4.1</span> 1. 自信息量（Shannon Information Content）</h3>
+<p>定义：某一具体结果 <span class="math inline">\(x\)</span> 发生时所携带的信息量： <span class="math display">\[
+h(x) = \log_2 \frac{1}{p(x)}
+\]</span></p>
+<ul>
+<li>特点：<strong>概率越小，信息量越大</strong></li>
+<li>曲线趋势：随 <span class="math inline">\(p(x)\)</span> 增大而单调递减</li>
+<li>当 <span class="math inline">\(p(x)=1\)</span> 时，<span class="math inline">\(h(x)=0\)</span>；当 <span class="math inline">\(p(x)\to0\)</span> 时，<span class="math inline">\(h(x)\to\infty\)</span></li>
+</ul>
+<blockquote class="blockquote">
+<p>💬 趣闻类比：<br>
+“有人告诉你‘中国队赢了巴西队’，你会震惊；但若说‘中国队输了’，你只会说‘哦，正常’。前者信息量远大于后者。”</p>
+</blockquote>
+<hr>
+</section>
+<section id="联合熵-hxy" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="联合熵-hxy"><span class="header-section-number">3.4.2</span> 2. 联合熵 <span class="math inline">\(H(X,Y)\)</span></h3>
+<p>衡量两个随机变量 <span class="math inline">\((X,Y)\)</span> 联合发生的不确定性：</p>
+<p><span class="math display">\[
+H(X,Y) = -\sum_{x,y} p(x,y) \log_2 p(x,y)
+\]</span></p>
+<p>若 <span class="math inline">\(X\)</span> 与 <span class="math inline">\(Y\)</span> <strong>独立</strong>，则： <span class="math display">\[
+H(X,Y) = H(X) + H(Y)
+\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_8.png" class="img-fluid figure-img"></p>
+<figcaption>联合熵与条件熵概念。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="条件熵-hxy" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="条件熵-hxy"><span class="header-section-number">3.4.3</span> 3. 条件熵 <span class="math inline">\(H(X|Y)\)</span></h3>
+<p>在已知 <span class="math inline">\(Y\)</span> 的条件下，<span class="math inline">\(X\)</span> 仍具有的不确定性：</p>
+<p><span class="math display">\[
+H(X|Y) = \sum_y p(y) H(X|Y=y) = -\sum_{x,y} p(x,y) \log_2 p(x|y)
+\]</span></p>
+<ul>
+<li>若 <span class="math inline">\(X,Y\)</span> 独立，则 <span class="math inline">\(H(X|Y) = H(X)\)</span></li>
+<li>若 <span class="math inline">\(X=Y\)</span>，则 <span class="math inline">\(H(X|Y) = 0\)</span></li>
+</ul>
+<hr>
+</section>
+<section id="链式法则chain-rule" class="level3" data-number="3.4.4">
+<h3 data-number="3.4.4" class="anchored" data-anchor-id="链式法则chain-rule"><span class="header-section-number">3.4.4</span> 4. 链式法则（Chain Rule）</h3>
+<p>联合熵可分解为： <span class="math display">\[
+H(X,Y) = H(Y) + H(X|Y)
+\]</span></p>
+<p>同理： <span class="math display">\[
+H(X,Y) = H(X) + H(Y|X)
+\]</span></p>
+<blockquote class="blockquote">
+<p>🔍 <strong>推导简述</strong>：</p>
+<p>由 <span class="math inline">\(p(x,y) = p(y)p(x|y)\)</span>，代入联合熵定义：</p>
+<p><span class="math display">\[
+H(X,Y) = -\sum_{x,y} p(x,y) \log_2 [p(y)p(x|y)] = -\sum_{x,y} p(x,y) \log_2 p(y) - \sum_{x,y} p(x,y) \log_2 p(x|y)
+\]</span></p>
+<p>第一项 = <span class="math inline">\(-\sum_y p(y) \log_2 p(y) = H(Y)\)</span><br>
+第二项 = <span class="math inline">\(H(X|Y)\)</span><br>
+得证。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_9.png" class="img-fluid figure-img"></p>
+<figcaption>联合熵与条件熵的链式规则。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="五互信息mutual-information变量间的共享信息" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="五互信息mutual-information变量间的共享信息"><span class="header-section-number">3.5</span> 五、互信息（Mutual Information）：变量间的“共享信息”</h2>
+<section id="定义" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="定义"><span class="header-section-number">3.5.1</span> 1. 定义</h3>
+<p>互信息 <span class="math inline">\(I(X;Y)\)</span> 衡量两个随机变量之间的<strong>依赖程度</strong>，即一个变量包含另一个变量信息的多少。</p>
+<p><span class="math display">\[
+I(X;Y) = \sum_{x,y} p(x,y) \log_2 \frac{p(x,y)}{p(x)p(y)}
+\]</span></p>
+<blockquote class="blockquote">
+<p>⚠️ 注意符号：使用分号 <code>;</code>，而非逗号 <code>,</code>。逗号表示联合，分号表示互信息。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_10.png" class="img-fluid figure-img"></p>
+<figcaption>信息论与KL散度</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="互信息的性质" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="互信息的性质"><span class="header-section-number">3.5.2</span> 2. 互信息的性质</h3>
+<section id="非负性ixy-geq-0" class="level4" data-number="3.5.2.1">
+<h4 data-number="3.5.2.1" class="anchored" data-anchor-id="非负性ixy-geq-0"><span class="header-section-number">3.5.2.1</span> (1) 非负性：<span class="math inline">\(I(X;Y) \geq 0\)</span></h4>
+<blockquote class="blockquote">
+<p>🔍 <strong>证明（关键工具：Jensen不等式）</strong></p>
+<p>设函数 <span class="math inline">\(f(u) = -\log u\)</span>，它是凸函数（convex）。</p>
+<p>令 <span class="math inline">\(u = \frac{p(x)p(y)}{p(x,y)}\)</span>，则：</p>
+<p><span class="math display">\[
+I(X;Y) = \mathbb{E} \left[ \log_2 \frac{p(x,y)}{p(x)p(y)} \right] = \mathbb{E} \left[ -\log_2 \frac{p(x)p(y)}{p(x,y)} \right]
+\]</span></p>
+<p>由 Jensen 不等式（<span class="math inline">\(\mathbb{E}[f(U)] \geq f(\mathbb{E}[U])\)</span>）：</p>
+<p><span class="math display">\[
+\mathbb{E} \left[ -\log_2 U \right] \geq -\log_2 \mathbb{E}[U]
+\]</span></p>
+<p>计算 <span class="math inline">\(\mathbb{E}[U]\)</span>：</p>
+<p><span class="math display">\[
+\mathbb{E}[U] = \sum_{x,y} p(x,y) \cdot \frac{p(x)p(y)}{p(x,y)} = \sum_{x,y} p(x)p(y) = 1
+\]</span></p>
+<p>所以：</p>
+<p><span class="math display">\[
+I(X;Y) \geq -\log_2 1 = 0
+\]</span></p>
+</blockquote>
+<p>✅ 等号成立当且仅当 <span class="math inline">\(X\)</span> 与 <span class="math inline">\(Y\)</span> <strong>相互独立</strong>。</p>
+<blockquote class="blockquote">
+<p>💡 <strong>教授点拨</strong>：<br>
+“Jensen不等式是信息论的‘瑞士军刀’。无论你是做机器学习、优化还是理论分析，都会频繁用到它。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_11.png" class="img-fluid figure-img"></p>
+<figcaption>互信息定义与性质</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="互信息与其他熵的关系" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="互信息与其他熵的关系"><span class="header-section-number">3.5.3</span> 3. 互信息与其他熵的关系</h3>
+<p><span class="math display">\[
+\begin{aligned}
+I(X;Y) &amp;= H(X) - H(X|Y) \\
+       &amp;= H(Y) - H(Y|X) \\
+       &amp;= H(X) + H(Y) - H(X,Y)
+\end{aligned}
+\]</span></p>
+<blockquote class="blockquote">
+<p>✅ <strong>解释</strong>：<br>
+给你 <span class="math inline">\(Y\)</span> 后，<span class="math inline">\(X\)</span> 的不确定性减少了多少？这个减少量就是 <span class="math inline">\(X\)</span> 和 <span class="math inline">\(Y\)</span> 的互信息。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_12.png" class="img-fluid figure-img"></p>
+<figcaption>互信息与熵的关系图示</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="venn-图理解熵的关系" class="level3" data-number="3.5.4">
+<h3 data-number="3.5.4" class="anchored" data-anchor-id="venn-图理解熵的关系"><span class="header-section-number">3.5.4</span> 4. Venn 图理解熵的关系</h3>
+<pre><code>        +---------------------+
+        |         X           |
+        |   +-------------+   |
+        |   |   H(X|Y)    |   |
+        |   |       +-----+---+------+
+        |   |       | I(X;Y)| Y     |
+        |   +-------+       |       |
+        |           | H(Y|X)|       |
+        +-----------+-------+-------+
+                  H(X,Y)</code></pre>
+<ul>
+<li>整个区域：联合熵 <span class="math inline">\(H(X,Y)\)</span></li>
+<li>左侧独有部分：<span class="math inline">\(H(X|Y)\)</span></li>
+<li>右侧独有部分：<span class="math inline">\(H(Y|X)\)</span></li>
+<li>中间重叠部分：互信息 <span class="math inline">\(I(X;Y)\)</span></li>
+</ul>
+<blockquote class="blockquote">
+<p>✅ <strong>独立情况</strong>：两圆无交集，<span class="math inline">\(I(X;Y)=0\)</span></p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="六连续随机变量微分熵differential-entropy" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="六连续随机变量微分熵differential-entropy"><span class="header-section-number">3.6</span> 六、连续随机变量：微分熵（Differential Entropy）</h2>
+<section id="定义-1" class="level3" data-number="3.6.1">
+<h3 data-number="3.6.1" class="anchored" data-anchor-id="定义-1"><span class="header-section-number">3.6.1</span> 1. 定义</h3>
+<p>对于连续随机变量 <span class="math inline">\(X\)</span>，概率密度函数为 <span class="math inline">\(f(x)\)</span>，其微分熵为：</p>
+<p><span class="math display">\[
+h(X) = -\int f(x) \log_2 f(x) dx
+\]</span></p>
+<blockquote class="blockquote">
+<p>⚠️ <strong>重要区别</strong>： - 离散熵 <span class="math inline">\(H(X) \geq 0\)</span> - 微分熵 <span class="math inline">\(h(X)\)</span> <strong>可正、可负、甚至无穷大</strong></p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_13.png" class="img-fluid figure-img"></p>
+<figcaption>微分熵与互信息定义</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="常见分布的微分熵" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="常见分布的微分熵"><span class="header-section-number">3.6.2</span> 2. 常见分布的微分熵</h3>
+<section id="均匀分布-x-sim-textuniformab" class="level4" data-number="3.6.2.1">
+<h4 data-number="3.6.2.1" class="anchored" data-anchor-id="均匀分布-x-sim-textuniformab"><span class="header-section-number">3.6.2.1</span> (1) 均匀分布 <span class="math inline">\(X \sim \text{Uniform}(a,b)\)</span></h4>
+<ul>
+<li>PDF: <span class="math inline">\(f(x) = \frac{1}{b-a},\ x \in [a,b]\)</span></li>
+<li>微分熵： <span class="math display">\[
+h(X) = \log_2 (b-a)
+\]</span></li>
+</ul>
+<blockquote class="blockquote">
+<p>✅ 直观解释：区间越宽，不确定性越高，熵越大。<br>
+❗ 当 <span class="math inline">\(b-a &lt; 1\)</span> 时，<span class="math inline">\(h(X) &lt; 0\)</span> —— 这在离散熵中不可能，但在连续情况下合理。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_14.png" class="img-fluid figure-img"></p>
+<figcaption>均匀分布的微分熵与互信息。</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_15.png" class="img-fluid figure-img"></p>
+<figcaption>微分熵与互信息示例</figcaption>
+</figure>
+</div>
+</section>
+<section id="高斯分布-x-sim-mathcalnmu-sigma2" class="level4" data-number="3.6.2.2">
+<h4 data-number="3.6.2.2" class="anchored" data-anchor-id="高斯分布-x-sim-mathcalnmu-sigma2"><span class="header-section-number">3.6.2.2</span> (2) 高斯分布 <span class="math inline">\(X \sim \mathcal{N}(\mu, \sigma^2)\)</span></h4>
+<ul>
+<li>PDF: <span class="math inline">\(f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)\)</span></li>
+<li>微分熵： <span class="math display">\[
+h(X) = \frac{1}{2} \log_2 (2\pi e \sigma^2) \quad \text{(bits)}
+\]</span></li>
+</ul>
+<blockquote class="blockquote">
+<p>🔍 <strong>推导要点</strong>：</p>
+<p>使用自然对数先计算（单位为 nats）：</p>
+<p><span class="math display">\[
+h(X) = \frac{1}{2} \ln(2\pi e \sigma^2)
+\]</span></p>
+<p>再换底：</p>
+<p><span class="math display">\[
+\log_2 u = \frac{\ln u}{\ln 2} \Rightarrow h(X)_{\text{bits}} = \frac{1}{2} \log_2 (2\pi e \sigma^2)
+\]</span></p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_16.png" class="img-fluid figure-img"></p>
+<figcaption>高斯分布的微分熵和互信息。</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_17.png" class="img-fluid figure-img"></p>
+<figcaption>高斯分布微分熵计算。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="最大熵定理给定方差下" class="level3" data-number="3.6.3">
+<h3 data-number="3.6.3" class="anchored" data-anchor-id="最大熵定理给定方差下"><span class="header-section-number">3.6.3</span> 3. 最大熵定理（给定方差下）</h3>
+<blockquote class="blockquote">
+<p>在所有具有相同方差 <span class="math inline">\(\sigma^2\)</span> 的连续分布中，<strong>高斯分布的微分熵最大</strong>。</p>
+</blockquote>
+<p>即： <span class="math display">\[
+h(X) \leq \frac{1}{2} \log_2 (2\pi e \sigma^2)
+\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_18.png" class="img-fluid figure-img"></p>
+<figcaption>高斯分布熵最大。</figcaption>
+</figure>
+</div>
+<blockquote class="blockquote">
+<p>💡 <strong>教授点拨</strong>：<br>
+“高斯噪声是‘最坏’的噪声，因为它携带最多的不确定性。这也是香农信道容量公式中出现高斯分布的原因。”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="七信源编码初步从信息压缩谈起" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="七信源编码初步从信息压缩谈起"><span class="header-section-number">3.7</span> 七、信源编码初步：从信息压缩谈起</h2>
+<section id="信源编码的目标" class="level3" data-number="3.7.1">
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="信源编码的目标"><span class="header-section-number">3.7.1</span> 1. 信源编码的目标</h3>
+<p>将离散信源输出的符号序列转换为二进制比特流，满足两个核心要求：</p>
+<ol type="1">
+<li><p><strong>唯一可译性（Uniquely Decodable）</strong><br>
+接收端必须能<strong>无歧义地解码</strong>出原始符号序列。</p></li>
+<li><p><strong>高效性（Efficiency）</strong><br>
+最小化<strong>平均码长</strong>，提升传输效率。</p></li>
+</ol>
+<blockquote class="blockquote">
+<p>✅ <strong>教授强调</strong>：<br>
+“编码不是为了改变信息内容，而是为了更经济地表达它。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_23.png" class="img-fluid figure-img"></p>
+<figcaption>源编码与解码流程图</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="编码类型" class="level3" data-number="3.7.2">
+<h3 data-number="3.7.2" class="anchored" data-anchor-id="编码类型"><span class="header-section-number">3.7.2</span> 2. 编码类型</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>类型</th>
+<th>输入</th>
+<th>输出</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>定长码</td>
+<td>固定长度符号序列</td>
+<td>固定长度比特序列</td>
+<td>ASCII码</td>
+</tr>
+<tr class="even">
+<td>变长码</td>
+<td>单个符号</td>
+<td>可变长度比特序列</td>
+<td>摩尔斯电码</td>
+</tr>
+<tr class="odd">
+<td>定长到变长</td>
+<td>固定长度块</td>
+<td>可变长度码字</td>
+<td>Huffman编码</td>
+</tr>
+<tr class="even">
+<td>变长到变长</td>
+<td>可变长度组</td>
+<td>可变长度码字</td>
+<td>Lempel-Ziv算法</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_21.png" class="img-fluid figure-img"></p>
+<figcaption>源编码类型概述。</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="摩尔斯电码的智慧" class="level3" data-number="3.7.3">
+<h3 data-number="3.7.3" class="anchored" data-anchor-id="摩尔斯电码的智慧"><span class="header-section-number">3.7.3</span> 3. 摩尔斯电码的智慧</h3>
+<p>观察国际摩尔斯电码： - 高频字母（如 E <code>·</code>, T <code>-</code>）编码短 - 低频字母（如 Q <code>--·-</code>, Z <code>--··</code>）编码长</p>
+<blockquote class="blockquote">
+<p>💡 <strong>设计哲学</strong>：<br>
+<strong>高频符号用短码，低频符号用长码，以降低平均码长</strong>。<br>
+这正是现代压缩编码（如Huffman）的核心思想。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_22.png" class="img-fluid figure-img"></p>
+<figcaption>国际莫尔斯电码示例</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="信源模型假设" class="level3" data-number="3.7.4">
+<h3 data-number="3.7.4" class="anchored" data-anchor-id="信源模型假设"><span class="header-section-number">3.7.4</span> 4. 信源模型假设</h3>
+<p>本课程暂考虑最简单的信源模型： - <strong>离散无记忆信源（Discrete Memoryless Source, DMS）</strong> - 时间离散 - 幅度离散 - 各符号独立同分布（i.i.d.）</p>
+<hr>
+</section>
+</section>
+<section id="八总结与展望" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="八总结与展望"><span class="header-section-number">3.8</span> 八、总结与展望</h2>
+<section id="本课核心知识图谱" class="level3" data-number="3.8.1">
+<h3 data-number="3.8.1" class="anchored" data-anchor-id="本课核心知识图谱"><span class="header-section-number">3.8.1</span> 本课核心知识图谱</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 38%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>概念</th>
+<th>数学表达</th>
+<th>物理意义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>信息熵 <span class="math inline">\(H(X)\)</span></td>
+<td><span class="math inline">\(-\sum p \log p\)</span></td>
+<td>随机变量的不确定性</td>
+</tr>
+<tr class="even">
+<td>联合熵 <span class="math inline">\(H(X,Y)\)</span></td>
+<td><span class="math inline">\(-\sum p(x,y) \log p(x,y)\)</span></td>
+<td>两变量联合不确定性</td>
+</tr>
+<tr class="odd">
+<td>条件熵 <span class="math inline">\(H(X\|Y)\)</span></td>
+<td><span class="math inline">\(-\sum p(x,y) \log p(x\|y)\)</span></td>
+<td>已知Y后X的剩余不确定性</td>
+</tr>
+<tr class="even">
+<td>互信息 <span class="math inline">\(I(X;Y)\)</span></td>
+<td><span class="math inline">\(\sum p(x,y) \log \frac{p(x,y)}{p(x)p(y)}\)</span></td>
+<td>两变量共享信息量</td>
+</tr>
+<tr class="odd">
+<td>微分熵 <span class="math inline">\(h(X)\)</span></td>
+<td><span class="math inline">\(-\int f \log f\ dx\)</span></td>
+<td>连续变量的“不确定性”（可负）</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="关键方法论回顾" class="level3" data-number="3.8.2">
+<h3 data-number="3.8.2" class="anchored" data-anchor-id="关键方法论回顾"><span class="header-section-number">3.8.2</span> 关键方法论回顾</h3>
+<ol type="1">
+<li><strong>从直觉到数学</strong>：用“提问次数”建立对信息量的直观感知。</li>
+<li><strong>期望视角</strong>：熵是对“自信息量”的期望。</li>
+<li><strong>不等式工具</strong>：Jensen不等式是证明非负性的利器。</li>
+<li><strong>最大熵原理</strong>：约束条件下的最优分布。</li>
+<li><strong>编码思想</strong>：频率驱动压缩，追求平均性能最优。</li>
+</ol>
+<blockquote class="blockquote">
+<p>🌟 <strong>教授寄语</strong>：<br>
+“信息论不仅是通信的基石，更是理解数据、智能乃至生命系统的语言。希望你们不仅能学会公式，更能体会其中的思想之美。”</p>
+</blockquote>
+<hr>
+<p><strong>下节预告</strong>：我们将深入讲解<strong>信源编码定理</strong>与<strong>Huffman编码算法</strong>，探索如何逼近信息熵极限，实现高效无损压缩。</p>
+<blockquote class="blockquote">
+<p><em>笔记整理完毕</em><br>
+上海科技大学 · 通信原理课程组<br>
+2025年11月</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1119b-1114-e-Q1%20How%20to%20measure%20the%20quantity%20of%20information/page_19.png" class="img-fluid figure-img"></p>
+<figcaption>上海科技大学感谢提问。</figcaption>
+</figure>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "已复制");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "已复制");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../chapters/1114-b-数字通信/checked_notes.html" class="pagination-link" aria-label="**通信原理深度学习笔记：数字通信系统导论**">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：数字通信系统导论</strong></span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../chapters/1121b-1119-e-Layering of Source Coding/checked_notes.html" class="pagination-link" aria-label="深度学习笔记：信源编码理论（基于廉黎祥《通信原理》第10周课堂）">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">深度学习笔记：信源编码理论（基于廉黎祥《通信原理》第10周课堂）</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>11&nbsp; 通信原理深度学习笔记：从信号空间到数字调制（第14周） – EE140 通信系统导论学习笔记</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../chapters/1219b-1217-e-PAM Signal Constellation/checked_notes.html" rel="next">
+<link href="../../chapters/1212b-1210-e-High-Rate Entropy-Coded Quantization/checked_notes.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0dd2bd5de344125cf763a379ddc3eb04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html">第三部分：信号处理与调制</a></li><li class="breadcrumb-item"><a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从信号空间到数字调制（第14周）</strong></span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">EE140 通信系统导论学习笔记</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">EE140 通信系统导论学习笔记</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">第一部分：数字通信基础</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1114-b-数字通信/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：数字通信系统导论</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1119b-1114-e-Q1 How to measure the quantity of information/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">深度学习笔记：信息论基础与信源编码导论</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1121b-1119-e-Layering of Source Coding/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">深度学习笔记：信源编码理论（基于廉黎祥《通信原理》第10周课堂）</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：信源编码与最优变长码理论</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">第二部分：采样与量化</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：采样、正交展开与混叠现象</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1205b-1203-e-Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：通信原理——量化器设计与Lloyd-Max算法</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1210b-1205-e-Lloyd-Max Algorithm/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：量化理论与应用——从通信原理到现代AI</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1212b-1210-e-High-Rate Entropy-Coded Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：高码率熵编码量化与信号空间基础</strong></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">第三部分：信号处理与调制</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从信号空间到数字调制（第14周）</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1219b-1217-e-PAM Signal Constellation/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从PAM到QAM的调制与系统设计</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：奈奎斯特准则与无码间干扰传输</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../chapters/1226b-1224-e-nyquist criterion2/checked_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">通信原理深度学习笔记</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">目录</h2>
+   
+  <ul>
+  <li><a href="#一课程回顾向量空间与信号空间的统一视角" id="toc-一课程回顾向量空间与信号空间的统一视角" class="nav-link active" data-scroll-target="#一课程回顾向量空间与信号空间的统一视角"><span class="header-section-number">11.1</span> <strong>一、课程回顾：向量空间与信号空间的统一视角</strong></a>
+  <ul class="collapse">
+  <li><a href="#向量空间的核心概念" id="toc-向量空间的核心概念" class="nav-link" data-scroll-target="#向量空间的核心概念"><span class="header-section-number">11.1.1</span> <strong>1.1 向量空间的核心概念</strong></a></li>
+  <li><a href="#gram-schmidt-正交化过程" id="toc-gram-schmidt-正交化过程" class="nav-link" data-scroll-target="#gram-schmidt-正交化过程"><span class="header-section-number">11.1.2</span> <strong>1.2 Gram-Schmidt 正交化过程</strong></a></li>
+  </ul></li>
+  <li><a href="#二信号空间将波形转化为向量" id="toc-二信号空间将波形转化为向量" class="nav-link" data-scroll-target="#二信号空间将波形转化为向量"><span class="header-section-number">11.2</span> <strong>二、信号空间：将波形转化为向量</strong></a>
+  <ul class="collapse">
+  <li><a href="#信号空间的基本定义" id="toc-信号空间的基本定义" class="nav-link" data-scroll-target="#信号空间的基本定义"><span class="header-section-number">11.2.1</span> <strong>2.1 信号空间的基本定义</strong></a></li>
+  <li><a href="#信号的正交展开-orthonormal-expansion" id="toc-信号的正交展开-orthonormal-expansion" class="nav-link" data-scroll-target="#信号的正交展开-orthonormal-expansion"><span class="header-section-number">11.2.2</span> <strong>2.2 信号的正交展开 (Orthonormal Expansion)</strong></a></li>
+  <li><a href="#经典实例采样定理的几何解读" id="toc-经典实例采样定理的几何解读" class="nav-link" data-scroll-target="#经典实例采样定理的几何解读"><span class="header-section-number">11.2.3</span> <strong>2.3 经典实例：采样定理的几何解读</strong></a></li>
+  </ul></li>
+  <li><a href="#三信道编码数字通信的逆源编码" id="toc-三信道编码数字通信的逆源编码" class="nav-link" data-scroll-target="#三信道编码数字通信的逆源编码"><span class="header-section-number">11.3</span> <strong>三、信道编码：数字通信的“逆源编码”</strong></a>
+  <ul class="collapse">
+  <li><a href="#信道编解码的整体流程" id="toc-信道编解码的整体流程" class="nav-link" data-scroll-target="#信道编解码的整体流程"><span class="header-section-number">11.3.1</span> <strong>3.1 信道编解码的整体流程</strong></a></li>
+  </ul></li>
+  <li><a href="#四数字调制从比特到波形的艺术" id="toc-四数字调制从比特到波形的艺术" class="nav-link" data-scroll-target="#四数字调制从比特到波形的艺术"><span class="header-section-number">11.4</span> <strong>四、数字调制：从比特到波形的艺术</strong></a>
+  <ul class="collapse">
+  <li><a href="#调制基本框图" id="toc-调制基本框图" class="nav-link" data-scroll-target="#调制基本框图"><span class="header-section-number">11.4.1</span> <strong>4.1 调制基本框图</strong></a></li>
+  <li><a href="#关键参数定义" id="toc-关键参数定义" class="nav-link" data-scroll-target="#关键参数定义"><span class="header-section-number">11.4.2</span> <strong>4.2 关键参数定义</strong></a></li>
+  </ul></li>
+  <li><a href="#五星座图-constellation-diagram调制设计的画布" id="toc-五星座图-constellation-diagram调制设计的画布" class="nav-link" data-scroll-target="#五星座图-constellation-diagram调制设计的画布"><span class="header-section-number">11.5</span> <strong>五、星座图 (Constellation Diagram)：调制设计的画布</strong></a>
+  <ul class="collapse">
+  <li><a href="#什么是星座图" id="toc-什么是星座图" class="nav-link" data-scroll-target="#什么是星座图"><span class="header-section-number">11.5.1</span> <strong>5.1 什么是星座图？</strong></a></li>
+  <li><a href="#m-pam-星座图设计" id="toc-m-pam-星座图设计" class="nav-link" data-scroll-target="#m-pam-星座图设计"><span class="header-section-number">11.5.2</span> <strong>5.2 M-PAM 星座图设计</strong></a></li>
+  </ul></li>
+  <li><a href="#六m-pam-的平均能量分析" id="toc-六m-pam-的平均能量分析" class="nav-link" data-scroll-target="#六m-pam-的平均能量分析"><span class="header-section-number">11.6</span> <strong>六、M-PAM 的平均能量分析</strong></a>
+  <ul class="collapse">
+  <li><a href="#平均符号能量-e_s-计算" id="toc-平均符号能量-e_s-计算" class="nav-link" data-scroll-target="#平均符号能量-e_s-计算"><span class="header-section-number">11.6.1</span> <strong>6.1 平均符号能量 (<span class="math inline">\(E_s\)</span>) 计算</strong></a></li>
+  <li><a href="#能量与可靠性的根本权衡" id="toc-能量与可靠性的根本权衡" class="nav-link" data-scroll-target="#能量与可靠性的根本权衡"><span class="header-section-number">11.6.2</span> <strong>6.2 能量与可靠性的根本权衡</strong></a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html">第三部分：信号处理与调制</a></li><li class="breadcrumb-item"><a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从信号空间到数字调制（第14周）</strong></span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从信号空间到数字调制（第14周）</strong></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><strong>授课教师：廉黎祥</strong><br>
+<strong>课程名称：通信系统导论（EE140）</strong><br>
+<strong>时间：2025年12月17日</strong></p>
+<hr>
+<blockquote class="blockquote">
+<p><strong>📌 教授点拨 · 开场提醒</strong><br>
+“考试可能安排在<strong>1月12日上午</strong>，部分同学若有‘三加一’交流计划，请务必确认行程，不要提前订票！一切以教务处通知为准，但请你们把这门课的考试放在优先级第一位。”</p>
+<p>“慕课可以补，但<strong>课堂的节奏、现场的互动和思维的碰撞是无法替代的</strong>。作业按时交就很好，错了没关系——关键是思考的过程。”</p>
+</blockquote>
+<hr>
+<section id="一课程回顾向量空间与信号空间的统一视角" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="一课程回顾向量空间与信号空间的统一视角"><span class="header-section-number">11.1</span> <strong>一、课程回顾：向量空间与信号空间的统一视角</strong></h2>
+<p>上节课的核心目标是建立一个<strong>几何化的信号处理框架</strong>：将抽象的“信号”视为某种“向量”，从而借助线性代数的强大工具进行分析与设计。</p>
+<section id="向量空间的核心概念" class="level3" data-number="11.1.1">
+<h3 data-number="11.1.1" class="anchored" data-anchor-id="向量空间的核心概念"><span class="header-section-number">11.1.1</span> <strong>1.1 向量空间的核心概念</strong></h3>
+<ul>
+<li><strong>内积 (Inner Product)</strong>：衡量两个向量之间的“相似度”。对于向量 <span class="math inline">\(\mathbf{u}, \mathbf{v}\)</span>，其定义为 <span class="math inline">\(\langle \mathbf{u}, \mathbf{v} \rangle\)</span>。</li>
+<li><strong>范数 (Norm)</strong>：表示向量的“长度”，计算公式为 <span class="math inline">\(\|\mathbf{v}\| = \sqrt{\langle \mathbf{v}, \mathbf{v} \rangle}\)</span>。</li>
+<li><strong>正交性 (Orthogonality)</strong>：若 <span class="math inline">\(\langle \mathbf{u}, \mathbf{v} \rangle = 0\)</span>，则两向量正交。</li>
+<li><strong>正交归一基 (Orthonormal Basis)</strong>：一组相互正交且每个向量范数为1的基底 <span class="math inline">\(\{\phi_1, \dots, \phi_n\}\)</span>。</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_1.png" class="img-fluid figure-img"></p>
+<figcaption>有限维投影公式</figcaption>
+</figure>
+</div>
+</section>
+<section id="gram-schmidt-正交化过程" class="level3" data-number="11.1.2">
+<h3 data-number="11.1.2" class="anchored" data-anchor-id="gram-schmidt-正交化过程"><span class="header-section-number">11.1.2</span> <strong>1.2 Gram-Schmidt 正交化过程</strong></h3>
+<p>给定任意一组线性无关的向量或信号，Gram-Schmidt 算法可系统地构造出一组正交归一基。</p>
+<blockquote class="blockquote">
+<p><strong>💡 思路与方法</strong><br>
+该过程的<strong>核心思想是“投影减法”</strong>： 1. 取第一个向量并归一化，得到 <span class="math inline">\(\phi_1\)</span>； 2. 对于第二个向量 <span class="math inline">\(s_2(t)\)</span>，计算其在 <span class="math inline">\(\phi_1\)</span> 上的投影：<span class="math inline">\(\text{proj}_{\phi_1}(s_2) = \langle s_2, \phi_1 \rangle \phi_1\)</span>； 3. 将 <span class="math inline">\(s_2\)</span> 减去该投影，获得与 <span class="math inline">\(\phi_1\)</span> 正交的新向量：<span class="math inline">\(v_2 = s_2 - \text{proj}_{\phi_1}(s_2)\)</span>； 4. 归一化 <span class="math inline">\(v_2\)</span> 得到 <span class="math inline">\(\phi_2\)</span>； 5. 以此类推，第 <span class="math inline">\(k\)</span> 个基向量为： <span class="math display">\[
+   v_k = s_k - \sum_{j=1}^{k-1} \langle s_k, \phi_j \rangle \phi_j, \quad \phi_k = \frac{v_k}{\|v_k\|}
+   \]</span></p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_2.png" class="img-fluid figure-img"></p>
+<figcaption>Gram-Schmidt正交化过程</figcaption>
+</figure>
+</div>
+<blockquote class="blockquote">
+<p><strong>⚠️ 关键洞察</strong><br>
+最终生成的正交基数量等于原始信号组所张成空间的<strong>维度</strong>。即使给出三个信号，若它们线性相关，Gram-Schmidt 过程将产生少于三个有效基向量，说明信号空间维度小于3。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_4.png" class="img-fluid figure-img"></p>
+<figcaption>Gram-Schmidt正交化过程示意图</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="二信号空间将波形转化为向量" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="二信号空间将波形转化为向量"><span class="header-section-number">11.2</span> <strong>二、信号空间：将波形转化为向量</strong></h2>
+<p>我们将向量空间的概念推广至连续时间信号领域，构建信号处理的几何语言体系。</p>
+<section id="信号空间的基本定义" class="level3" data-number="11.2.1">
+<h3 data-number="11.2.1" class="anchored" data-anchor-id="信号空间的基本定义"><span class="header-section-number">11.2.1</span> <strong>2.1 信号空间的基本定义</strong></h3>
+<ul>
+<li><strong>内积</strong>：对两个能量信号 <span class="math inline">\(x_1(t), x_2(t)\)</span> 定义为： <span class="math display">\[
+\langle x_1(t), x_2(t) \rangle = \int_{-\infty}^{\infty} x_1(t) x_2^*(t) dt
+\]</span> （<em>注：“contre”应为共轭 <code>conjugate</code>，“do”应为“inner product”</em>）</li>
+<li><strong>能量 (Energy)</strong>：信号的能量即为其范数平方：<span class="math inline">\(\mathcal{E}_x = \|x(t)\|^2 = \langle x(t), x(t) \rangle\)</span>。</li>
+<li><strong>正交信号</strong>：当 <span class="math inline">\(\langle x_1(t), x_2(t) \rangle = 0\)</span> 时称二者正交。</li>
+<li><strong>正交归一信号集</strong>：信号之间两两正交，且每个信号能量为1。</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_3.png" class="img-fluid figure-img"></p>
+<figcaption>信号空间与正交性概念</figcaption>
+</figure>
+</div>
+</section>
+<section id="信号的正交展开-orthonormal-expansion" class="level3" data-number="11.2.2">
+<h3 data-number="11.2.2" class="anchored" data-anchor-id="信号的正交展开-orthonormal-expansion"><span class="header-section-number">11.2.2</span> <strong>2.2 信号的正交展开 (Orthonormal Expansion)</strong></h3>
+<p>这是连接连续信号与离散向量的关键桥梁。</p>
+<blockquote class="blockquote">
+<p><strong>📚 核心公式</strong><br>
+给定 <span class="math inline">\(\mathcal{L}_2\)</span> 空间的一组正交归一基 <span class="math inline">\(\{\phi_1(t), \phi_2(t), \cdots\}\)</span>，任何信号 <span class="math inline">\(x(t)\)</span> 都可展开为： <span class="math display">\[
+x(t) = \sum_{j} x_j \phi_j(t)
+\]</span> 其中系数由内积确定： <span class="math display">\[
+x_j = \langle x(t), \phi_j(t) \rangle = \int x(t) \phi_j^*(t) dt
+\]</span> 该等式在<strong>均方误差趋于零</strong>的意义下成立。</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_5.png" class="img-fluid figure-img"></p>
+<figcaption>正交基展开与应用</figcaption>
+</figure>
+</div>
+<blockquote class="blockquote">
+<p><strong>🎯 深入理解</strong><br>
+信号 <span class="math inline">\(x(t)\)</span> 与其向量表示 <span class="math inline">\(\mathbf{x} = [x_1, x_2, \dots]\)</span> 在能量层面完全等价。因此，我们可以在信号域与向量域之间自由切换，实现问题的简化与直观化。</p>
+</blockquote>
+</section>
+<section id="经典实例采样定理的几何解读" class="level3" data-number="11.2.3">
+<h3 data-number="11.2.3" class="anchored" data-anchor-id="经典实例采样定理的几何解读"><span class="header-section-number">11.2.3</span> <strong>2.3 经典实例：采样定理的几何解读</strong></h3>
+<p>采样本质上是一种<strong>基于特定基函数的正交展开</strong>。</p>
+<ul>
+<li><p><strong>时限信号 (Time-Limited)</strong>：持续时间为 <span class="math inline">\([-T/2, T/2]\)</span> 的信号，可用如下函数作为正交归一基： <span class="math display">\[
+\phi_k(t) = \frac{1}{\sqrt{T}} e^{j 2\pi k t / T} \cdot \text{rect}(t/T)
+\]</span> 这正是<strong>傅里叶级数</strong>的基函数。展开系数 <span class="math inline">\(\alpha_k = \langle v(t), \phi_k(t) \rangle\)</span> 即为傅里叶系数。</p></li>
+<li><p><strong>带限信号 (Band-Limited)</strong>：频带限制在 <span class="math inline">\(W\)</span> 内的信号，其正交归一基为平移的 sinc 函数： <span class="math display">\[
+\phi_n(t) = \text{sinc}\left(\frac{t}{T} - n\right), \quad T = \frac{1}{2W}
+\]</span> 展开系数 <span class="math inline">\(x_n = x(nT)\)</span> 即为<strong>采样值</strong>。重构公式： <span class="math display">\[
+x(t) = \sum_n x(nT) \phi_n(t)
+\]</span> 完美体现了奈奎斯特采样定理。</p></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_6.png" class="img-fluid figure-img"></p>
+<figcaption>傅里叶级数展开</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_7.png" class="img-fluid figure-img"></p>
+<figcaption>采样定理与正交展开</figcaption>
+</figure>
+</div>
+<blockquote class="blockquote">
+<p><strong>✨ 教授洞见</strong><br>
+“你看，<strong>采样不是魔法，它是信号空间理论的一个自然结果</strong>。我们只是选择了一组特殊的基（sinc函数），然后用内积（积分）去提取坐标（采样点）。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_8.png" class="img-fluid figure-img"></p>
+<figcaption>信号映射为向量</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_9.png" class="img-fluid figure-img"></p>
+<figcaption>信号映射矢量图示</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="三信道编码数字通信的逆源编码" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="三信道编码数字通信的逆源编码"><span class="header-section-number">11.3</span> <strong>三、信道编码：数字通信的“逆源编码”</strong></h2>
+<section id="信道编解码的整体流程" class="level3" data-number="11.3.1">
+<h3 data-number="11.3.1" class="anchored" data-anchor-id="信道编解码的整体流程"><span class="header-section-number">11.3.1</span> <strong>3.1 信道编解码的整体流程</strong></h3>
+<p>完整的数字通信链路如下所示：</p>
+<pre><code>信息源 -&gt; [信源编码] -&gt; Bit Sequence -&gt; [信道编码] -&gt; 基带波形 -&gt; [带通调制] -&gt; 信道 -&gt; ...
+... -&gt; [带通解调] -&gt; 噪声基带波形 -&gt; [信道解码] -&gt; Bit Sequence -&gt; [信源解码] -&gt; 信息</code></pre>
+<blockquote class="blockquote">
+<p><strong>🔄 核心关系</strong><br>
+信道编码与信源编码是<strong>互逆的操作</strong>： - <strong>信源编码</strong>：将连续波形 <span class="math inline">\(s(t)\)</span> 转换为离散比特流 <span class="math inline">\(\{b_k\}\)</span> —— 实现<strong>数字化压缩</strong>； - <strong>信道编码</strong>：将离散比特流 <span class="math inline">\(\{b_k\}\)</span> 映射为适合传输的连续波形 <span class="math inline">\(s(t)\)</span> —— 实现<strong>物理层承载</strong>。</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>❗ 教授强调</strong><br>
+“它们的目的完全不同！信源编码追求<strong>高效压缩</strong>，而信道编码旨在保障<strong>可靠传输</strong>。本节重点在于如何从比特流生成可传输的波形，即‘调制’部分。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_12.png" class="img-fluid figure-img"></p>
+<figcaption>信号空间与向量空间</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="四数字调制从比特到波形的艺术" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="四数字调制从比特到波形的艺术"><span class="header-section-number">11.4</span> <strong>四、数字调制：从比特到波形的艺术</strong></h2>
+<section id="调制基本框图" class="level3" data-number="11.4.1">
+<h3 data-number="11.4.1" class="anchored" data-anchor-id="调制基本框图"><span class="header-section-number">11.4.1</span> <strong>4.1 调制基本框图</strong></h3>
+<p>调制器主要完成两个步骤： 1. <strong>符号映射 (Symbol Mapping)</strong>：将输入比特序列 <span class="math inline">\(\{b_k\}\)</span> 映射为符号序列 <span class="math inline">\(\{u_k\}\)</span>； 2. <strong>基带调制 (Baseband Modulation)</strong>：将符号序列转换为实际传输的基带波形 <span class="math inline">\(u(t)\)</span>。</p>
+<p>数学表达式为： <span class="math display">\[
+u(t) = \sum_{k} u_k p(t - kT_s)
+\]</span> 其中： - <span class="math inline">\(u_k\)</span>：第 <span class="math inline">\(k\)</span> 个时刻的符号（实数或复数）； - <span class="math inline">\(p(t)\)</span>：<strong>基础脉冲波形 (Basic Pulse Waveform)</strong>，如矩形波、sinc函数； - <span class="math inline">\(T_s\)</span>：<strong>符号间隔 (Symbol Duration)</strong>。</p>
+<blockquote class="blockquote">
+<p><strong>🔍 教授点拨</strong><br>
+“这个求和过程，实质上是用符号 <span class="math inline">\(u_k\)</span> 对平移后的脉冲 <span class="math inline">\(p(t-kT_s)\)</span> 进行<strong>幅度加权</strong>。因此，这类调制统称为<strong>脉冲幅度调制 (PAM)</strong>。”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_13.png" class="img-fluid figure-img"></p>
+<figcaption>调制与解调流程图</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_14.png" class="img-fluid figure-img"></p>
+<figcaption>二进制信号调制与解调示例</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_15.png" class="img-fluid figure-img"></p>
+<figcaption>2-PAM调制与解调示例</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_16.png" class="img-fluid figure-img"></p>
+<figcaption>调制与解调示例解析</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_17.png" class="img-fluid figure-img"></p>
+<figcaption>调制与解调示例</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_18.png" class="img-fluid figure-img"></p>
+<figcaption>调制与解调示例</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_19.png" class="img-fluid figure-img"></p>
+<figcaption>调制与解调示例</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_20.png" class="img-fluid figure-img"></p>
+<figcaption>PAM调制原理与参数</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_21.png" class="img-fluid figure-img"></p>
+<figcaption>PAM调制原理与信号分析</figcaption>
+</figure>
+</div>
+</section>
+<section id="关键参数定义" class="level3" data-number="11.4.2">
+<h3 data-number="11.4.2" class="anchored" data-anchor-id="关键参数定义"><span class="header-section-number">11.4.2</span> <strong>4.2 关键参数定义</strong></h3>
+<ul>
+<li><strong>比特率 (Bit Rate, <span class="math inline">\(R_b\)</span>)</strong>：每秒传输的比特数，单位 bps。定义为 <span class="math inline">\(R_b = 1/T_b\)</span>，其中 <span class="math inline">\(T_b\)</span> 为比特间隔。</li>
+<li><strong>符号率 (Symbol Rate, <span class="math inline">\(R_s\)</span>)</strong>：每秒传输的符号数，单位 Baud 或 symbols/s。<span class="math inline">\(R_s = 1/T_s\)</span>。</li>
+<li><strong>比特与符号的关系</strong>：若每 <span class="math inline">\(b\)</span> 个比特映射为一个符号，则 <span class="math inline">\(M = 2^b\)</span>，<span class="math inline">\(T_s = b \cdot T_b\)</span>，故有 <span class="math inline">\(R_s = R_b / b = R_b / \log_2 M\)</span>。</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>📝 示例</strong><br>
+若比特率 <span class="math inline">\(R_b = 1\)</span> Mbps，采用 4-PAM 调制（<span class="math inline">\(M=4, b=2\)</span>），则符号率为 <span class="math inline">\(R_s = 0.5\)</span> MBaud，符号间隔 <span class="math inline">\(T_s = 2\)</span> μs。</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="五星座图-constellation-diagram调制设计的画布" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="五星座图-constellation-diagram调制设计的画布"><span class="header-section-number">11.5</span> <strong>五、星座图 (Constellation Diagram)：调制设计的画布</strong></h2>
+<section id="什么是星座图" class="level3" data-number="11.5.1">
+<h3 data-number="11.5.1" class="anchored" data-anchor-id="什么是星座图"><span class="header-section-number">11.5.1</span> <strong>5.1 什么是星座图？</strong></h3>
+<p>星座图是一个二维平面图，用于直观展示所有可能的符号 <span class="math inline">\(u_k\)</span> 及其对应的比特组合。</p>
+<blockquote class="blockquote">
+<p><strong>🌌 趣闻解释</strong><br>
+“为什么叫‘星座图’？因为它就像夜空中的星座，由一个个代表星星的点（符号）构成。比如猎户座有腰带三星，我们的 4-PAM 星座图也有四个点排成一线。”</p>
+</blockquote>
+</section>
+<section id="m-pam-星座图设计" class="level3" data-number="11.5.2">
+<h3 data-number="11.5.2" class="anchored" data-anchor-id="m-pam-星座图设计"><span class="header-section-number">11.5.2</span> <strong>5.2 M-PAM 星座图设计</strong></h3>
+<ul>
+<li><strong>标准结构</strong>：<span class="math inline">\(M\)</span> 个星座点对称分布在实轴原点两侧，相邻点间距为 <span class="math inline">\(d\)</span>。
+<ul>
+<li>例如，4-PAM：<span class="math inline">\(u_k \in \{-3d/2, -d/2, d/2, 3d/2\}\)</span>。</li>
+</ul></li>
+<li><strong>映射策略</strong>：需明确定义比特组合到星座点的规则。使用<strong>格雷码 (Gray Coding)</strong> 可使相邻点仅有一位比特不同，从而降低误比特率。</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>⚙️ 设计考量</strong><br>
+M-PAM 设计需综合考虑以下关键性能指标：</p>
+</blockquote>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">指标</th>
+<th style="text-align: left;">计算方式</th>
+<th style="text-align: left;">目标</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>能量效率 (Energy Efficiency)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(R_b / E_b\)</span></td>
+<td style="text-align: left;">最大化</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>带宽效率 (Bandwidth Efficiency)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(R_b / B\)</span></td>
+<td style="text-align: left;">最大化</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>可靠性 (Reliability)</strong></td>
+<td style="text-align: left;">误检测概率 <span class="math inline">\(P_e\)</span></td>
+<td style="text-align: left;">最小化</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_22.png" class="img-fluid figure-img"></p>
+<figcaption>M-PAM调制设计与分析</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_24.png" class="img-fluid figure-img"></p>
+<figcaption>PAM信号星座图分析</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_25.png" class="img-fluid figure-img"></p>
+<figcaption>PAM信号星座图分析</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_26.png" class="img-fluid figure-img"></p>
+<figcaption>PAM信号星座图分析</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="六m-pam-的平均能量分析" class="level2" data-number="11.6">
+<h2 data-number="11.6" class="anchored" data-anchor-id="六m-pam-的平均能量分析"><span class="header-section-number">11.6</span> <strong>六、M-PAM 的平均能量分析</strong></h2>
+<section id="平均符号能量-e_s-计算" class="level3" data-number="11.6.1">
+<h3 data-number="11.6.1" class="anchored" data-anchor-id="平均符号能量-e_s-计算"><span class="header-section-number">11.6.1</span> <strong>6.1 平均符号能量 (<span class="math inline">\(E_s\)</span>) 计算</strong></h3>
+<p>符号 <span class="math inline">\(u_k\)</span> 是一个随机变量，其统计特性取决于输入比特的概率分布及映射方式。</p>
+<ul>
+<li><p><strong>一般情况</strong>： <span class="math display">\[
+E_s = \mathbb{E}[|u_k|^2] = \sum_{m=1}^{M} P_m \cdot a_m^2 \cdot E_p
+\]</span> 其中：</p>
+<ul>
+<li><span class="math inline">\(P_m\)</span>：第 <span class="math inline">\(m\)</span> 个符号被发送的概率；</li>
+<li><span class="math inline">\(a_m\)</span>：第 <span class="math inline">\(m\)</span> 个星座点的幅度；</li>
+<li><span class="math inline">\(E_p = \int |p(t)|^2 dt\)</span>：基础脉冲 <span class="math inline">\(p(t)\)</span> 的能量。</li>
+</ul></li>
+<li><p><strong>特殊情况（比特等概独立）</strong>：此时各符号等概率出现，<span class="math inline">\(P_m = 1/M\)</span>，因此： <span class="math display">\[
+E_s = \frac{E_p}{M} \sum_{m=1}^{M} a_m^2
+\]</span></p>
+<p>对于标准对称 M-PAM 星座图，经推导得： <span class="math display">\[
+E_s = \frac{d^2 (M^2 - 1)}{12} E_p
+\]</span></p></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_23.png" class="img-fluid figure-img"></p>
+<figcaption>脉冲幅度调制（PAM）原理与公式</figcaption>
+</figure>
+</div>
+<blockquote class="blockquote">
+<p><strong>📊 深入理解</strong><br>
+- <strong><span class="math inline">\(M\)</span> 的影响</strong>：随着 <span class="math inline">\(M\)</span> 增大，星座图跨度变宽，平均能量升高。<strong>高阶调制以更高的能量消耗换取更高的数据速率</strong>。 - <strong><span class="math inline">\(d\)</span> 的影响</strong>：增大 <span class="math inline">\(d\)</span> 提升抗噪能力，但也增加发射能量需求。</p>
+</blockquote>
+</section>
+<section id="能量与可靠性的根本权衡" class="level3" data-number="11.6.2">
+<h3 data-number="11.6.2" class="anchored" data-anchor-id="能量与可靠性的根本权衡"><span class="header-section-number">11.6.2</span> <strong>6.2 能量与可靠性的根本权衡</strong></h3>
+<blockquote class="blockquote">
+<p><strong>⚖️ 核心矛盾</strong><br>
+- <strong>从能量效率角度</strong>：希望 <span class="math inline">\(d\)</span> 小，以降低 <span class="math inline">\(E_s\)</span>，提高能效； - <strong>从可靠性角度</strong>：希望 <span class="math inline">\(d\)</span> 大，以便接收机更易区分相近符号，降低误检概率 <span class="math inline">\(P_e\)</span>。</p>
+<p><strong>结论</strong>：在固定发射功率（即固定 <span class="math inline">\(E_s\)</span>）条件下，增大 <span class="math inline">\(M\)</span> 必然导致 <span class="math inline">\(d\)</span> 减小，从而<strong>牺牲可靠性来换取更高的带宽效率</strong>。这是数字通信系统设计中最根本的权衡之一。</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>🎯 教授总结</strong><br>
+“通信系统的艺术，就在于在<strong>效率</strong>（速率、带宽、能量）和<strong>可靠性</strong>（误码率）之间找到最佳平衡点。没有完美的方案，只有最适合应用场景的设计。”</p>
+</blockquote>
+<hr>
+<blockquote class="blockquote">
+<p><strong>📢 下节预告与提醒</strong><br>
+“下次课我们将深入讲解<strong>带通调制</strong>（如PSK、QAM）以及<strong>最优接收机设计</strong>。另外，<strong>元旦后周日（第16周）要补课</strong>，最后一周很关键，请大家务必参加！”</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_11.png" class="img-fluid figure-img"></p>
+<figcaption>上海科技大通信课件</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1217b-1212-e-Gram-Schmidt%20Procedure/page_10.png" class="img-fluid figure-img"></p>
+<figcaption>上海科技大学感谢提问</figcaption>
+</figure>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "已复制");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "已复制");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../chapters/1212b-1210-e-High-Rate Entropy-Coded Quantization/checked_notes.html" class="pagination-link" aria-label="**通信原理深度学习笔记：高码率熵编码量化与信号空间基础**">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：高码率熵编码量化与信号空间基础</strong></span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../chapters/1219b-1217-e-PAM Signal Constellation/checked_notes.html" class="pagination-link" aria-label="**通信原理深度学习笔记：从PAM到QAM的调制与系统设计**">
+        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从PAM到QAM的调制与系统设计</strong></span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
