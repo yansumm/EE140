@@ -1,0 +1,69 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "EE140 通信系统导论学习笔记"
+  subtitle: "2025年秋季学期"
+  author: "Qihang Yan"
+  date: last-modified
+  chapters:
+    - index.qmd
+    - part: "第一部分：数字通信基础"
+      chapters:
+        - chapters/1114-b-数字通信/checked_notes.md
+        - chapters/1119b-1114-e-Q1 How to measure the quantity of information/checked_notes.md
+        - chapters/1121b-1119-e-Layering of Source Coding/checked_notes.md
+        - chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.md
+        - chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.md
+    - part: "第二部分：采样与量化"
+      chapters:
+        - chapters/1203b-1128-e-sampling theorem/checked_notes.md
+        - chapters/1205b-1203-e-Quantization/checked_notes.md
+        - chapters/1210b-1205-e-Lloyd-Max Algorithm/checked_notes.md
+        - chapters/1212b-1210-e-High-Rate Entropy-Coded Quantization/checked_notes.md
+    - part: "第三部分：信号处理与调制"
+      chapters:
+        - chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.md
+        - chapters/1219b-1217-e-PAM Signal Constellation/checked_notes.md
+        - chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.md
+        - chapters/1226b-1224-e-nyquist criterion2/checked_notes.md
+
+lang: zh
+language:
+  label:
+    fig: "图"
+    tbl: "表"
+    eq: "公式"
+
+execute:
+  freeze: auto
+format:
+  html:
+    theme: cosmo
+    toc: true
+    number-sections: true
+    html-math-method: mathjax
+  # pdf:
+  #   pdf-engine: xelatex
+  #   keep-tex: true
+  #   documentclass: scrbook
+  #   geometry:
+  #     - margin=1in
+  #     - footskip=0.5in
+  #   number-sections: true
+  #   colorlinks: true
+  #   include-in-header:
+  #     - text: |
+  #         \usepackage{xeCJK}
+  #         \setCJKmainfont[BoldFont=Microsoft YaHei Bold]{Microsoft YaHei}
+  #         \setCJKsansfont{Microsoft YaHei}
+  #         \setCJKmonofont{Consolas}
+  #         \usepackage{amsmath, amssymb, amsthm, mathtools}
+  #         \usepackage{bm}
+  #         \linespread{1.3}
+  #         \theoremstyle{definition}
+  #         \newtheorem{definition}{定义}[chapter]
+  #         \newtheorem{theorem}{定理}[chapter]
+  #         \newtheorem{lemma}{引理}[chapter]
+  #         \newtheorem{example}{例}[chapter]
