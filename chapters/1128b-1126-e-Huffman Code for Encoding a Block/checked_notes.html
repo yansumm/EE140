@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>6&nbsp; 通信原理深度学习笔记 – EE140 通信系统导论学习笔记</title>
+<title>6&nbsp; 通信原理：信源编码进阶与模拟采样 – EE140 通信系统导论学习笔记</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -112,7 +112,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1114-b-数字通信/checked_notes.html">第一部分：数字通信基础</a></li><li class="breadcrumb-item"><a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1114-b-数字通信/checked_notes.html">第一部分：数字通信基础</a></li><li class="breadcrumb-item"><a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理：信源编码进阶与模拟采样</strong></span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -173,13 +173,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：信源编码与最优变长码理论</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理：信源编码与最优变长码理论</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理：信源编码进阶与模拟采样</strong></span></span></a>
   </div>
 </li>
       </ul>
@@ -196,25 +196,25 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：采样、正交展开与混叠现象</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理：采样、正交展开与混叠现象</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1205b-1203-e-Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：通信原理——量化器设计与Lloyd-Max算法</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title"><strong>通信原理：量化器设计与Lloyd-Max算法</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1210b-1205-e-Lloyd-Max Algorithm/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：量化理论与应用——从通信原理到现代AI</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><strong>通信原理：量化理论与应用——从通信原理到现代AI</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1212b-1210-e-High-Rate Entropy-Coded Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：高码率熵编码量化与信号空间基础</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title"><strong>通信原理：高码率熵编码量化与信号空间基础</strong></span></span></a>
   </div>
 </li>
       </ul>
@@ -231,19 +231,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从信号空间到数字调制（第14周）</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><strong>通信原理：从信号空间到数字调制（第14周）</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1219b-1217-e-PAM Signal Constellation/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从PAM到QAM的调制与系统设计</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><strong>通信原理：从PAM到QAM的调制与系统设计</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：奈奎斯特准则与无码间干扰传输</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理：奈奎斯特准则与无码间干扰传输</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -294,9 +294,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1114-b-数字通信/checked_notes.html">第一部分：数字通信基础</a></li><li class="breadcrumb-item"><a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1114-b-数字通信/checked_notes.html">第一部分：数字通信基础</a></li><li class="breadcrumb-item"><a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理：信源编码进阶与模拟采样</strong></span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></h1>
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理：信源编码进阶与模拟采样</strong></span></h1>
 </div>
 
 
@@ -354,7 +354,8 @@ window.Quarto = {
 <p>对于一组码字长度 $ l_1, l_2, …, l_n <span class="math inline">\(，存在一个唯一可解的前缀码当且仅当：\)</span>$ _{i=1}^{n} 2^{-l_i} $$</p>
 <blockquote class="blockquote">
 <p>🔍 <strong>深入理解 · 为什么是这个形式？</strong><br>
-这个不等式本质上反映了<strong>二叉树的空间约束</strong>。每个码字对应一棵二叉树的叶子节点，$ 2^{-l_i} $ 表示该叶子所占据的“子树比例”。总和不超过1，意味着所有叶子不会超出整棵树的容量。</p>
+SELF： 注意这个式子只和前缀性相关，和每个编码长度对应的码子的概率，可以这样想： 前缀码（Prefix-free）代表着 只取最终的叶节点，而对于这种情况而言，我们可以看到，如果叶节点都被取满了，那么这些叶节点的长度的2的指数相加应该等于1，因为<strong>这是二叉树</strong>，<strong>把树看做平均流量分配模型</strong>的话，有<strong>总流量之和守恒</strong>，为1。而对于叶节点未取满的情况，自然总流量不足1，故<strong>对于前缀码，一定满足这个式子</strong>。 故，对于给定的一组码字长度，如果希望存在一个前缀码编码方案，则一定满足Kraft不等式。</p>
+<p>这个不等式本质上反映了<strong>二叉树的空间约束</strong>。每个码字对应一棵二叉树的叶子节点，$ 2^{-l_i} $ 表示该叶子所占据的“子树比例”。总和不超过1，意味着所有叶子不会超出整棵树的容量。</p>
 </blockquote>
 <blockquote class="blockquote">
 <p>⚠️ <strong>常见误区纠正</strong><br>
@@ -386,6 +387,9 @@ window.Quarto = {
 <blockquote class="blockquote">
 <p>💡 <strong>教授洞见 · 理论的意义</strong><br>
 “这个定理告诉我们：<strong>压缩是有极限的</strong>。你可以无限逼近 $ H(X) $，但永远不能突破它。就像光速之于物理世界，信息熵是数据世界的‘光速’。”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>SELF： $ R $ 是编码速率，即 $ R = _{i=1}^{N} l_i $，是一个抽象的性能指标，常用于讨论理论极限或块编码分摊。 而 平均码长 <span class="math inline">\(\bar{L}=\sum p_i l_i\)</span> 是针对具体的、已实现的编码方案。</p>
 </blockquote>
 <hr>
 </section>
@@ -526,19 +530,22 @@ JPEG 是霍夫曼编码在工程实践中最著名的应用之一。</p>
 <section id="完整流程四步走" class="level4" data-number="6.3.2.1">
 <h4 data-number="6.3.2.1" class="anchored" data-anchor-id="完整流程四步走"><span class="header-section-number">6.3.2.1</span> <strong>完整流程（四步走）</strong></h4>
 <pre class="mermaid"><code>graph LR
-A[原始高清图像] --&gt; B[DCT 变换]
-B --&gt; C[量化]
-C --&gt; D[熵编码&lt;br&gt;(Zigzag + RLE + Huffman)]
-D --&gt; E[JEPG 比特流]</code></pre>
+  A[原始高清图像] --&gt; B[DCT 变换]
+  B --&gt; C[量化]
+  C --&gt; D[熵编码 Zigzag + RLE + Huffman]
+  D --&gt; E[JEPG 比特流]</code></pre>
 </section>
 <section id="离散余弦变换-dct" class="level4" data-number="6.3.2.2">
 <h4 data-number="6.3.2.2" class="anchored" data-anchor-id="离散余弦变换-dct"><span class="header-section-number">6.3.2.2</span> <strong>(1) 离散余弦变换 (DCT)</strong></h4>
 <ul>
-<li>将图像分块（通常8×8），对每块做 DCT： <span class="math display">\[
+<li>将图像分块（通常每块图像大小是8×8），对每块做 DCT： <span class="math display">\[
 F(u,v) = C(u)C(v) \sum_{x=0}^{7} \sum_{y=0}^{7} f(x,y) \cos\left[\frac{(2x+1)u\pi}{16}\right] \cos\left[\frac{(2y+1)v\pi}{16}\right]
 \]</span></li>
 <li><strong>作用</strong>：能量集中。低频分量（左上角）包含主要信息，高频分量（右下角）多为细节/噪声。</li>
 </ul>
+<blockquote class="blockquote">
+<p>为什么是 8×8？（历史背景与工程权衡） 既然 <span class="math inline">\(N\)</span> 可以是任何值，为什么 JPEG 等标准几乎约定俗成地使用 <span class="math inline">\(8 \times 8\)</span>？ 这源于 20 世纪 70-80 年代在制定标准时对计算复杂度、压缩效率和视觉质量的博弈。 - A. 计算复杂度的约束DCT 的计算量随 <span class="math inline">\(N\)</span> 的增大而剧增。 - 在早期硬件（如 80 年代的 DSP 芯片）上，计算 <span class="math inline">\(16 \times 16\)</span> 的 DCT 需要的乘法和加法次数远多于 <span class="math inline">\(8 \times 8\)</span>。<span class="math inline">\(8\)</span> 是 <span class="math inline">\(2^3\)</span>，非常有利于使用快速傅里叶变换（FFT）算法的变体进行加速。 - B. 局部相关性（Spatial Correlation）图像的像素通常与其相邻像素高度相关，但与远处的像素相关性较弱。 - <span class="math inline">\(N\)</span> 太小（如 <span class="math inline">\(2 \times 2\)</span> 或 <span class="math inline">\(4 \times 4\)</span>）：无法有效利用像素间的相关性，压缩率提升有限。 - <span class="math inline">\(N\)</span> 太大（如 <span class="math inline">\(32 \times 32\)</span>）：一个块内可能包含完全不同的物体边缘，导致“能量集中”效果变差，且容易产生严重的振铃效应（Ringing Artifacts）。 经验证明：对于大多数自然图像，<span class="math inline">\(8 \times 8\)</span> 是捕捉局部统计特性的“甜点区”。</p>
+</blockquote>
 </section>
 <section id="量化-quantization" class="level4" data-number="6.3.2.3">
 <h4 data-number="6.3.2.3" class="anchored" data-anchor-id="量化-quantization"><span class="header-section-number">6.3.2.3</span> <strong>(2) 量化 (Quantization)</strong></h4>
@@ -595,6 +602,18 @@ F_Q(u,v) = \text{round}\left( \frac{F(u,v)}{Q(u,v)} \right)
 <figcaption>Huffman编码应用示例。</figcaption>
 </figure>
 </div>
+<blockquote class="blockquote">
+<p>关于JPEG算法： 1. 关于 <span class="math inline">\(c\)</span> 怎么办？——“哈夫曼 + VLI” 的混合编码在 - 公式 <span class="math inline">\([(r, s), c]\)</span> 中，只有 <span class="math inline">\((r, s)\)</span> 这一对组合进入了哈夫曼编码表，而真正的数值 <span class="math inline">\(c\)</span> 是<strong>通过 可变长度整数编码（VLI, Variable Length Integer） 直接附加在哈夫曼码字之后的</strong>。其具体操作逻辑如下： - 第一步：哈夫曼编码 <span class="math inline">\((r, s)\)</span><span class="math inline">\((r, s)\)</span> 被看作一个单一的符号。例如，图中第一个例子 <span class="math inline">\([(0, 7), 100]\)</span>，<span class="math inline">\((0, 7)\)</span> 代表“前面有 0 个 0，当前数值需要 7 位来表示”。编码器查哈夫曼表，给 <span class="math inline">\((0, 7)\)</span> 分配一个变长码（比如可能是 1110）。 - 第二步：直接附加 <span class="math inline">\(c\)</span> 的二进制值既然 <span class="math inline">\(s\)</span> 已经告诉了解码器 <span class="math inline">\(c\)</span> 占用了 7 位，那么解码器在读完 <span class="math inline">\((0, 7)\)</span> 的哈夫曼码后，会直接往后读 7 位。这 7 位就是 <span class="math inline">\(c=100\)</span> 的二进制表示。 2. 为什么要这么设计？ - 如果把 <span class="math inline">\(c\)</span> 的每一个可能取值（比如 -1024 到 1023）都放进哈夫曼表，表会变得巨大且稀疏，搜索效率极低。通过这种方式，<strong>哈夫曼表只需要处理“数据特征”（连零个数和量级），而具体的“数据细节”直接由<em>紧随其后</em>的二进制表示</strong>，达到了压缩率和计算复杂度的平衡。</p>
+</blockquote>
+<blockquote class="blockquote">
+<ol start="3" type="1">
+<li>为什么 <span class="math inline">\(|A|=256\)</span>？ 这里的 <span class="math inline">\(A\)</span> 指的是所有可能的 <span class="math inline">\((r, s)\)</span> 符号集合。 <span class="math inline">\(256\)</span> 这个数字是通过 <span class="math inline">\(r\)</span> 和 <span class="math inline">\(s\)</span> 的取值范围定义的，具有严格的硬件和协议背景：</li>
+</ol>
+<ul>
+<li><span class="math inline">\(r\)</span> (Runlength) 的取值范围：0 - 15在 JPEG 标准中，为了限制码表大小，<strong>规定一次<em>行程</em>编码最多只能记录 15 个连续的 0</strong>。如果 0 的个数超过 15，会使用一个特殊符号 <span class="math inline">\((15, 0)\)</span>，即 ZRL（Zero Run Length）。因此，<span class="math inline">\(r\)</span> 占用 4 个 bit (<span class="math inline">\(2^4 = 16\)</span> 个取值)。</li>
+<li><span class="math inline">\(s\)</span> (Size/Category) 的取值范围：0 - 15<span class="math inline">\(s\)</span> 代表表示 <span class="math inline">\(c\)</span> 所需的位数。对于 AC 系数，量化后的值通常很小，但在标准定义中，<span class="math inline">\(s\)</span> 也预留了 4 个 bit 的表达空间 (<span class="math inline">\(2^4 = 16\)</span> 个取值)。<span class="math inline">\(s=0\)</span> 通常用于特殊情况，如 EOB（End of Block，块结束，图中标记为 <span class="math inline">\((0,0)\)</span>）或 ZRL。 计算过程：<span class="math display">\[|A| = (\text{r 的可能取值数}) \times (\text{s 的可能取值数}) = 16 \times 16 = 256\]</span> 因此，哈夫曼编码器的输入空间就是这 256 种可能的组合。</li>
+</ul>
+</blockquote>
 <hr>
 </section>
 </section>
@@ -650,6 +669,9 @@ F_Q(u,v) = \text{round}\left( \frac{F(u,v)}{Q(u,v)} \right)
 <blockquote class="blockquote">
 <p>💡 <strong>教授洞见 · 通用性的力量</strong><br>
 “LZ 编码的伟大之处在于它的<strong>普适性</strong>。不管你是中文、英文还是DNA序列，只要有重复，它就能压缩。它不像霍夫曼那样依赖训练，是一种真正‘即插即用’的智能压缩。”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>SELF：LZ：无损还能压缩 LZ编码这种压缩算法是无损的，而JPEG一般是有损的 LZ编码的无损还能压缩实际<strong>利用了数据中的重复模式</strong>，通过<strong>动态构建字典</strong>（即选取历史缓冲区中的重复模式）来实现压缩。</p>
 </blockquote>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1254,13 +1276,13 @@ X(f) = \sum_{k} x_k \cdot e^{-j2\pi kf / (2W)} \cdot \Pi_{2W}(f)
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.html" class="pagination-link" aria-label="**通信原理深度学习笔记：信源编码与最优变长码理论**">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：信源编码与最优变长码理论</strong></span></span>
+      <a href="../../chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.html" class="pagination-link" aria-label="**通信原理：信源编码与最优变长码理论**">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理：信源编码与最优变长码理论</strong></span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html" class="pagination-link" aria-label="**通信原理深度学习笔记：采样、正交展开与混叠现象**">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：采样、正交展开与混叠现象</strong></span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html" class="pagination-link" aria-label="**通信原理：采样、正交展开与混叠现象**">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理：采样、正交展开与混叠现象</strong></span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

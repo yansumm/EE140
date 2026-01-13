@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7&nbsp; 通信原理深度学习笔记：采样、正交展开与混叠现象 – EE140 通信系统导论学习笔记</title>
+<title>7&nbsp; 通信原理：采样、正交展开与混叠现象 – EE140 通信系统导论学习笔记</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -112,7 +112,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html">第二部分：采样与量化</a></li><li class="breadcrumb-item"><a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：采样、正交展开与混叠现象</strong></span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html">第二部分：采样与量化</a></li><li class="breadcrumb-item"><a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理：采样、正交展开与混叠现象</strong></span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -173,13 +173,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：信源编码与最优变长码理论</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理：信源编码与最优变长码理论</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理：信源编码进阶与模拟采样</strong></span></span></a>
   </div>
 </li>
       </ul>
@@ -196,25 +196,25 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：采样、正交展开与混叠现象</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理：采样、正交展开与混叠现象</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1205b-1203-e-Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：通信原理——量化器设计与Lloyd-Max算法</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title"><strong>通信原理：量化器设计与Lloyd-Max算法</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1210b-1205-e-Lloyd-Max Algorithm/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：量化理论与应用——从通信原理到现代AI</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><strong>通信原理：量化理论与应用——从通信原理到现代AI</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1212b-1210-e-High-Rate Entropy-Coded Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：高码率熵编码量化与信号空间基础</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title"><strong>通信原理：高码率熵编码量化与信号空间基础</strong></span></span></a>
   </div>
 </li>
       </ul>
@@ -231,19 +231,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从信号空间到数字调制（第14周）</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><strong>通信原理：从信号空间到数字调制（第14周）</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1219b-1217-e-PAM Signal Constellation/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从PAM到QAM的调制与系统设计</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><strong>通信原理：从PAM到QAM的调制与系统设计</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：奈奎斯特准则与无码间干扰传输</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理：奈奎斯特准则与无码间干扰传输</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -302,9 +302,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html">第二部分：采样与量化</a></li><li class="breadcrumb-item"><a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：采样、正交展开与混叠现象</strong></span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html">第二部分：采样与量化</a></li><li class="breadcrumb-item"><a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理：采样、正交展开与混叠现象</strong></span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：采样、正交展开与混叠现象</strong></span></h1>
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理：采样、正交展开与混叠现象</strong></span></h1>
 </div>
 
 
@@ -469,6 +469,9 @@ x(t) = \sum_{m=-\infty}^{\infty} \sum_{k=-\infty}^{\infty} v_{m,k} \cdot \text{s
 <blockquote class="blockquote">
 <p>若信号 $ x(t) $ 的最高频率为 $ W $ Hz，则当采样频率 $ f_s 2W $ 时，可用采样点 $ {x(kT)}, T=1/f_s $ 完全重建原始信号。</p>
 </blockquote>
+<blockquote class="blockquote">
+<p>SELF：时域的sinc来自于频域的抗混叠（低通）滤波器 时域的sinc来自于对频域进行低通滤波的rect，如果频域不进行低通滤波，则时域不弥散，成为δ函数</p>
+</blockquote>
 <p>等价形式： <span class="math display">\[
 x(t) = \sum_{k=-\infty}^{\infty} x(kT) \cdot \text{sinc}\left( \frac{t}{T} - k \right), \quad T = \frac{1}{2W}
 \]</span></p>
@@ -568,7 +571,7 @@ x(t) = \sum_k u_k \phi_k(t)
 <h3 data-number="7.4.3" class="anchored" data-anchor-id="正交性的价值"><span class="header-section-number">7.4.3</span> <strong>3. 正交性的价值</strong></h3>
 <ul>
 <li>若基函数不正交，则交叉项不为零，误差传播复杂，难以优化。</li>
-<li>正交基使得误差可分离，从而可以<strong>独立设计每个量化器</strong>来最小化整体失真。</li>
+<li><strong>正交基使得误差可分离，从而可以<em>独立设计每个量化器</em>来最小化整体失真</strong>。</li>
 </ul>
 <blockquote class="blockquote">
 <p>🧠 <strong>教授点拨</strong>：<br>
@@ -610,7 +613,7 @@ x(kT) = \tilde{x}(kT), \quad \forall k
 \]</span> 此时，若用这些采样点重建，得到的是 $ (t) $ 而非 $ x(t) $。</p>
 <blockquote class="blockquote">
 <p>🎯 <strong>教授点拨</strong>：<br>
-“就像两个人在固定时间点拍合影，看起来一样，但中间的动作完全不同。”</p>
+“就像一个人在固定的离散时间点拍合影，在每张照片中看起来一样，但中间的转移动作可以完全不同。”</p>
 </blockquote>
 </section>
 <section id="频域视角频谱折叠与叠加" class="level3" data-number="7.5.3">
@@ -728,7 +731,7 @@ D = \mathbb{E}[(U - V)^2] = \int (u - Q(u))^2 f_U(u) du
 </tr>
 <tr class="even">
 <td><strong>正交性优势</strong></td>
-<td>实现重建误差与量化误差解耦</td>
+<td>实现重建误差与量化误差<strong>解耦</strong></td>
 <td>是实现最优编码的前提</td>
 </tr>
 <tr class="odd">
@@ -739,7 +742,7 @@ D = \mathbb{E}[(U - V)^2] = \int (u - Q(u))^2 f_U(u) du
 <tr class="even">
 <td><strong>混叠现象</strong></td>
 <td>频谱折叠导致信息混淆</td>
-<td>必须前置抗混叠滤波器</td>
+<td>必须前置抗混叠滤波器（实际就是一个<strong>低通滤波器</strong>）</td>
 </tr>
 <tr class="odd">
 <td><strong>量化设计</strong></td>
@@ -1185,13 +1188,13 @@ D = \mathbb{E}[(U - V)^2] = \int (u - Q(u))^2 f_U(u) du
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html" class="pagination-link" aria-label="**通信原理深度学习笔记**">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></span>
+      <a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html" class="pagination-link" aria-label="**通信原理：信源编码进阶与模拟采样**">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理：信源编码进阶与模拟采样</strong></span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../chapters/1205b-1203-e-Quantization/checked_notes.html" class="pagination-link" aria-label="**深度学习笔记：通信原理——量化器设计与Lloyd-Max算法**">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：通信原理——量化器设计与Lloyd-Max算法</strong></span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../chapters/1205b-1203-e-Quantization/checked_notes.html" class="pagination-link" aria-label="**通信原理：量化器设计与Lloyd-Max算法**">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title"><strong>通信原理：量化器设计与Lloyd-Max算法</strong></span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

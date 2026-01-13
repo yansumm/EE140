@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>13&nbsp; 通信原理深度学习笔记：奈奎斯特准则与无码间干扰传输 – EE140 通信系统导论学习笔记</title>
+<title>13&nbsp; 通信原理：奈奎斯特准则与无码间干扰传输 – EE140 通信系统导论学习笔记</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -71,6 +71,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -83,7 +112,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html">第三部分：信号处理与调制</a></li><li class="breadcrumb-item"><a href="../../chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：奈奎斯特准则与无码间干扰传输</strong></span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html">第三部分：信号处理与调制</a></li><li class="breadcrumb-item"><a href="../../chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理：奈奎斯特准则与无码间干扰传输</strong></span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -144,13 +173,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1126b-1121-e-Minimum L for Prefix-free Codes/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：信源编码与最优变长码理论</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>通信原理：信源编码与最优变长码理论</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1128b-1126-e-Huffman Code for Encoding a Block/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title"><strong>通信原理：信源编码进阶与模拟采样</strong></span></span></a>
   </div>
 </li>
       </ul>
@@ -167,25 +196,25 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1203b-1128-e-sampling theorem/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：采样、正交展开与混叠现象</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title"><strong>通信原理：采样、正交展开与混叠现象</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1205b-1203-e-Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：通信原理——量化器设计与Lloyd-Max算法</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title"><strong>通信原理：量化器设计与Lloyd-Max算法</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1210b-1205-e-Lloyd-Max Algorithm/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><strong>深度学习笔记：量化理论与应用——从通信原理到现代AI</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><strong>通信原理：量化理论与应用——从通信原理到现代AI</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1212b-1210-e-High-Rate Entropy-Coded Quantization/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：高码率熵编码量化与信号空间基础</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title"><strong>通信原理：高码率熵编码量化与信号空间基础</strong></span></span></a>
   </div>
 </li>
       </ul>
@@ -202,19 +231,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从信号空间到数字调制（第14周）</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><strong>通信原理：从信号空间到数字调制（第14周）</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1219b-1217-e-PAM Signal Constellation/checked_notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从PAM到QAM的调制与系统设计</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><strong>通信原理：从PAM到QAM的调制与系统设计</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：奈奎斯特准则与无码间干扰传输</strong></span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理：奈奎斯特准则与无码间干扰传输</strong></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -283,9 +312,9 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html">第三部分：信号处理与调制</a></li><li class="breadcrumb-item"><a href="../../chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：奈奎斯特准则与无码间干扰传输</strong></span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../chapters/1217b-1212-e-Gram-Schmidt Procedure/checked_notes.html">第三部分：信号处理与调制</a></li><li class="breadcrumb-item"><a href="../../chapters/1224b-1219-e-The Nyquist Criterion/checked_notes.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理：奈奎斯特准则与无码间干扰传输</strong></span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：奈奎斯特准则与无码间干扰传输</strong></span></h1>
+<h1 class="title"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title"><strong>通信原理：奈奎斯特准则与无码间干扰传输</strong></span></h1>
 </div>
 
 
@@ -340,7 +369,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
 <li>第13次作业（最后一次）：<strong>不强制提交</strong>，发布后无截止日期，仅作练习用途
 <ul>
-<li>内容重要，涉及“检测”部分核心知识点</li>
+<li>内容重要，涉及”检测”部分核心知识点</li>
 <li>鼓励完成并用于自测，有问题可咨询助教或老师</li>
 </ul></li>
 </ul>
@@ -362,8 +391,8 @@ ul.task-list li input[type="checkbox"] {
 <h2 data-number="13.2" class="anchored" data-anchor-id="二核心概念回顾从符号到带通信号的生成"><span class="header-section-number">13.2</span> <strong>二、核心概念回顾：从符号到带通信号的生成</strong></h2>
 <p>我们之前的学习构建了一个完整的数字通信链路框架：</p>
 <pre><code>{u_k} → [发送滤波器 p(t)] → u(t) (基带信号) → [载波调制] → s(t) (带通信号)</code></pre>
-<p>其中： - <code>{u_k}</code> 是离散的符号序列（如 QPSK 中的 ±1±j） - <code>p(t)</code> 是发送端脉冲成形滤波器 - <code>u(t) = Σ u_k · p(t - kT)</code> 是由符号和脉冲卷积生成的基带波形 - <code>s(t)</code> 是最终通过信道传输的带通信号</p>
-<p>本次课的核心，是深入理解接收端如何从接收到的信号中<strong>无误差地恢复出原始符号序列 <code>{u_k}</code></strong>。</p>
+<p>其中： - <span class="math inline">\(\{u_k\}\)</span> 是离散的符号序列（如 QPSK 中的 ±1±j） - <span class="math inline">\(p(t)\)</span> 是发送端脉冲成形滤波器 - <span class="math inline">\(u(t) = Σ u_k · p(t - kT)\)</span> 是由符号和脉冲卷积生成的基带波形 - <span class="math inline">\(s(t)\)</span> 是最终通过信道传输的带通信号</p>
+<p>本次课的核心，是深入理解接收端如何从接收到的信号中<strong>无误差地恢复出原始符号序列 <span class="math inline">\(\{u_k\}\)</span></strong>。</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1224b-1219-e-The%20Nyquist%20Criterion/page_1.png" class="img-fluid figure-img"></p>
@@ -376,11 +405,11 @@ ul.task-list li input[type="checkbox"] {
 <h2 data-number="13.3" class="anchored" data-anchor-id="三核心问题如何实现无码间干扰no-isi的信号恢复"><span class="header-section-number">13.3</span> <strong>三、核心问题：如何实现无码间干扰（No ISI）的信号恢复？</strong></h2>
 <section id="问题建模与目标" class="level3" data-number="13.3.1">
 <h3 data-number="13.3.1" class="anchored" data-anchor-id="问题建模与目标"><span class="header-section-number">13.3.1</span> 3.1 问题建模与目标</h3>
-<p>假设信道无噪声（理想情况），接收端收到的是基带信号 <code>u(t)</code>。我们需要设计一个接收系统，使其能完美恢复 <code>{u_k}</code>。</p>
+<p>假设信道无噪声（理想情况），接收端收到的是基带信号 <span class="math inline">\(u(t)\)</span>。我们需要设计一个接收系统，使其能完美恢复 <span class="math inline">\(\{u_k\}\)</span>。</p>
 <p>接收结构如下：</p>
 <pre><code>u(t) → [接收滤波器 q(t)] → r(t) → [周期采样 T] → {r(kT)}</code></pre>
 <p>我们的目标是：<br>
-&gt; <strong>选择合适的 <code>p(t)</code> 和 <code>q(t)</code>，使得采样输出 <code>r(nT) = u_n</code> 对所有整数 n 成立。</strong></p>
+&gt; <strong>选择合适的 <span class="math inline">\(p(t)\)</span> 和 <span class="math inline">\(q(t)\)</span>，使得采样输出 <span class="math inline">\(r(nT) = u_n\)</span> 对所有整数 n 成立。</strong></p>
 <p>这意味着在每个符号周期的采样时刻，只读取到当前符号的信息，不受前后符号波形的干扰——即<strong>无码间干扰（Inter-Symbol Interference, ISI）</strong>。</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -391,10 +420,10 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="关键函数gt-的定义" class="level3" data-number="13.3.2">
 <h3 data-number="13.3.2" class="anchored" data-anchor-id="关键函数gt-的定义"><span class="header-section-number">13.3.2</span> 3.2 关键函数：g(t) 的定义</h3>
-<p>定义复合脉冲响应： &gt; <strong>g(t) = p(t) * q(t)</strong></p>
-<p>则接收信号为： &gt; <strong>r(t) = u(t) * q(t) = Σ u_k · g(t - kT)</strong></p>
-<p>采样后得到： &gt; <strong>r(nT) = Σ u_k · g((n - k)T)</strong></p>
-<p>为了实现无 ISI，我们必须有： &gt; <strong>g(mT) = δ[m] = { 1, m=0; 0, m≠0 }</strong></p>
+<p>定义复合脉冲响应： &gt; <strong><span class="math inline">\(g(t) = p(t) * q(t)\)</span></strong></p>
+<p>则接收信号为： &gt; <strong><span class="math inline">\(r(t) = u(t) * q(t) = Σ u_k · g(t - kT)\)</span></strong></p>
+<p>采样后得到： &gt; <strong><span class="math inline">\(r(nT) = Σ u_k · g((n - k)T)\)</span></strong></p>
+<p>为了实现无 ISI，我们必须有： &gt; <strong><span class="math inline">\(g(mT) = δ[m] = \{ 1, m=0; 0, m≠0 \}\)</span></strong></p>
 <p>这个条件称为 <strong>理想奈奎斯特脉冲响应（Ideal Nyquist Pulse）</strong>。</p>
 <hr>
 </section>
@@ -404,31 +433,40 @@ ul.task-list li input[type="checkbox"] {
 <section id="时域视角理想奈奎斯特波形" class="level3" data-number="13.4.1">
 <h3 data-number="13.4.1" class="anchored" data-anchor-id="时域视角理想奈奎斯特波形"><span class="header-section-number">13.4.1</span> 4.1 时域视角：理想奈奎斯特波形</h3>
 <blockquote class="blockquote">
-<p><strong>定义</strong>：若函数 <code>g(t)</code> 满足： - <code>g(0) = 1</code> - <code>g(kT) = 0</code>，当 <code>k ≠ 0</code>（整数 k）</p>
+<p><strong>定义</strong>：若函数 <span class="math inline">\(g(t)\)</span> 满足： - <span class="math inline">\(g(0) = 1\)</span> - <span class="math inline">\(g(kT) = 0\)</span>，当 <span class="math inline">\(k ≠ 0\)</span>（整数 k）</p>
 </blockquote>
-<p>则称 <code>g(t)</code> 为<strong>周期为 T 的理想奈奎斯特波形</strong>。</p>
+<p>则称 <span class="math inline">\(g(t)\)</span> 为<strong>周期为 T 的理想奈奎斯特波形</strong>。</p>
 <section id="为什么这能消除-isi" class="level4" data-number="13.4.1.1">
 <h4 data-number="13.4.1.1" class="anchored" data-anchor-id="为什么这能消除-isi"><span class="header-section-number">13.4.1.1</span> 🎯 为什么这能消除 ISI？</h4>
-<p>考虑采样点 <code>r(nT)</code>：</p>
+<p>考虑采样点 <span class="math inline">\(r(nT)\)</span>：</p>
 <pre><code>r(nT) = Σ u_k · g((n-k)T)</code></pre>
-<p>由于 <code>g(mT) = 0</code> 当 <code>m ≠ 0</code>，只有当 <code>k = n</code> 时项非零：</p>
+<p>由于 <span class="math inline">\(g(mT) = 0\)</span> 当 <span class="math inline">\(m ≠ 0\)</span>，只有当 <span class="math inline">\(k = n\)</span> 时项非零：</p>
 <pre><code>r(nT) = u_n · g(0) + Σ_{k≠n} u_k · 0 = u_n</code></pre>
 <p>✅ 完美恢复！</p>
 </section>
 <section id="直观图示理解" class="level4" data-number="13.4.1.2">
 <h4 data-number="13.4.1.2" class="anchored" data-anchor-id="直观图示理解"><span class="header-section-number">13.4.1.2</span> 💡 直观图示理解</h4>
-<p>想象多个平移后的 <code>g(t)</code> 波形叠加形成 <code>r(t)</code>： - 在 <code>t = 0</code> 处，只有 <code>u_0·g(t)</code> 贡献值 <code>u_0</code> - 在 <code>t = T</code> 处，只有 <code>u_1·g(t-T)</code> 贡献值 <code>u_1</code> - 其他波形在此刻恰好过零点</p>
-<p>这种“错峰采样”的设计，正是奈奎斯特思想的精妙所在。</p>
+<p>想象多个平移后的 <span class="math inline">\(g(t)\)</span> 波形叠加形成 <span class="math inline">\(r(t)\)</span>： - 在 <span class="math inline">\(t = 0\)</span> 处，只有 <span class="math inline">\(u_0·g(t)\)</span> 贡献值 <span class="math inline">\(u_0\)</span> - 在 <span class="math inline">\(t = T\)</span> 处，只有 <span class="math inline">\(u_1·g(t-T)\)</span> 贡献值 <span class="math inline">\(u_1\)</span> - 其他波形在此刻恰好过零点</p>
+<p>这种”错峰采样”的设计，正是奈奎斯特思想的精妙所在。</p>
 <hr>
 </section>
 </section>
 <section id="频域视角奈奎斯特准则nyquist-criterion" class="level3" data-number="13.4.2">
 <h3 data-number="13.4.2" class="anchored" data-anchor-id="频域视角奈奎斯特准则nyquist-criterion"><span class="header-section-number">13.4.2</span> 4.2 频域视角：奈奎斯特准则（Nyquist Criterion）</h3>
+<blockquote class="blockquote">
+<p>奈奎斯特第一准则 (Nyquist’s First Criterion for ISI)</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>当我们在信道中传输数字脉冲信号时，面临的挑战不再是”如何采样”，而是”如何保证脉冲之间不互相打架”。这被称为消除码间串扰（Intersymbol Interference, ISI）。 严谨定义 - 对于一个基带传输系统，若其等效系统函数为 <span class="math inline">\(H(f)\)</span>，冲激响应为 <span class="math inline">\(h(t)\)</span>，要使采样时刻 <span class="math inline">\(t = nT_s\)</span> 处不存在 ISI，则 <span class="math inline">\(h(t)\)</span> 必须满足：<span class="math display">\[h(nT_s) = \begin{cases} 1, &amp; n = 0 \\ 0, &amp; n \neq 0 \end{cases}\]</span> 即：在当前码元的采样点上，其他所有码元的值都必须刚好为 0。</p>
+<p>频域判据 - 哈里·奈奎斯特在 1928 年证明，上述时域条件等价于频域的周期性累加：<span class="math display">\[\sum_{k=-\infty}^{\infty} H\left(f + \frac{k}{T_s}\right) = T_s \quad (\text{常数})\]</span></p>
+<p>直观理解： - 如果将 <span class="math inline">\(H(f)\)</span> 按 <span class="math inline">\(1/T_s\)</span> 为间隔切开并叠在一起，它们累加的结果应该是一个平坦的直线。</p>
+<p>经典例子： - 升余弦滚降滤波器 (Raised Cosine Filter)由于理想的”砖墙式”低通滤波器在时域表现为 <span class="math inline">\(Sinc\)</span> 函数，其收敛速度慢（<span class="math inline">\(1/t\)</span>），且对定时抖动极其敏感，工程中通常使用升余弦滤波器。它通过牺牲一部分带宽（引入滚降系数 <span class="math inline">\(\alpha\)</span>），使得时域波形的尾部衰减更快。它依然满足奈奎斯特第一准则，即在 <span class="math inline">\(nT_s\)</span> 处保持零交叉。</p>
+</blockquote>
 <p>我们利用<strong>混叠定理（Aliasing Theorem）</strong> 推导频域条件。</p>
 <section id="混叠定理回顾" class="level4" data-number="13.4.2.1">
 <h4 data-number="13.4.2.1" class="anchored" data-anchor-id="混叠定理回顾"><span class="header-section-number">13.4.2.1</span> 🔁 混叠定理回顾</h4>
-<p>对连续信号 <code>x(t)</code> 以周期 <code>T</code> 采样，其采样信号的频谱为： &gt; <strong>X_s(f) = (1/T) Σ X(f - k/T)</strong></p>
-<p>即原频谱以 <code>1/T</code> 为间隔复制并叠加。</p>
+<p>对连续信号 <span class="math inline">\(x(t)\)</span> 以周期 <span class="math inline">\(T\)</span> 采样，其采样信号的频谱为： &gt; <strong><span class="math inline">\(X_s(f) = (1/T) Σ X(f - k/T)\)</span></strong></p>
+<p>即原频谱以 <span class="math inline">\(1/T\)</span> 为间隔复制并叠加。</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1224b-1219-e-The%20Nyquist%20Criterion/page_3.png" class="img-fluid figure-img"></p>
@@ -438,17 +476,11 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="推导过程" class="level4" data-number="13.4.2.2">
 <h4 data-number="13.4.2.2" class="anchored" data-anchor-id="推导过程"><span class="header-section-number">13.4.2.2</span> 🧮 推导过程</h4>
-<p>设 <code>G(f)</code> 为 <code>g(t)</code> 的傅里叶变换。</p>
-<p>我们构造一个新信号：将 <code>g(t)</code> 以 <code>T</code> 为周期进行冲激采样： &gt; <strong>s(t) = Σ g(t - kT)</strong></p>
-<p>其频谱为： &gt; <strong>S(f) = (1/T) Σ G(f - k/T)</strong></p>
-<p>但如果 <code>g(t)</code> 是理想奈奎斯特波形，则 <code>s(t)</code> 实际上是一个<strong>单位冲激串</strong>： &gt; <strong>s(t) = δ(t)</strong></p>
-<p>因为 <code>g(kT) = δ[k]</code>，所以采样序列就是狄拉克梳状函数。</p>
-<p>而 <code>δ(t)</code> 的频谱是常数 1，因此： &gt; <strong>S(f) = 1</strong></p>
-<p>联立得： &gt; <strong>(1/T) Σ G(f - k/T) = 1</strong>, 对所有 <code>f ∈ [-1/(2T), 1/(2T)]</code></p>
-<p>这就是著名的 <strong>奈奎斯特准则</strong>：</p>
-<blockquote class="blockquote">
-<p><strong>在一个宽度为 <code>1/T</code> 的频带上，将 <code>G(f)</code> 以 <code>1/T</code> 为间隔进行周期性折叠后，其总和恒等于 T。</strong></p>
-</blockquote>
+<p>为了消除码间串扰（ISI），我们需要脉冲在采样时刻满足： <span class="math display">\[g(kT) = \begin{cases} 1, &amp; k=0 \\ 0, &amp; k \neq 0 \end{cases}\]</span></p>
+<p>第一步：构造采样信号 对连续信号 <span class="math inline">\(g(t)\)</span> 进行理想冲激采样： <span class="math display">\[g_s(t) = g(t) \cdot \sum_{k=-\infty}^{\infty} \delta(t - kT) = \sum_{k=-\infty}^{\infty} g(kT) \delta(t - kT)\]</span></p>
+<p>第二步：代入无 ISI 条件 根据无 ISI 的要求，<span class="math inline">\(g(kT)\)</span> 只有在 <span class="math inline">\(k=0\)</span> 时为 1，其余全为 0。</p>
+<p>因此，采样后的信号退化为一个简单的单位冲激： <span class="math display">\[g_s(t) = 1 \cdot \delta(t-0) = \delta(t)\]</span></p>
+<p>第三步：频域转换 根据狄拉克梳状函数的性质，采样信号 <span class="math inline">\(g_s(t)\)</span> 的频谱 <span class="math inline">\(G_s(f)\)</span> 等于原频谱 <span class="math inline">\(G(f)\)</span> 的周期搬移：<span class="math display">\[G_s(f) = \frac{1}{T} \sum_{k=-\infty}^{\infty} G\left(f - \frac{k}{T}\right)\]</span>另一方面，直接对 <span class="math inline">\(g_s(t) = \delta(t)\)</span> 求傅里叶变换：<span class="math display">\[\mathcal{F}\{\delta(t)\} = 1\]</span>第四步：联立得到准则将上述两个结果相等，得：<span class="math display">\[\frac{1}{T} \sum_{k=-\infty}^{\infty} G\left(f - \frac{k}{T}\right) = 1\]</span>整理即得奈奎斯特频域判据：<span class="math display">\[\sum_{k=-\infty}^{\infty} G\left(f - \frac{k}{T}\right) = T\]</span></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1224b-1219-e-The%20Nyquist%20Criterion/page_4.png" class="img-fluid figure-img"></p>
@@ -478,33 +510,33 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>T</code></td>
+<td><span class="math inline">\(T\)</span></td>
 <td>符号周期（Symbol Duration）</td>
 <td>每个符号占用的时间</td>
 <td>秒</td>
 </tr>
 <tr class="even">
-<td><code>R_s = 1/T</code></td>
+<td><span class="math inline">\(R_s = 1/T\)</span></td>
 <td>符号速率（Symbol Rate）</td>
 <td>每秒传输的符号数</td>
 <td>波特（Baud）或 符号/秒</td>
 </tr>
 <tr class="odd">
-<td><code>W_b = 1/(2T) = R_s / 2</code></td>
+<td><span class="math inline">\(W_b = 1/(2T) = R_s / 2\)</span></td>
 <td><strong>奈奎斯特带宽（Nyquist Bandwidth）</strong></td>
 <td>理论最小带宽要求</td>
 <td>Hz</td>
 </tr>
 <tr class="even">
-<td><code>B_b</code></td>
+<td><span class="math inline">\(B_b\)</span></td>
 <td>实际基带带宽（Actual Baseband Bandwidth）</td>
-<td><code>g(t)</code> 或 <code>u(t)</code> 的实际带宽</td>
+<td><span class="math inline">\(g(t)\)</span> 或 <span class="math inline">\(u(t)\)</span> 的实际带宽</td>
 <td>Hz</td>
 </tr>
 </tbody>
 </table>
 <blockquote class="blockquote">
-<p><strong>⚠️ 注意区分</strong>：<code>W_b</code> 是一个理论量，不是物理信号的真实带宽。它标志着无 ISI 传输的“门槛”。</p>
+<p><strong>⚠️ 注意区分</strong>：<span class="math inline">\(W_b\)</span> 是一个理论量，不是物理信号的真实带宽。它标志着无 ISI 传输的”门槛”。</p>
 </blockquote>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -518,7 +550,7 @@ ul.task-list li input[type="checkbox"] {
 <h2 data-number="13.6" class="anchored" data-anchor-id="六带宽约束与滚降因子工程上的权衡艺术"><span class="header-section-number">13.6</span> <strong>六、带宽约束与滚降因子：工程上的权衡艺术</strong></h2>
 <section id="最小带宽要求" class="level3" data-number="13.6.1">
 <h3 data-number="13.6.1" class="anchored" data-anchor-id="最小带宽要求"><span class="header-section-number">13.6.1</span> 6.1 最小带宽要求</h3>
-<p>要满足奈奎斯特准则，必须有： &gt; <strong>B_b ≥ W_b = R_s / 2</strong></p>
+<p>要满足奈奎斯特准则，必须有： &gt; <span class="math display">\[B_b ≥ W_b = R_s / 2\]</span></p>
 <p>否则无法在 <code>[-1/(2T), 1/(2T)]</code> 内折叠出常数。</p>
 <ul>
 <li>若 <code>B_b &lt; W_b</code>：不可能满足准则，必然存在 ISI。</li>
@@ -548,10 +580,52 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="解决方案引入滚降因子roll-off-factor" class="level3" data-number="13.6.3">
 <h3 data-number="13.6.3" class="anchored" data-anchor-id="解决方案引入滚降因子roll-off-factor"><span class="header-section-number">13.6.3</span> 6.3 解决方案：引入滚降因子（Roll-off Factor）</h3>
-<p>允许 <code>B_b &gt; W_b</code>，让频谱在边缘处平滑过渡，从而加快时域衰减。</p>
-<p>定义： &gt; <strong>α = (B_b - W_b) / W_b = (B_b - R_s/2) / (R_s/2)</strong></p>
-<p>其中 <code>α ∈ [0, 1]</code>，称为<strong>滚降因子（Roll-off Factor）</strong>。</p>
-<p>于是： &gt; <strong>B_b = W_b (1 + α) = (R_s / 2)(1 + α)</strong></p>
+<p>实际带宽 <span class="math inline">\(B_b\)</span> 大于理论最小带宽 <span class="math inline">\(W_b\)</span> ，<strong>让频谱在边缘处平滑过渡，从而加快时域衰减</strong>【时域与频域的对偶性】。</p>
+<blockquote class="blockquote">
+<p>当你决定以 <span class="math inline">\(R_s\)</span> 的速率发送码元时，理想情况下最省带宽的波形是 <span class="math inline">\(Sinc\)</span> 函数，对应频域是”砖墙”矩形 <span class="math inline">\(rect\)</span>函数。但因为”砖墙”不可实现且对定时抖动敏感，我们引入滚降因子 <span class="math inline">\(\alpha\)</span> 使得频谱边缘变得平滑。 结果：带宽从 <span class="math inline">\(R_s/2\)</span> 扩展到了 <span class="math inline">\(\frac{R_s}{2}(1+\alpha)\)</span>。物理意义：这是一种 <strong>“频谱冗余”</strong>。我们多用了一点频率资源，换取了时域脉冲的快速衰减，从而让系统更健壮。</p>
+</blockquote>
+<p>定义： &gt; <span class="math display">\[α = (B_b - W_b) / W_b = (B_b - R_s/2) / (R_s/2)\]</span></p>
+<p>其中 <span class="math inline">\(α ∈ [0, 1]\)</span>，称为<strong>滚降因子（Roll-off Factor）</strong>。</p>
+<p>于是： &gt; <span class="math display">\[B_b = W_b (1 + α) = (R_s / 2)(1 + α)\]</span></p>
+<blockquote class="blockquote">
+<p>区分滚降因子与过采样</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 50%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>滚降因子法 (Pulse Shaping)</th>
+<th>过采样 (Oversampling)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>所属范畴</td>
+<td>奈奎斯特第一准则（消除码间串扰 ISI）</td>
+<td>奈奎斯特-香农采样定理（信号重建）</td>
+</tr>
+<tr class="even">
+<td>核心目的</td>
+<td>压缩带外辐射，平衡带宽效率与抗抖动能力</td>
+<td>简化模拟滤波器设计，提高信噪比（SNR）</td>
+</tr>
+<tr class="odd">
+<td>数学表现</td>
+<td>改变频谱的形状（变得平滑）</td>
+<td>改变频谱副本之间的间距（拉开距离）</td>
+</tr>
+<tr class="even">
+<td>关键参数</td>
+<td>滚降系数 <span class="math inline">\(\alpha \in [0, 1]\)</span></td>
+<td>过采样率 <span class="math inline">\(L = f_s / f_{Nyquist}\)</span></td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <section id="权衡trade-off分析" class="level4" data-number="13.6.3.1">
 <h4 data-number="13.6.3.1" class="anchored" data-anchor-id="权衡trade-off分析"><span class="header-section-number">13.6.3.1</span> ⚖️ 权衡（Trade-off）分析</h4>
 <table class="caption-top table">
@@ -569,12 +643,12 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>α ≈ 0</strong>（接近 sinc）</td>
+<td><span class="math display">\[α ≈ 0\]</span>（接近 sinc）</td>
 <td>带宽效率高（高效利用频谱）</td>
 <td>时域衰减慢，抗定时误差能力差</td>
 </tr>
 <tr class="even">
-<td><strong>α ≈ 1</strong></td>
+<td><span class="math display">\[α ≈ 1\]</span></td>
 <td>时域衰减快（~1/t³），鲁棒性强</td>
 <td>带宽更宽，频谱效率低</td>
 </tr>
@@ -598,13 +672,14 @@ ul.task-list li input[type="checkbox"] {
 <section id="七升余弦滤波器实际系统的标准答案" class="level2" data-number="13.7">
 <h2 data-number="13.7" class="anchored" data-anchor-id="七升余弦滤波器实际系统的标准答案"><span class="header-section-number">13.7</span> <strong>七、升余弦滤波器：实际系统的标准答案</strong></h2>
 <p>为了满足上述要求，通信系统广泛采用<strong>升余弦滚降滤波器（Raised Cosine Filter）</strong>。</p>
-<p>其频域表达式为：</p>
-<pre><code>G(f) = 
-{
-    T,                             |f| ≤ (1-α)/(2T)
-    (T/2)[1 + cos(πT(|f| - (1-α)/(2T))/α)],   (1-α)/(2T) &lt; |f| ≤ (1+α)/(2T)
-    0,                             |f| &gt; (1+α)/(2T)
-}</code></pre>
+<p>其频域表达式为： <span class="math display">\[
+G(f) =
+\begin{cases}
+T, &amp; |f| \leq \frac{1-\alpha}{2T} \\
+\frac{T}{2}\left[1 + \cos\left(\frac{\pi T\left(|f| - \frac{1-\alpha}{2T}\right)}{\alpha}\right)\right], &amp; \frac{1-\alpha}{2T} &lt; |f| \leq \frac{1+\alpha}{2T} \\
+0, &amp; |f| &gt; \frac{1+\alpha}{2T}
+\end{cases}
+\]</span></p>
 <p>特点： - 在 <code>[(1-α)/(2T), (1+α)/(2T)]</code> 区间内平滑过渡 - 满足奈奎斯特准则 - 时域 <code>g(t)</code> 快速衰减</p>
 <blockquote class="blockquote">
 <p><strong>📊 PPT 图表洞察</strong>：<br>
@@ -623,24 +698,24 @@ ul.task-list li input[type="checkbox"] {
 <section id="匹配滤波器设计" class="level3" data-number="13.8.1">
 <h3 data-number="13.8.1" class="anchored" data-anchor-id="匹配滤波器设计"><span class="header-section-number">13.8.1</span> 8.1 匹配滤波器设计</h3>
 <p>常用方法：令接收滤波器 <code>q(t)</code> 为发送滤波器 <code>p(t)</code> 的<strong>匹配滤波器</strong>。</p>
-<p>即： &gt; <strong>Q(f) = P*(f)</strong> （频域共轭）<br>
-或等价地： &gt; <strong>q(t) = p(T - t)</strong> （时域时间反转）</p>
-<p>此时： &gt; <strong>G(f) = P(f)Q(f) = |P(f)|²</strong></p>
-<p>若进一步要求 <code>G(f)</code> 满足奈奎斯特准则，则 <code>g(t)</code> 为理想奈奎斯特脉冲。</p>
+<p>即： &gt; <span class="math display">\[Q(f) = P^*(f)\]</span> （频域共轭）<br>
+或等价地： &gt; <span class="math display">\[q(t) = p(T - t)\]</span> （时域时间反转）</p>
+<p>此时： &gt; <span class="math display">\[G(f) = P(f)Q(f) = |P(f)|²\]</span></p>
+<p>若进一步要求 <span class="math inline">\(G(f)\)</span> 满足奈奎斯特准则，则 <span class="math inline">\(g(t)\)</span> 为理想奈奎斯特脉冲。</p>
 </section>
 <section id="深层联系正交波形与信号空间" class="level3" data-number="13.8.2">
 <h3 data-number="13.8.2" class="anchored" data-anchor-id="深层联系正交波形与信号空间"><span class="header-section-number">13.8.2</span> 8.2 深层联系：正交波形与信号空间</h3>
 <p>有一个深刻结论将多个概念统一起来：</p>
 <blockquote class="blockquote">
-<p><strong>定理</strong>：以下两个条件等价： 1. <code>{p(t - kT)}</code> 构成一组单位正交函数集（即 <code>&lt;p(t-kT), p(t-lT)&gt; = δ[k-l]</code>），且 <code>q(t)</code> 是 <code>p(t)</code> 的匹配滤波器。 2. <code>g(t) = p(t)\*q(t)</code> 是理想奈奎斯特脉冲。</p>
+<p><strong>定理</strong>：以下两个条件等价： 1. <span class="math inline">\({p(t - kT)}\)</span> 构成一组单位正交函数集（即 <span class="math inline">\(\langle p(t-kT), p(t-lT) \rangle = \int_{-\infty}^{\infty} p(t-kT)p(t-lT) dt = \delta[k-l]\)</span>），且 <span class="math inline">\(q(t)\)</span> 是 <span class="math inline">\(p(t)\)</span> 的匹配滤波器。 2. <span class="math inline">\(g(t) = p(t) \ q(t)\)</span> 是理想奈奎斯特脉冲。</p>
 </blockquote>
 <section id="洞见解读" class="level4" data-number="13.8.2.1">
 <h4 data-number="13.8.2.1" class="anchored" data-anchor-id="洞见解读"><span class="header-section-number">13.8.2.1</span> 🌟 洞见解读</h4>
-<p>这揭示了： - <strong>发送过程</strong>：<code>u(t) = Σ u_k p(t - kT)</code> 是将符号向量 <code>{u_k}</code> 映射为信号波形的过程，相当于在由 <code>{p(t-kT)}</code> 张成的信号空间中做线性组合。 - <strong>接收过程</strong>：通过匹配滤波 + 采样，本质上是在计算接收信号与各基函数的<strong>内积（投影）</strong>，从而提取出原始系数 <code>u_k</code>。</p>
+<p>这揭示了： - <strong>发送过程</strong>：<span class="math inline">\(u(t) = \sum u_k p(t - kT)\)</span> 是将符号向量 <span class="math inline">\({u_k}\)</span> 映射为信号波形的过程，相当于在由 <span class="math inline">\({p(t-kT)}\)</span> 张成的信号空间中做线性组合。 - <strong>接收过程</strong>：通过匹配滤波 + 采样，本质上是在计算接收信号与各基函数的<strong>内积（投影）</strong>，从而提取出原始系数 <span class="math inline">\(u_k\)</span>。</p>
 <blockquote class="blockquote">
 <p><strong>🧠 思维升华</strong>：<br>
-“这个过程其实等价于去计算 UT 到 EK 个 basis 的 projection。”<br>
-这句话打通了<strong>时域滤波</strong>与<strong>向量空间投影</strong>的任督二脉，是理解现代通信本质的关键。</p>
+“这个过程其实等价于去计算 <span class="math inline">\(U(t)\)</span> 到 <span class="math inline">\({p(t-kT)}\)</span> 张成的信号空间的 projection。”</p>
+<p>这句话打通了<strong>时域滤波</strong>与<strong>向量空间投影</strong>的任督二脉，是理解现代通信本质的关键。</p>
 </blockquote>
 <p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1224b-1219-e-The%20Nyquist%20Criterion/page_14.png" class="img-fluid" alt="Nyquist准则与正交移位。"><br>
 <img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1224b-1219-e-The%20Nyquist%20Criterion/page_15.png" class="img-fluid" alt="匹配滤波与正交性分析。"><br>
@@ -657,15 +732,15 @@ ul.task-list li input[type="checkbox"] {
 <section id="数字基带传输" class="level3" data-number="13.9.1">
 <h3 data-number="13.9.1" class="anchored" data-anchor-id="数字基带传输"><span class="header-section-number">13.9.1</span> 9.1 数字基带传输</h3>
 <ul>
-<li>传输带宽 <code>B ≈ B_b = (R_s / 2)(1 + α)</code></li>
-<li>带宽效率： &gt; <strong>η_base = R_s / B = 2 / (1 + α) ≤ 2 Baud/Hz</strong></li>
+<li>传输带宽 <span class="math inline">\(B ≈ B_b = (R_s / 2)(1 + α)\)</span></li>
+<li>带宽效率： &gt; <span class="math display">\[η_{base} = R_s / B = 2 / (1 + α) ≤ 2 Baud/Hz\]</span></li>
 </ul>
 </section>
 <section id="双边带调制dsb" class="level3" data-number="13.9.2">
 <h3 data-number="13.9.2" class="anchored" data-anchor-id="双边带调制dsb"><span class="header-section-number">13.9.2</span> 9.2 双边带调制（DSB）</h3>
 <ul>
-<li>带通信号带宽 <code>B = 2 × B_b = R_s (1 + α)</code></li>
-<li>带宽效率： &gt; <strong>η_pass = R_s / B = 1 / (1 + α) ≤ 1 Baud/Hz</strong></li>
+<li>带通信号带宽 <span class="math inline">\(B = 2 × B_b = R_s (1 + α)\)</span></li>
+<li>带宽效率： &gt; <span class="math display">\[η_{pass} = R_s / B = 1 / (1 + α) ≤ 1 Baud/Hz\]</span></li>
 </ul>
 <blockquote class="blockquote">
 <p><strong>📌 结论</strong>：<br>
@@ -682,19 +757,25 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="十典型例题与应用总结" class="level2" data-number="13.10">
 <h2 data-number="13.10" class="anchored" data-anchor-id="十典型例题与应用总结"><span class="header-section-number">13.10</span> <strong>十、典型例题与应用总结</strong></h2>
+<blockquote class="blockquote">
+<p>教授点拨 · 发展脉络 奈奎斯特准则最早由 Harry Nyquist 在 1928 年提出，用于分析电报系统中的最大传输速率。它揭示了一个根本规律：信道带宽决定了符号传输的极限速度。这一思想后来成为香农信息论的基础之一。</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>注意<span class="math inline">\(R_s\)</span>是码元发射速度，<span class="math inline">\(R_s\)</span> (Symbol Rate)：代表每秒钟向信道发送了多少个这样的物理脉冲。 不能发射太快 <span class="math display">\[R_b = R_s \cdot \log_2 M\]</span></p>
+</blockquote>
 <section id="给定符号速率求最小带宽" class="level3" data-number="13.10.1">
 <h3 data-number="13.10.1" class="anchored" data-anchor-id="给定符号速率求最小带宽"><span class="header-section-number">13.10.1</span> ✅ 给定符号速率，求最小带宽</h3>
 <ul>
-<li>例：<code>R_s = 100 Baud</code>，要求无 ISI</li>
-<li>最小基带带宽：<code>B_b ≥ R_s / 2 = 50 Hz</code></li>
-<li>若用 DSB 调制，信道带宽至少需 <code>100 Hz</code></li>
+<li>例：<span class="math inline">\(R_s = 100 Baud\)</span>，要求无 ISI</li>
+<li>最小基带带宽：<span class="math inline">\(B_b ≥ R_s / 2 = 50 Hz\)</span></li>
+<li>若用 DSB 调制，信道带宽至少需 <span class="math inline">\(100 Hz\)</span></li>
 </ul>
 </section>
 <section id="给定带宽求最大符号速率" class="level3" data-number="13.10.2">
 <h3 data-number="13.10.2" class="anchored" data-anchor-id="给定带宽求最大符号速率"><span class="header-section-number">13.10.2</span> ✅ 给定带宽，求最大符号速率</h3>
 <ul>
-<li>例：基带系统 <code>B_b = 50 Hz</code></li>
-<li>最大 <code>R_s ≤ 2 B_b = 100 Baud</code></li>
+<li>例：基带系统 <span class="math inline">\(B_b = 50 Hz\)</span></li>
+<li>最大 <span class="math inline">\(R_s ≤ 2 B_b = 100 Baud\)</span></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -705,7 +786,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="如何判断能否无-isi-传输" class="level3" data-number="13.10.3">
 <h3 data-number="13.10.3" class="anchored" data-anchor-id="如何判断能否无-isi-传输"><span class="header-section-number">13.10.3</span> ✅ 如何判断能否无 ISI 传输？</h3>
-<p>三种等价方法： 1. <strong>时域法</strong>：检查 <code>g(kT)</code> 是否满足 <code>δ[k]</code> 2. <strong>频域法</strong>：检查 <code>G(f)</code> 折叠后是否为常数 3. <strong>正交性法</strong>：检查 <code>{p(t-kT)}</code> 是否正交，并配合匹配滤波</p>
+<p>三种等价方法： 1. <strong>时域法</strong>：检查 <span class="math inline">\(g(kT)\)</span> 是否满足 <span class="math inline">\(δ[k]\)</span> 2. <strong>频域法</strong>：检查 <span class="math inline">\(G(f)\)</span> 折叠后是否为常数 3. <strong>正交性法</strong>：检查 <span class="math inline">\({p(t-kT)}\)</span> 是否正交，并配合匹配滤波</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1224b-1219-e-The%20Nyquist%20Criterion/page_20.png" class="img-fluid figure-img"></p>
@@ -723,7 +804,7 @@ ul.task-list li input[type="checkbox"] {
 </blockquote>
 <p>通信工程的本质，就是在各种限制之间寻找最优平衡： - <strong>带宽 ↔︎ 速率</strong> - <strong>效率 ↔︎ 可靠性</strong> - <strong>理论完美 ↔︎ 工程可行</strong></p>
 <p>奈奎斯特准则不仅是一条数学公式，更是一种<strong>系统设计哲学</strong>。它告诉我们：<strong>没有免费的午餐</strong>。每一次性能提升的背后，都是资源的重新分配与妥协。</p>
-<p>希望这份笔记不仅能帮你通过考试，更能启发你像工程师一样思考问题。</p>
+<p>希望这份笔记不仅能帮你通过考试，还能启发你像工程师一样思考问题。</p>
 <hr>
 <p><strong>笔记整理完毕</strong><br>
 祝各位复习顺利，期末取得佳绩！</p>
@@ -1134,8 +1215,8 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../chapters/1219b-1217-e-PAM Signal Constellation/checked_notes.html" class="pagination-link" aria-label="**通信原理深度学习笔记：从PAM到QAM的调制与系统设计**">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><strong>通信原理深度学习笔记：从PAM到QAM的调制与系统设计</strong></span></span>
+      <a href="../../chapters/1219b-1217-e-PAM Signal Constellation/checked_notes.html" class="pagination-link" aria-label="**通信原理：从PAM到QAM的调制与系统设计**">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title"><strong>通信原理：从PAM到QAM的调制与系统设计</strong></span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
