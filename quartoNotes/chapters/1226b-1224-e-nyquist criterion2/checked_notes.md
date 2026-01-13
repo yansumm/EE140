@@ -53,6 +53,7 @@ $$
 
 > **教授点拨 · 直观理解**  
 > “你可以把 $g(t)$ 想象成一个‘梳子’——它的齿只在整数倍 $T$ 处起作用，其他地方都是空的。这样你每次‘抓取’信号时，只会抓到你想抓的那个符号。”
+> 但需要注意的是，这里面限制的只有$t=nT$的位置，而不是所有的$t$。
 
 ![奈奎斯特准则示例。](https://raw.githubusercontent.com/yansumm/picbed/master/class/EE140/1226b-1224-e-nyquist%20criterion2/page_2.png)
 
